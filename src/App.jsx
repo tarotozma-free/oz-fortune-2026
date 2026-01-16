@@ -11,6 +11,9 @@ export default function App() {
   const [formData, setFormData] = useState({
     name: '',
     dob: '',
+    dob_year: '',
+    dob_month: '',
+    dob_day: '',
     birth_time: '',
     gender: 'male',
     email: ''
@@ -126,13 +129,41 @@ export default function App() {
 
             <div>
               <label className="block text-purple-200 text-sm mb-2">생년월일</label>
-              <input
-                type="date"
-                required
-                value={formData.dob}
-                onChange={(e) => setFormData({...formData, dob: e.target.value})}
-                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-400"
-              />
+              <div className="flex gap-2">
+                <select
+                  required
+                  value={formData.dob_year || ''}
+                  onChange={(e) => setFormData({...formData, dob_year: e.target.value, dob: `${e.target.value}-${formData.dob_month || '01'}-${formData.dob_day || '01'}`})}
+                  className="flex-1 px-3 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-400"
+                >
+                  <option value="" className="bg-gray-800">년도</option>
+                  {Array.from({length: 85}, (_, i) => 2010 - i).map(year => (
+                    <option key={year} value={year} className="bg-gray-800">{year}년</option>
+                  ))}
+                </select>
+                <select
+                  required
+                  value={formData.dob_month || ''}
+                  onChange={(e) => setFormData({...formData, dob_month: e.target.value, dob: `${formData.dob_year || '1990'}-${e.target.value}-${formData.dob_day || '01'}`})}
+                  className="w-24 px-3 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-400"
+                >
+                  <option value="" className="bg-gray-800">월</option>
+                  {Array.from({length: 12}, (_, i) => String(i + 1).padStart(2, '0')).map(month => (
+                    <option key={month} value={month} className="bg-gray-800">{parseInt(month)}월</option>
+                  ))}
+                </select>
+                <select
+                  required
+                  value={formData.dob_day || ''}
+                  onChange={(e) => setFormData({...formData, dob_day: e.target.value, dob: `${formData.dob_year || '1990'}-${formData.dob_month || '01'}-${e.target.value}`})}
+                  className="w-24 px-3 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-400"
+                >
+                  <option value="" className="bg-gray-800">일</option>
+                  {Array.from({length: 31}, (_, i) => String(i + 1).padStart(2, '0')).map(day => (
+                    <option key={day} value={day} className="bg-gray-800">{parseInt(day)}일</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div>
@@ -240,7 +271,7 @@ export default function App() {
             <button
               onClick={() => {
                 setStep('form');
-                setFormData({ name: '', dob: '', birth_time: '', gender: 'male', email: '' });
+                setFormData({ name: '', dob: '', dob_year: '', dob_month: '', dob_day: '', birth_time: '', gender: 'male', email: '' });
                 setOrderId(null);
               }}
               className="block w-full py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all"
@@ -458,7 +489,7 @@ export default function App() {
             <button
               onClick={() => {
                 setStep('form');
-                setFormData({ name: '', dob: '', birth_time: '', gender: 'male', email: '' });
+                setFormData({ name: '', dob: '', dob_year: '', dob_month: '', dob_day: '', birth_time: '', gender: 'male', email: '' });
                 setOrderId(null);
                 setResult(null);
                 setProgress(0);

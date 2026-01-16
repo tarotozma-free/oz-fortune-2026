@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-  'https://mwqvdtwxiiluwdxtbqgz.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13cXZkdHd4aWlsdXdkeHRicWd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk4MzIzMjQsImV4cCI6MjA2NTQwODMyNH0.P6rONeDnSP3mEE2WAfgjIc3XNMXhLf5gPIEt7B8ZMHM'
+  'https://mwgvdtwxiiluwdxtbqgz.supabase.co',  // g로 수정!
+  'eyJhbGci...'
 );
 
 export default function App() {

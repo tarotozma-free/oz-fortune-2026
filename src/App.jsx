@@ -7,7 +7,7 @@ const supabase = createClient(
 );
 
 export default function App() {
-  const [step, setStep] = useState('form'); // form, submitted, loading, result, summary
+  const [step, setStep] = useState('form');
   const [formData, setFormData] = useState({
     name: '',
     dob: '',
@@ -92,6 +92,13 @@ export default function App() {
     setStep('loading');
     setProgress(5);
   };
+
+  // 저작권
+  const Copyright = () => (
+    <p className="text-center text-purple-400/60 text-xs mt-8">
+      © 2026 OZ Fortune. All rights reserved.
+    </p>
+  );
 
   // 입력 폼
   if (step === 'form') {
@@ -206,6 +213,7 @@ export default function App() {
           <p className="text-center text-purple-300 text-sm mt-6">
             분석에는 약 1분 정도 소요됩니다
           </p>
+          <Copyright />
         </div>
       </div>
     );
@@ -244,6 +252,7 @@ export default function App() {
           <p className="text-purple-400 text-xs mt-6">
             💡 창을 닫아도 분석은 계속 진행되며, 완료 시 이메일로 발송됩니다
           </p>
+          <Copyright />
         </div>
       </div>
     );
@@ -275,12 +284,13 @@ export default function App() {
           <p className="text-purple-300 text-xs mt-6">
             잠시만 기다려주세요. 정확한 분석을 위해 최선을 다하고 있습니다.
           </p>
+          <Copyright />
         </div>
       </div>
     );
   }
 
-  // 요약본 페이지
+  // 요약본 페이지 (간소화)
   if (step === 'summary') {
     const ai = result?.aiResponse || {};
     const analyses = ai.custom_analysis_10 || [];
@@ -291,7 +301,7 @@ export default function App() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         {/* 헤더 */}
         <div className="bg-black/30 backdrop-blur-sm sticky top-0 z-10 border-b border-white/10">
-          <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="max-w-2xl mx-auto px-4 py-4 flex justify-between items-center">
             <h1 className="text-white font-bold">🔮 {formData.name}님의 2026년 운세</h1>
             <button
               onClick={() => setStep('result')}
@@ -302,129 +312,103 @@ export default function App() {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto px-4 py-8">
           {/* 훅킹 멘트 */}
           {ai.hooking_ment && (
-            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl p-6 mb-8 border border-purple-500/30">
-              <p className="text-xl text-white text-center italic">"{ai.hooking_ment}"</p>
+            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl p-6 mb-6 border border-purple-500/30">
+              <p className="text-lg text-white text-center italic">"{ai.hooking_ment}"</p>
             </div>
           )}
 
-          {/* 종합 점수 */}
-          <div className="bg-white/5 rounded-2xl p-8 mb-8 text-center border border-white/10">
-            <div className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-2">
-              {ai.summary_score || 85}점
-            </div>
-            <p className="text-purple-300">2026년 종합운</p>
-          </div>
-
-          {/* 운세 지표 */}
-          <div className="grid grid-cols-5 gap-4 mb-8">
-            {[
-              { label: '재물', value: graphs.wealth || 80, emoji: '💰' },
-              { label: '애정', value: graphs.love || 80, emoji: '💕' },
-              { label: '직업', value: graphs.career || 80, emoji: '💼' },
-              { label: '건강', value: graphs.health || 80, emoji: '🏃' },
-              { label: '사회', value: graphs.social || 80, emoji: '🤝' },
-            ].map((item, i) => (
-              <div key={i} className="bg-white/5 rounded-xl p-4 text-center border border-white/10">
-                <div className="text-2xl mb-1">{item.emoji}</div>
-                <div className="text-white font-bold">{item.value}</div>
-                <div className="text-purple-300 text-xs">{item.label}</div>
+          {/* 종합 점수 + 운세 지표 */}
+          <div className="bg-white/5 rounded-2xl p-6 mb-6 border border-white/10">
+            <div className="text-center mb-6">
+              <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-1">
+                {ai.summary_score || 85}점
               </div>
-            ))}
+              <p className="text-purple-300 text-sm">2026년 종합운</p>
+            </div>
+            <div className="grid grid-cols-5 gap-2">
+              {[
+                { label: '재물', value: graphs.wealth || 80, emoji: '💰' },
+                { label: '애정', value: graphs.love || 80, emoji: '💕' },
+                { label: '직업', value: graphs.career || 80, emoji: '💼' },
+                { label: '건강', value: graphs.health || 80, emoji: '🏃' },
+                { label: '사회', value: graphs.social || 80, emoji: '🤝' },
+              ].map((item, i) => (
+                <div key={i} className="text-center">
+                  <div className="text-lg">{item.emoji}</div>
+                  <div className="text-white font-bold text-sm">{item.value}</div>
+                  <div className="text-purple-400 text-xs">{item.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* 총평 */}
-          {ai.summary_text && (
-            <div className="bg-white/5 rounded-2xl p-6 mb-8 border border-white/10">
-              <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                📜 총평
-              </h2>
-              <p className="text-purple-100 leading-relaxed whitespace-pre-line">{ai.summary_text}</p>
-            </div>
-          )}
-
-          {/* 소주제 10개 */}
-          <div className="space-y-4 mb-8">
-            <h2 className="text-xl font-bold text-white mb-4">🔮 상세 분석</h2>
+          {/* 소주제 10개 (펼쳐서, 200자 요약만) */}
+          <div className="space-y-3 mb-6">
             {analyses.map((item, i) => (
-              <details key={i} className="bg-white/5 rounded-xl border border-white/10 overflow-hidden group">
-                <summary className="px-6 py-4 cursor-pointer text-white font-medium hover:bg-white/5 transition-all flex justify-between items-center">
-                  <span>{item.topic || `분석 ${i + 1}`}</span>
-                  <span className="text-purple-400 group-open:rotate-180 transition-transform">▼</span>
-                </summary>
-                <div className="px-6 py-4 border-t border-white/10">
-                  <p className="text-purple-100 leading-relaxed whitespace-pre-line">
-                    {item.full_content || item.summary || ''}
-                  </p>
-                </div>
-              </details>
+              <div key={i} className="bg-white/5 rounded-xl p-4 border border-white/10">
+                <h3 className="text-white font-medium mb-2">{item.topic || `분석 ${i + 1}`}</h3>
+                <p className="text-purple-200 text-sm leading-relaxed">
+                  {(item.summary || item.full_content || '').substring(0, 200)}
+                  {(item.summary || item.full_content || '').length > 200 && '...'}
+                </p>
+              </div>
             ))}
           </div>
 
           {/* 개운 처방전 */}
-          <div className="bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-2xl p-6 mb-8 border border-emerald-500/30">
-            <h2 className="text-xl font-bold text-white mb-4">🍀 개운 처방전</h2>
-            <div className="grid grid-cols-2 gap-4">
+          <div className="bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-2xl p-5 mb-6 border border-emerald-500/30">
+            <h2 className="text-lg font-bold text-white mb-3">🍀 개운 처방전</h2>
+            <div className="grid grid-cols-2 gap-2 text-sm">
               {luck.color && (
-                <div className="bg-white/10 rounded-xl p-4">
-                  <div className="text-sm text-emerald-300 mb-1">행운의 색상</div>
-                  <div className="text-white font-medium">🎨 {luck.color}</div>
+                <div className="bg-white/10 rounded-lg p-3">
+                  <span className="text-emerald-300">색상</span>
+                  <span className="text-white ml-2">{luck.color}</span>
                 </div>
               )}
               {luck.number && (
-                <div className="bg-white/10 rounded-xl p-4">
-                  <div className="text-sm text-emerald-300 mb-1">행운의 숫자</div>
-                  <div className="text-white font-medium">🔢 {luck.number}</div>
+                <div className="bg-white/10 rounded-lg p-3">
+                  <span className="text-emerald-300">숫자</span>
+                  <span className="text-white ml-2">{luck.number}</span>
                 </div>
               )}
               {luck.direction && (
-                <div className="bg-white/10 rounded-xl p-4">
-                  <div className="text-sm text-emerald-300 mb-1">행운의 방향</div>
-                  <div className="text-white font-medium">🧭 {luck.direction}</div>
+                <div className="bg-white/10 rounded-lg p-3">
+                  <span className="text-emerald-300">방향</span>
+                  <span className="text-white ml-2">{luck.direction}</span>
                 </div>
               )}
               {luck.item && (
-                <div className="bg-white/10 rounded-xl p-4">
-                  <div className="text-sm text-emerald-300 mb-1">행운의 물건</div>
-                  <div className="text-white font-medium">💎 {luck.item}</div>
+                <div className="bg-white/10 rounded-lg p-3">
+                  <span className="text-emerald-300">물건</span>
+                  <span className="text-white ml-2">{luck.item}</span>
                 </div>
               )}
             </div>
-            {luck.action && (
-              <div className="mt-4 bg-white/10 rounded-xl p-4">
-                <div className="text-sm text-emerald-300 mb-1">운을 여는 행동</div>
-                <div className="text-white">{luck.action}</div>
-              </div>
-            )}
           </div>
 
-          {/* 마무리 조언 */}
-          {ai.final_advice && (
-            <div className="bg-white/5 rounded-2xl p-6 mb-8 border border-white/10">
-              <h2 className="text-xl font-bold text-white mb-4">💫 마무리 조언</h2>
-              <p className="text-purple-100 leading-relaxed whitespace-pre-line">{ai.final_advice}</p>
-            </div>
-          )}
+          {/* PDF 다운로드 */}
+          <a
+            href={result?.pdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full py-4 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-center hover:from-purple-600 hover:to-pink-600 transition-all mb-4"
+          >
+            📄 PDF 전체 리포트 다운로드
+          </a>
 
-          {/* 하단 버튼 */}
-          <div className="flex gap-4">
-            <a
-              href={result?.pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 py-4 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-center hover:from-purple-600 hover:to-pink-600 transition-all"
-            >
-              📄 PDF 다운로드
-            </a>
-            <button
-              onClick={() => setStep('result')}
-              className="flex-1 py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all"
-            >
-              ← 돌아가기
-            </button>
-          </div>
+          <button
+            onClick={() => setStep('result')}
+            className="block w-full py-3 rounded-xl bg-white/10 border border-white/20 text-white font-medium hover:bg-white/20 transition-all"
+          >
+            ← 돌아가기
+          </button>
+
+          <p className="text-center text-purple-400/60 text-xs mt-8">
+            © 2026 OZ Fortune. All rights reserved.
+          </p>
         </div>
       </div>
     );
@@ -488,6 +472,7 @@ export default function App() {
           <p className="text-purple-300 text-sm mt-6">
             📧 이메일로도 리포트가 발송되었습니다
           </p>
+          <Copyright />
         </div>
       </div>
     );

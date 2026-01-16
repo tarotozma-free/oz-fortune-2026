@@ -34,7 +34,7 @@ export default function App() {
     const interval = setInterval(async () => {
       const { data } = await supabase
         .from('orders')
-        .select('status, ai_response')
+        .select('status, ai_response, pdf_url, notion_url')
         .eq('id', orderId)
         .single();
 
@@ -45,9 +45,10 @@ export default function App() {
           .getPublicUrl(`${orderId}_report.pdf`);
         
         setResult({
-          pdfUrl: urlData?.publicUrl,
-          aiResponse: data.ai_response
-        });
+  pdfUrl: data.pdf_url,
+  notionUrl: data.notion_url,
+  aiResponse: data.ai_response
+});
         setProgress(100);
         setTimeout(() => setStep('result'), 500);
       }
@@ -273,7 +274,18 @@ export default function App() {
               📄 PDF 리포트 다운로드
             </a>
 
-            <button
+{result?.notionUrl && (
+  
+    href={result.notionUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="block w-full py-4 rounded-xl bg-gradient-to-r from-gray-700 to-gray-900 text-white font-bold text-lg hover:from-gray-800 hover:to-black transition-all transform hover:scale-[1.02] shadow-lg"
+  >
+    📝 Notion 요약본 보기
+  </a>
+)}
+
+<button
               onClick={() => {
                 setStep('form');
                 setFormData({ name: '', dob: '', birth_time: '', gender: 'male', email: '' });

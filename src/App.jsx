@@ -40,15 +40,11 @@ export default function App() {
 
       if (data?.status === 'completed') {
         clearInterval(interval);
-        const { data: urlData } = supabase.storage
-          .from('reports')
-          .getPublicUrl(`${orderId}_report.pdf`);
-        
         setResult({
-  pdfUrl: data.pdf_url,
-  notionUrl: data.notion_url,
-  aiResponse: data.ai_response
-});
+          pdfUrl: data.pdf_url,
+          notionUrl: data.notion_url,
+          aiResponse: data.ai_response
+        });
         setProgress(100);
         setTimeout(() => setStep('result'), 500);
       }
@@ -274,18 +270,18 @@ export default function App() {
               📄 PDF 리포트 다운로드
             </a>
 
-{result?.notionUrl && (
-  
-    href={result.notionUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="block w-full py-4 rounded-xl bg-gradient-to-r from-gray-700 to-gray-900 text-white font-bold text-lg hover:from-gray-800 hover:to-black transition-all transform hover:scale-[1.02] shadow-lg"
-  >
-    📝 Notion 요약본 보기
-  </a>
-)}
+            {result?.notionUrl && (
+              <a
+                href={result.notionUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full py-4 rounded-xl bg-gradient-to-r from-gray-700 to-gray-900 text-white font-bold text-lg hover:from-gray-800 hover:to-black transition-all transform hover:scale-[1.02] shadow-lg"
+              >
+                📝 Notion 요약본 보기
+              </a>
+            )}
 
-<button
+            <button
               onClick={() => {
                 setStep('form');
                 setFormData({ name: '', dob: '', birth_time: '', gender: 'male', email: '' });

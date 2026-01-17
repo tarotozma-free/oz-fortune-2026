@@ -151,6 +151,58 @@ const PRODUCTS = {
     showLoveStyle: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
+  },
+
+  career: {
+    product_id: 'career_exam_fortune',
+    icon: '🎯',
+    title: '평생 취업·이직·합격운 대분석',
+    subtitle: '커리어의 흐름을 읽는 프리미엄 사주 분석',
+    buttonText: '내 합격운 분석받기',
+    theme: {
+      bg: 'from-slate-950 via-blue-950 to-indigo-950',
+      card: 'bg-black/40 border-blue-500/30',
+      accent: 'blue',
+      button: 'from-blue-500 via-indigo-500 to-blue-600 hover:from-blue-400 hover:to-indigo-400 text-white',
+      text: {
+        primary: 'text-white',
+        secondary: 'text-blue-200',
+        muted: 'text-blue-400/60',
+        accent: 'text-blue-400',
+      },
+      input: 'bg-black/30 border-blue-500/30 text-white placeholder-blue-300/50 focus:ring-blue-400',
+      select: 'bg-gray-900',
+      score: 'from-blue-400 to-indigo-500',
+    },
+    statusMessages: [
+      '🎯 커리어 원국을 분석하고 있습니다...',
+      '📊 평생 직업 흐름을 계산하고 있습니다...',
+      '🏆 당신의 합격 전략을 설계하고 있습니다...',
+      '📈 승진/이직 적기를 분석하고 있습니다...',
+      '💼 맞춤형 커리어 리포트를 제작하고 있습니다...'
+    ],
+    graphLabels: [
+      { key: 'job_luck', label: '취업', emoji: '💼' },
+      { key: 'change_luck', label: '이직', emoji: '🔄' },
+      { key: 'exam_luck', label: '시험', emoji: '📝' },
+      { key: 'promotion_luck', label: '승진', emoji: '🚀' },
+      { key: 'business_luck', label: '사업', emoji: '🏢' },
+    ],
+    prescriptionTitle: '🎯 합격 처방전',
+    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionLabels: { 
+      color: '면접운 색상', 
+      number: '합격의 숫자', 
+      direction: '좋은 직장 방향', 
+      item: '합격 아이템',
+      action: '면접 전 행동',
+      avoid: '취업할 때 피할 것'
+    },
+    showCareerGrade: true,
+    showCareerType: true,
+    showPeakDanger: true,
+    showLifetimeFlow: true,
+    showExamTiming: true,
   }
 };
 
@@ -264,6 +316,21 @@ const GradeBadge = ({ grade, hook, type = 'wealth' }) => {
       shadow: 'shadow-pink-500/30',
       textColor: 'text-pink-400',
       hookColor: 'text-pink-200/80'
+    },
+    career: {
+      colors: {
+        'S': 'from-blue-400 via-indigo-300 to-blue-500',
+        'A': 'from-indigo-400 via-blue-400 to-indigo-500',
+        'B': 'from-blue-300 via-blue-200 to-blue-400',
+        'C': 'from-indigo-600 via-indigo-500 to-indigo-700',
+        'D': 'from-blue-700 via-blue-600 to-blue-800'
+      },
+      labels: {
+        'S': '타고난 합격체질', 'A': '상위권 커리어', 'B': '평균 커리어운', 'C': '노력형 커리어', 'D': '대기만성 합격운'
+      },
+      shadow: 'shadow-blue-500/30',
+      textColor: 'text-blue-400',
+      hookColor: 'text-blue-200/80'
     }
   };
   
@@ -289,15 +356,19 @@ const SummaryView = ({ config, theme, formData, result, onBack }) => {
   const prescription = ai.lucky_prescription || {};
   const graphs = ai.graphs || {};
   
-  // 연애운/재물운 구분
+  // 상품 타입 구분
   const isLove = config.showLoveGrade;
   const isWealth = config.showWealthGrade;
-  const flowData = ai.lifetime_love_flow || ai.lifetime_wealth_flow || [];
-  const grade = isLove ? ai.love_grade : ai.wealth_grade;
-  const gradeHook = isLove ? ai.love_grade_hook : ai.wealth_grade_hook;
-  const styleType = isLove ? ai.love_style : ai.money_type;
-  const styleHook = isLove ? ai.love_style_hook : ai.money_type_hook;
-  const chartColor = isLove ? '#EC4899' : '#FFD700';
+  const isCareer = config.showCareerGrade;
+  
+  // 데이터 매핑
+  const flowData = ai.lifetime_love_flow || ai.lifetime_wealth_flow || ai.lifetime_career_flow || [];
+  const grade = isLove ? ai.love_grade : isWealth ? ai.wealth_grade : ai.career_grade;
+  const gradeHook = isLove ? ai.love_grade_hook : isWealth ? ai.wealth_grade_hook : ai.career_grade_hook;
+  const styleType = isLove ? ai.love_style : isWealth ? ai.money_type : ai.career_type;
+  const styleHook = isLove ? ai.love_style_hook : isWealth ? ai.money_type_hook : ai.career_type_hook;
+  const chartColor = isLove ? '#EC4899' : isWealth ? '#FFD700' : '#3B82F6';
+  const gradeType = isLove ? 'love' : isWealth ? 'wealth' : 'career';
 
   const Copyright = () => (
     <p className={`text-center ${theme.text.muted} text-xs mt-8`}>
@@ -327,21 +398,25 @@ const SummaryView = ({ config, theme, formData, result, onBack }) => {
           </div>
         )}
 
-        {/* 등급 + 유형 (재물운/연애운) */}
-        {(isWealth || isLove) && (
+        {/* 등급 + 유형 */}
+        {(isWealth || isLove || isCareer) && (
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className={`${theme.card} rounded-2xl p-5 border flex flex-col items-center justify-center`}>
-              <GradeBadge grade={grade || 'A'} hook={gradeHook} type={isLove ? 'love' : 'wealth'} />
+              <GradeBadge grade={grade || 'A'} hook={gradeHook} type={gradeType} />
             </div>
             <div className={`${theme.card} rounded-2xl p-5 border`}>
               <div className="text-center">
                 <div className="text-3xl mb-2">
                   {isLove 
                     ? (styleType === '헌신형' ? '💝' : styleType === '자유연애형' ? '🦋' : '💕')
-                    : (styleType === '사업가형' ? '🏢' : styleType === '투자자형' ? '📈' : '💰')
+                    : isWealth
+                    ? (styleType === '사업가형' ? '🏢' : styleType === '투자자형' ? '📈' : '💰')
+                    : (styleType === '전문직형' ? '👔' : styleType === '창업형' ? '🚀' : '💼')
                   }
                 </div>
-                <div className={`${theme.text.accent} font-bold`}>{styleType || (isLove ? '연애 유형' : '재물 유형')}</div>
+                <div className={`${theme.text.accent} font-bold`}>
+                  {styleType || (isLove ? '연애 유형' : isWealth ? '재물 유형' : '커리어 유형')}
+                </div>
                 <div className={`${theme.text.muted} text-xs mt-1 italic`}>"{styleHook}"</div>
               </div>
             </div>
@@ -352,7 +427,9 @@ const SummaryView = ({ config, theme, formData, result, onBack }) => {
         {config.showPeakDanger && (
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 rounded-xl p-4 border border-green-500/30">
-              <div className="text-green-400 text-sm mb-1">{isLove ? '💕 연애 전성기' : '🚀 전성기'}</div>
+              <div className="text-green-400 text-sm mb-1">
+                {isLove ? '💕 연애 전성기' : isCareer ? '🎯 커리어 전성기' : '🚀 전성기'}
+              </div>
               <div className="text-white font-bold text-lg">{ai.peak_period || '45-55세'}</div>
               <div className="text-green-300/80 text-xs mt-1">"{ai.peak_hook}"</div>
             </div>
@@ -370,6 +447,15 @@ const SummaryView = ({ config, theme, formData, result, onBack }) => {
             <div className="text-purple-400 text-sm mb-1">💍 결혼 적기</div>
             <div className="text-white font-bold text-lg">{ai.marriage_timing}</div>
             <div className="text-purple-300/80 text-xs mt-1">"{ai.marriage_hook}"</div>
+          </div>
+        )}
+
+        {/* 시험 타이밍 (커리어 전용) */}
+        {isCareer && ai.exam_timing && (
+          <div className="bg-gradient-to-br from-indigo-900/40 to-blue-900/40 rounded-xl p-4 mb-6 border border-indigo-500/30">
+            <div className="text-indigo-400 text-sm mb-1">📝 시험 합격 타이밍</div>
+            <div className="text-white font-bold text-lg">{ai.exam_timing}</div>
+            <div className="text-indigo-300/80 text-xs mt-1">"{ai.exam_hook}"</div>
           </div>
         )}
 
@@ -396,7 +482,7 @@ const SummaryView = ({ config, theme, formData, result, onBack }) => {
         {config.showLifetimeFlow && flowData.length > 0 && (
           <div className={`${theme.card} rounded-2xl p-6 mb-6 border`}>
             <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>
-              {isLove ? '💕 인생 연애 흐름' : '📈 인생 재물 흐름'}
+              {isLove ? '💕 인생 연애 흐름' : isCareer ? '📈 인생 커리어 흐름' : '📈 인생 재물 흐름'}
             </h3>
             <LifetimeFlowChart data={flowData} theme={theme} lineColor={chartColor} />
           </div>
@@ -813,7 +899,8 @@ const ProductPage = ({ productKey }) => {
     const ai = result?.aiResponse || {};
     const isLove = config.showLoveGrade;
     const isWealth = config.showWealthGrade;
-    const grade = isLove ? ai.love_grade : ai.wealth_grade;
+    const isCareer = config.showCareerGrade;
+    const grade = isLove ? ai.love_grade : isWealth ? ai.wealth_grade : ai.career_grade;
     
     return (
       <div className={`min-h-screen bg-gradient-to-br ${theme.bg} flex items-center justify-center p-4`}>
@@ -830,9 +917,9 @@ const ProductPage = ({ productKey }) => {
 
           {/* 미리보기 (등급+점수) */}
           <div className="flex justify-center gap-6 mb-6">
-            {(isWealth || isLove) && grade && (
+            {(isWealth || isLove || isCareer) && grade && (
               <div className="text-center">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br ${isLove ? 'from-pink-400 to-rose-500' : 'from-yellow-400 to-amber-500'} shadow-lg`}>
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br ${isLove ? 'from-pink-400 to-rose-500' : isCareer ? 'from-blue-400 to-indigo-500' : 'from-yellow-400 to-amber-500'} shadow-lg`}>
                   <span className="text-2xl font-black text-gray-900">{grade}</span>
                 </div>
                 <div className={`${theme.text.accent} text-sm mt-1`}>등급</div>
@@ -887,6 +974,7 @@ export default function App() {
         <Route path="/saju" element={<ProductPage productKey="saju" />} />
         <Route path="/wealth" element={<ProductPage productKey="wealth" />} />
         <Route path="/love" element={<ProductPage productKey="love" />} />
+        <Route path="/career" element={<ProductPage productKey="career" />} />
         <Route path="/result/:orderId" element={<ResultPage />} />
       </Routes>
     </BrowserRouter>

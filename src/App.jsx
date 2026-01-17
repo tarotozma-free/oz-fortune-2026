@@ -444,7 +444,7 @@ const SummaryView = ({ config, theme, formData, result, onBack }) => {
   const gradeType = isLove ? 'love' : isWealth ? 'wealth' : isCareer ? 'career' : 'full';
   
   // 분석 배열 (10개 또는 20개)
-  const analyses = ai.custom_analysis_20 || ai.custom_analysis_10 || [];
+  const analyses = ai.custom_analysis || [];
   
   // 10년 대운 (full 전용)
   const tenYearFortune = ai.ten_year_fortune || [];

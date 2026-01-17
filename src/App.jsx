@@ -425,7 +425,6 @@ const GradeBadge = ({ grade, hook, type = 'wealth' }) => {
 // ========================================
 const SummaryView = ({ config, theme, formData, result, onBack }) => {
   const ai = result?.aiResponse || {};
-  const analyses = ai.custom_analysis_10 || [];
   const prescription = ai.lucky_prescription || {};
   const graphs = ai.graphs || {};
   

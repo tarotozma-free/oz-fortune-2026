@@ -87,17 +87,68 @@ const PRODUCTS = {
       { key: 'windfall', label: '횡재', emoji: '🎰' },
     ],
     prescriptionTitle: '💎 재물 처방전',
-    prescriptionFields: ['wallet_color', 'lucky_number', 'money_direction', 'lucky_item', 'best_timing', 'avoid_action'],
+    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
     prescriptionLabels: { 
-      wallet_color: '지갑 색상', 
-      lucky_number: '행운의 숫자', 
-      money_direction: '돈이 오는 방향', 
-      lucky_item: '재물 아이템',
-      best_timing: '투자 타이밍',
-      avoid_action: '피해야 할 것'
+      color: '지갑 색상', 
+      number: '행운의 숫자', 
+      direction: '돈이 오는 방향', 
+      item: '재물 아이템',
+      action: '투자 타이밍',
+      avoid: '피해야 할 것'
     },
     showWealthGrade: true,
     showMoneyType: true,
+    showPeakDanger: true,
+    showLifetimeFlow: true,
+  },
+
+  love: {
+    product_id: 'love_relationship_fortune',
+    icon: '💕',
+    title: '평생 연애·결혼운 대분석',
+    subtitle: '사랑의 흐름을 읽는 프리미엄 사주 분석',
+    buttonText: '내 연애운 분석받기',
+    theme: {
+      bg: 'from-pink-950 via-rose-900 to-red-950',
+      card: 'bg-black/40 border-pink-500/30',
+      accent: 'pink',
+      button: 'from-pink-500 via-rose-500 to-red-500 hover:from-pink-400 hover:to-rose-400 text-white',
+      text: {
+        primary: 'text-white',
+        secondary: 'text-pink-200',
+        muted: 'text-pink-400/60',
+        accent: 'text-pink-400',
+      },
+      input: 'bg-black/30 border-pink-500/30 text-white placeholder-pink-300/50 focus:ring-pink-400',
+      select: 'bg-gray-900',
+      score: 'from-pink-400 to-rose-500',
+    },
+    statusMessages: [
+      '💕 연애 원국을 분석하고 있습니다...',
+      '💑 평생 인연 흐름을 계산하고 있습니다...',
+      '💍 당신의 이상형을 분석하고 있습니다...',
+      '❤️ 결혼운을 살펴보고 있습니다...',
+      '🌹 맞춤형 연애 리포트를 제작하고 있습니다...'
+    ],
+    graphLabels: [
+      { key: 'charm', label: '매력', emoji: '✨' },
+      { key: 'love_luck', label: '연애', emoji: '💕' },
+      { key: 'marriage_luck', label: '결혼', emoji: '💍' },
+      { key: 'spouse_luck', label: '배우자복', emoji: '👫' },
+      { key: 'destiny', label: '인연', emoji: '🔗' },
+    ],
+    prescriptionTitle: '💕 연애 처방전',
+    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionLabels: { 
+      color: '연애운 색상', 
+      number: '인연의 숫자', 
+      direction: '인연이 오는 방향', 
+      item: '연애 아이템',
+      action: '연애운 높이는 행동',
+      avoid: '연애할 때 피할 것'
+    },
+    showLoveGrade: true,
+    showLoveStyle: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
   }
@@ -112,9 +163,9 @@ const getProductKeyById = (productId) => {
 };
 
 // ========================================
-// 꺾은선 그래프 컴포넌트 (재물운 전용)
+// 꺾은선 그래프 컴포넌트 (재물운/연애운 공용)
 // ========================================
-const WealthFlowChart = ({ data, theme }) => {
+const LifetimeFlowChart = ({ data, theme, lineColor = '#FFD700' }) => {
   if (!data || data.length === 0) return null;
   
   const maxScore = 100;
@@ -135,14 +186,14 @@ const WealthFlowChart = ({ data, theme }) => {
     <div className="w-full">
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-40">
         <defs>
-          <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#FFD700" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#FFD700" stopOpacity="0.1" />
+          <linearGradient id="flowGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor={lineColor} stopOpacity="0.6" />
+            <stop offset="100%" stopColor={lineColor} stopOpacity="0.1" />
           </linearGradient>
-          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#F59E0B" />
-            <stop offset="50%" stopColor="#FFD700" />
-            <stop offset="100%" stopColor="#F59E0B" />
+          <linearGradient id="flowLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor={lineColor} />
+            <stop offset="50%" stopColor={lineColor} />
+            <stop offset="100%" stopColor={lineColor} />
           </linearGradient>
         </defs>
         
@@ -150,17 +201,17 @@ const WealthFlowChart = ({ data, theme }) => {
           const y = height - padding - ((val / maxScore) * (height - padding * 2));
           return (
             <line key={i} x1={padding} y1={y} x2={width - padding} y2={y} 
-              stroke="rgba(255,215,0,0.2)" strokeWidth="0.3" strokeDasharray="2,2" />
+              stroke={`${lineColor}33`} strokeWidth="0.3" strokeDasharray="2,2" />
           );
         })}
         
-        <path d={areaD} fill="url(#goldGradient)" />
-        <path d={pathD} fill="none" stroke="url(#lineGradient)" strokeWidth="1.5" strokeLinecap="round" />
+        <path d={areaD} fill="url(#flowGradient)" />
+        <path d={pathD} fill="none" stroke="url(#flowLineGradient)" strokeWidth="1.5" strokeLinecap="round" />
         
         {points.map((p, i) => (
           <g key={i}>
-            <circle cx={p.x} cy={p.y} r="2.5" fill="#1F2937" stroke="#FFD700" strokeWidth="1.5" />
-            <text x={p.x} y={height - 2} textAnchor="middle" className="text-[4px] fill-amber-400">{p.age_range}</text>
+            <circle cx={p.x} cy={p.y} r="2.5" fill="#1F2937" stroke={lineColor} strokeWidth="1.5" />
+            <text x={p.x} y={height - 2} textAnchor="middle" className="text-[4px]" fill={lineColor}>{p.age_range}</text>
           </g>
         ))}
       </svg>
@@ -178,28 +229,51 @@ const WealthFlowChart = ({ data, theme }) => {
 };
 
 // ========================================
-// 재물 등급 뱃지 컴포넌트
+// 등급 뱃지 컴포넌트 (재물운/연애운 공용)
 // ========================================
-const WealthGradeBadge = ({ grade, hook }) => {
-  const gradeColors = {
-    'S': 'from-yellow-400 via-amber-300 to-yellow-500',
-    'A': 'from-amber-400 via-yellow-400 to-amber-500',
-    'B': 'from-gray-300 via-gray-200 to-gray-400',
-    'C': 'from-orange-700 via-orange-600 to-orange-800',
-    'D': 'from-stone-500 via-stone-400 to-stone-600'
+const GradeBadge = ({ grade, hook, type = 'wealth' }) => {
+  const colorSchemes = {
+    wealth: {
+      colors: {
+        'S': 'from-yellow-400 via-amber-300 to-yellow-500',
+        'A': 'from-amber-400 via-yellow-400 to-amber-500',
+        'B': 'from-gray-300 via-gray-200 to-gray-400',
+        'C': 'from-orange-700 via-orange-600 to-orange-800',
+        'D': 'from-stone-500 via-stone-400 to-stone-600'
+      },
+      labels: {
+        'S': '최상급 재물복', 'A': '상급 재물복', 'B': '중급 재물복', 'C': '관리형 재물복', 'D': '노력형 재물복'
+      },
+      shadow: 'shadow-amber-500/30',
+      textColor: 'text-amber-400',
+      hookColor: 'text-amber-200/80'
+    },
+    love: {
+      colors: {
+        'S': 'from-pink-400 via-rose-300 to-pink-500',
+        'A': 'from-rose-400 via-pink-400 to-rose-500',
+        'B': 'from-pink-300 via-pink-200 to-pink-400',
+        'C': 'from-rose-600 via-rose-500 to-rose-700',
+        'D': 'from-pink-700 via-pink-600 to-pink-800'
+      },
+      labels: {
+        'S': '타고난 연애고수', 'A': '매력 넘치는 인연', 'B': '평범한 연애운', 'C': '노력형 연애운', 'D': '대기만성 연애운'
+      },
+      shadow: 'shadow-pink-500/30',
+      textColor: 'text-pink-400',
+      hookColor: 'text-pink-200/80'
+    }
   };
   
-  const gradeLabels = {
-    'S': '최상급 재물복', 'A': '상급 재물복', 'B': '중급 재물복', 'C': '관리형 재물복', 'D': '노력형 재물복'
-  };
+  const scheme = colorSchemes[type] || colorSchemes.wealth;
   
   return (
     <div className="text-center">
-      <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br ${gradeColors[grade] || gradeColors['B']} shadow-lg shadow-amber-500/30`}>
+      <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br ${scheme.colors[grade] || scheme.colors['B']} shadow-lg ${scheme.shadow}`}>
         <span className="text-4xl font-black text-gray-900">{grade}</span>
       </div>
-      <div className="text-amber-400 font-bold mt-2">{gradeLabels[grade] || '재물복'}</div>
-      {hook && <div className="text-amber-200/80 text-sm mt-1 italic">"{hook}"</div>}
+      <div className={`${scheme.textColor} font-bold mt-2`}>{scheme.labels[grade] || '운세'}</div>
+      {hook && <div className={`${scheme.hookColor} text-sm mt-1 italic`}>"{hook}"</div>}
     </div>
   );
 };
@@ -207,12 +281,21 @@ const WealthGradeBadge = ({ grade, hook }) => {
 // ========================================
 // 요약본 컴포넌트 (결과 페이지용)
 // ========================================
-const SummaryView = ({ config, theme, formData, result, onBack, onDownload }) => {
+const SummaryView = ({ config, theme, formData, result, onBack }) => {
   const ai = result?.aiResponse || {};
   const analyses = ai.custom_analysis_10 || [];
-  const prescription = ai.lucky_prescription || ai.wealth_prescription || {};
+  const prescription = ai.lucky_prescription || {};
   const graphs = ai.graphs || {};
-  const wealthFlow = ai.lifetime_wealth_flow || [];
+  
+  // 연애운/재물운 구분
+  const isLove = config.showLoveGrade;
+  const isWealth = config.showWealthGrade;
+  const flowData = ai.lifetime_love_flow || ai.lifetime_wealth_flow || [];
+  const grade = isLove ? ai.love_grade : ai.wealth_grade;
+  const gradeHook = isLove ? ai.love_grade_hook : ai.wealth_grade_hook;
+  const styleType = isLove ? ai.love_style : ai.money_type;
+  const styleHook = isLove ? ai.love_style_hook : ai.money_type_hook;
+  const chartColor = isLove ? '#EC4899' : '#FFD700';
 
   const Copyright = () => (
     <p className={`text-center ${theme.text.muted} text-xs mt-8`}>
@@ -242,29 +325,32 @@ const SummaryView = ({ config, theme, formData, result, onBack, onDownload }) =>
           </div>
         )}
 
-        {/* 재물운 전용: 등급 + 유형 */}
-        {config.showWealthGrade && (
+        {/* 등급 + 유형 (재물운/연애운) */}
+        {(isWealth || isLove) && (
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className={`${theme.card} rounded-2xl p-5 border flex flex-col items-center justify-center`}>
-              <WealthGradeBadge grade={ai.wealth_grade || 'A'} hook={ai.wealth_grade_hook} />
+              <GradeBadge grade={grade || 'A'} hook={gradeHook} type={isLove ? 'love' : 'wealth'} />
             </div>
             <div className={`${theme.card} rounded-2xl p-5 border`}>
               <div className="text-center">
                 <div className="text-3xl mb-2">
-                  {ai.money_type === '사업가형' ? '🏢' : ai.money_type === '투자자형' ? '📈' : '💰'}
+                  {isLove 
+                    ? (styleType === '헌신형' ? '💝' : styleType === '자유연애형' ? '🦋' : '💕')
+                    : (styleType === '사업가형' ? '🏢' : styleType === '투자자형' ? '📈' : '💰')
+                  }
                 </div>
-                <div className={`${theme.text.accent} font-bold`}>{ai.money_type || '복합형'}</div>
-                <div className={`${theme.text.muted} text-xs mt-1 italic`}>"{ai.money_type_hook}"</div>
+                <div className={`${theme.text.accent} font-bold`}>{styleType || (isLove ? '연애 유형' : '재물 유형')}</div>
+                <div className={`${theme.text.muted} text-xs mt-1 italic`}>"{styleHook}"</div>
               </div>
             </div>
           </div>
         )}
 
-        {/* 재물운 전용: 전성기/주의기 */}
+        {/* 전성기/주의기 */}
         {config.showPeakDanger && (
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 rounded-xl p-4 border border-green-500/30">
-              <div className="text-green-400 text-sm mb-1">🚀 전성기</div>
+              <div className="text-green-400 text-sm mb-1">{isLove ? '💕 연애 전성기' : '🚀 전성기'}</div>
               <div className="text-white font-bold text-lg">{ai.peak_period || '45-55세'}</div>
               <div className="text-green-300/80 text-xs mt-1">"{ai.peak_hook}"</div>
             </div>
@@ -273,6 +359,15 @@ const SummaryView = ({ config, theme, formData, result, onBack, onDownload }) =>
               <div className="text-white font-bold text-lg">{ai.danger_period || '38-42세'}</div>
               <div className="text-red-300/80 text-xs mt-1">"{ai.danger_hook}"</div>
             </div>
+          </div>
+        )}
+
+        {/* 결혼 타이밍 (연애운 전용) */}
+        {isLove && ai.marriage_timing && (
+          <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 rounded-xl p-4 mb-6 border border-purple-500/30">
+            <div className="text-purple-400 text-sm mb-1">💍 결혼 적기</div>
+            <div className="text-white font-bold text-lg">{ai.marriage_timing}</div>
+            <div className="text-purple-300/80 text-xs mt-1">"{ai.marriage_hook}"</div>
           </div>
         )}
 
@@ -295,11 +390,13 @@ const SummaryView = ({ config, theme, formData, result, onBack, onDownload }) =>
           </div>
         </div>
 
-        {/* 재물운 전용: 인생 그래프 */}
-        {config.showLifetimeFlow && wealthFlow.length > 0 && (
+        {/* 인생 흐름 그래프 */}
+        {config.showLifetimeFlow && flowData.length > 0 && (
           <div className={`${theme.card} rounded-2xl p-6 mb-6 border`}>
-            <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>📈 인생 재물 흐름</h3>
-            <WealthFlowChart data={wealthFlow} theme={theme} />
+            <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>
+              {isLove ? '💕 인생 연애 흐름' : '📈 인생 재물 흐름'}
+            </h3>
+            <LifetimeFlowChart data={flowData} theme={theme} lineColor={chartColor} />
           </div>
         )}
 
@@ -712,6 +809,9 @@ const ProductPage = ({ productKey }) => {
   // ========== 결과 화면 ==========
   if (step === 'result') {
     const ai = result?.aiResponse || {};
+    const isLove = config.showLoveGrade;
+    const isWealth = config.showWealthGrade;
+    const grade = isLove ? ai.love_grade : ai.wealth_grade;
     
     return (
       <div className={`min-h-screen bg-gradient-to-br ${theme.bg} flex items-center justify-center p-4`}>
@@ -726,12 +826,12 @@ const ProductPage = ({ productKey }) => {
             </div>
           )}
 
-          {/* 미리보기 (재물운: 등급+점수 / 일반: 점수만) */}
+          {/* 미리보기 (등급+점수) */}
           <div className="flex justify-center gap-6 mb-6">
-            {config.showWealthGrade && ai.wealth_grade && (
+            {(isWealth || isLove) && grade && (
               <div className="text-center">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 shadow-lg`}>
-                  <span className="text-2xl font-black text-gray-900">{ai.wealth_grade}</span>
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br ${isLove ? 'from-pink-400 to-rose-500' : 'from-yellow-400 to-amber-500'} shadow-lg`}>
+                  <span className="text-2xl font-black text-gray-900">{grade}</span>
                 </div>
                 <div className={`${theme.text.accent} text-sm mt-1`}>등급</div>
               </div>
@@ -784,6 +884,7 @@ export default function App() {
         <Route path="/" element={<Navigate to="/saju" replace />} />
         <Route path="/saju" element={<ProductPage productKey="saju" />} />
         <Route path="/wealth" element={<ProductPage productKey="wealth" />} />
+        <Route path="/love" element={<ProductPage productKey="love" />} />
         <Route path="/result/:orderId" element={<ResultPage />} />
       </Routes>
     </BrowserRouter>

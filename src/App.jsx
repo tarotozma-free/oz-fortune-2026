@@ -156,7 +156,7 @@ const PRODUCTS = {
   career: {
     product_id: 'career_exam_fortune',
     icon: '🎯',
-    title: '평생 취업·이직·합격운 대분석',
+    title: '평생 취업·합격운 대분석',
     subtitle: '커리어의 흐름을 읽는 프리미엄 사주 분석',
     buttonText: '내 합격운 분석받기',
     theme: {

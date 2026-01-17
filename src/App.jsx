@@ -216,14 +216,16 @@ const LifetimeFlowChart = ({ data, theme, lineColor = '#FFD700' }) => {
         ))}
       </svg>
       
-      <div className="flex justify-between px-2 mt-2">
-        {data.map((item, i) => (
-          <div key={i} className="text-center flex-1">
-            <div className={`${theme.text.accent} font-bold text-sm`}>{item.score}점</div>
-            <div className={`${theme.text.muted} text-xs truncate px-1`}>{item.hook}</div>
-          </div>
-        ))}
+     <div className="grid grid-cols-5 gap-1 mt-4">
+  {data.map((item, i) => (
+    <div key={i} className="text-center">
+      <div className={`${theme.text.accent} font-bold text-sm`}>{item.score}점</div>
+      <div className={`${theme.text.muted} text-xs leading-tight px-1`}>
+        {item.hook?.length > 12 ? item.hook.substring(0, 12) + '...' : item.hook}
       </div>
+    </div>
+  ))}
+</div>
     </div>
   );
 };

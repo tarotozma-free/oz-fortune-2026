@@ -96,12 +96,19 @@ const PRODUCTS = {
       best_timing: '투자 타이밍',
       avoid_action: '피해야 할 것'
     },
-    // 재물운 전용 추가 기능
     showWealthGrade: true,
     showMoneyType: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
   }
+};
+
+// product_id로 productKey 찾기
+const getProductKeyById = (productId) => {
+  for (const [key, config] of Object.entries(PRODUCTS)) {
+    if (config.product_id === productId) return key;
+  }
+  return 'saju'; // 기본값
 };
 
 // ========================================
@@ -194,6 +201,249 @@ const WealthGradeBadge = ({ grade, hook }) => {
       <div className="text-amber-400 font-bold mt-2">{gradeLabels[grade] || '재물복'}</div>
       {hook && <div className="text-amber-200/80 text-sm mt-1 italic">"{hook}"</div>}
     </div>
+  );
+};
+
+// ========================================
+// 요약본 컴포넌트 (결과 페이지용)
+// ========================================
+const SummaryView = ({ config, theme, formData, result, onBack, onDownload }) => {
+  const ai = result?.aiResponse || {};
+  const analyses = ai.custom_analysis_10 || [];
+  const prescription = ai.lucky_prescription || ai.wealth_prescription || {};
+  const graphs = ai.graphs || {};
+  const wealthFlow = ai.lifetime_wealth_flow || [];
+
+  const Copyright = () => (
+    <p className={`text-center ${theme.text.muted} text-xs mt-8`}>
+      © 2025 OZ Fortune. All rights reserved.
+    </p>
+  );
+
+  return (
+    <div className={`min-h-screen bg-gradient-to-br ${theme.bg}`}>
+      {/* 헤더 */}
+      <div className="bg-black/30 backdrop-blur-sm sticky top-0 z-10 border-b border-white/10">
+        <div className="max-w-2xl mx-auto px-4 py-4 flex justify-between items-center">
+          <h1 className={`${theme.text.primary} font-bold`}>{config.icon} {formData?.name || '회원'}님의 분석 결과</h1>
+          {onBack && (
+            <button onClick={onBack} className={`${theme.text.accent} hover:text-white text-sm`}>
+              ← 돌아가기
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        {/* 후킹 멘트 */}
+        {ai.hooking_ment && (
+          <div className={`bg-gradient-to-r from-${theme.accent}-500/20 to-${theme.accent}-500/20 rounded-2xl p-6 mb-6 border border-${theme.accent}-500/30`}>
+            <p className={`text-lg ${theme.text.primary} text-center italic`}>"{ai.hooking_ment}"</p>
+          </div>
+        )}
+
+        {/* 재물운 전용: 등급 + 유형 */}
+        {config.showWealthGrade && (
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className={`${theme.card} rounded-2xl p-5 border flex flex-col items-center justify-center`}>
+              <WealthGradeBadge grade={ai.wealth_grade || 'A'} hook={ai.wealth_grade_hook} />
+            </div>
+            <div className={`${theme.card} rounded-2xl p-5 border`}>
+              <div className="text-center">
+                <div className="text-3xl mb-2">
+                  {ai.money_type === '사업가형' ? '🏢' : ai.money_type === '투자자형' ? '📈' : '💰'}
+                </div>
+                <div className={`${theme.text.accent} font-bold`}>{ai.money_type || '복합형'}</div>
+                <div className={`${theme.text.muted} text-xs mt-1 italic`}>"{ai.money_type_hook}"</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 재물운 전용: 전성기/주의기 */}
+        {config.showPeakDanger && (
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 rounded-xl p-4 border border-green-500/30">
+              <div className="text-green-400 text-sm mb-1">🚀 전성기</div>
+              <div className="text-white font-bold text-lg">{ai.peak_period || '45-55세'}</div>
+              <div className="text-green-300/80 text-xs mt-1">"{ai.peak_hook}"</div>
+            </div>
+            <div className="bg-gradient-to-br from-red-900/40 to-rose-900/40 rounded-xl p-4 border border-red-500/30">
+              <div className="text-red-400 text-sm mb-1">⚠️ 주의 시기</div>
+              <div className="text-white font-bold text-lg">{ai.danger_period || '38-42세'}</div>
+              <div className="text-red-300/80 text-xs mt-1">"{ai.danger_hook}"</div>
+            </div>
+          </div>
+        )}
+
+        {/* 종합 점수 + 지표 */}
+        <div className={`${theme.card} rounded-2xl p-6 mb-6 border`}>
+          <div className="text-center mb-6">
+            <div className={`text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${theme.score} mb-1`}>
+              {ai.summary_score || 85}점
+            </div>
+            <p className={`${theme.text.accent} text-sm`}>종합 점수</p>
+          </div>
+          <div className="grid grid-cols-5 gap-2">
+            {config.graphLabels.map((item, i) => (
+              <div key={i} className="text-center">
+                <div className="text-lg">{item.emoji}</div>
+                <div className={`${theme.text.primary} font-bold text-sm`}>{graphs[item.key] || 80}</div>
+                <div className={`${theme.text.muted} text-xs`}>{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 재물운 전용: 인생 그래프 */}
+        {config.showLifetimeFlow && wealthFlow.length > 0 && (
+          <div className={`${theme.card} rounded-2xl p-6 mb-6 border`}>
+            <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>📈 인생 재물 흐름</h3>
+            <WealthFlowChart data={wealthFlow} theme={theme} />
+          </div>
+        )}
+
+        {/* 분석 10개 */}
+        <div className="space-y-3 mb-6">
+          {analyses.map((item, i) => (
+            <div key={i} className={`${theme.card} rounded-xl p-4 border`}>
+              <h3 className={`${theme.text.primary} font-medium mb-1`}>{item.topic || `분석 ${i + 1}`}</h3>
+              {item.hook && <p className={`${theme.text.accent} text-sm italic mb-2`}>"{item.hook}"</p>}
+              <p className={`${theme.text.secondary} text-sm leading-relaxed`}>
+                {(item.summary || item.full_content || '').substring(0, 200)}
+                {(item.summary || item.full_content || '').length > 200 && '...'}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* 처방전 */}
+        <div className={`bg-gradient-to-r from-${theme.accent}-500/20 to-${theme.accent}-500/20 rounded-2xl p-5 mb-6 border border-${theme.accent}-500/30`}>
+          <h2 className={`text-lg font-bold ${theme.text.primary} mb-3`}>{config.prescriptionTitle}</h2>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            {config.prescriptionFields.map(field => prescription[field] && (
+              <div key={field} className={`${theme.card} rounded-lg p-3`}>
+                <span className={theme.text.accent}>{config.prescriptionLabels[field]}</span>
+                <span className={`${theme.text.primary} ml-2`}>{prescription[field]}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* PDF 다운로드 */}
+        {result?.pdfUrl && (
+          <a href={result?.pdfUrl} target="_blank" rel="noopener noreferrer"
+            className={`block w-full py-4 rounded-xl bg-gradient-to-r ${theme.button} font-bold text-center transition-all mb-4`}
+          >
+            📄 PDF 전체 리포트 다운로드
+          </a>
+        )}
+
+        {onBack && (
+          <button onClick={onBack}
+            className={`block w-full py-3 rounded-xl ${theme.input} border font-medium transition-all`}
+          >
+            ← 돌아가기
+          </button>
+        )}
+
+        <Copyright />
+      </div>
+    </div>
+  );
+};
+
+// ========================================
+// 결과 페이지 (URL로 접근 시)
+// ========================================
+const ResultPage = () => {
+  const { orderId } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orderData, setOrderData] = useState(null);
+  const [productKey, setProductKey] = useState('saju');
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('id', orderId)
+          .single();
+
+        if (error) throw error;
+        if (!data) throw new Error('주문을 찾을 수 없습니다');
+
+        setOrderData(data);
+        setProductKey(getProductKeyById(data.product_id));
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    if (orderId) {
+      fetchOrder();
+    }
+  }, [orderId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center">
+        <div className="text-white text-xl">불러오는 중...</div>
+      </div>
+    );
+  }
+
+  if (error || !orderData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center p-4">
+        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 w-full max-w-md border border-white/20 text-center">
+          <div className="text-6xl mb-4">😢</div>
+          <h2 className="text-2xl font-bold text-white mb-2">결과를 찾을 수 없습니다</h2>
+          <p className="text-purple-200 mb-6">{error || '잘못된 링크이거나 결과가 아직 준비되지 않았습니다.'}</p>
+          <a href="/" className="inline-block py-3 px-6 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold">
+            홈으로 돌아가기
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  if (orderData.status !== 'completed') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center p-4">
+        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 w-full max-w-md border border-white/20 text-center">
+          <div className="text-6xl mb-4 animate-bounce">⏳</div>
+          <h2 className="text-2xl font-bold text-white mb-2">분석 진행 중입니다</h2>
+          <p className="text-purple-200 mb-6">잠시 후 다시 확인해 주세요. 완료되면 이메일로도 안내드립니다.</p>
+          <button onClick={() => window.location.reload()} className="py-3 px-6 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold">
+            새로고침
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const config = PRODUCTS[productKey];
+  const theme = config.theme;
+  const formData = orderData.input_data || {};
+  const result = {
+    aiResponse: orderData.ai_response,
+    pdfUrl: orderData.pdf_url,
+    notionUrl: orderData.notion_url
+  };
+
+  return (
+    <SummaryView 
+      config={config} 
+      theme={theme} 
+      formData={formData} 
+      result={result}
+      onBack={null}
+    />
   );
 };
 
@@ -448,136 +698,14 @@ const ProductPage = ({ productKey }) => {
 
   // ========== 요약본 ==========
   if (step === 'summary') {
-    const ai = result?.aiResponse || {};
-    const analyses = ai.custom_analysis_10 || [];
-    const prescription = ai.lucky_prescription || ai.wealth_prescription || {};
-    const graphs = ai.graphs || {};
-    const wealthFlow = ai.lifetime_wealth_flow || [];
-
     return (
-      <div className={`min-h-screen bg-gradient-to-br ${theme.bg}`}>
-        {/* 헤더 */}
-        <div className="bg-black/30 backdrop-blur-sm sticky top-0 z-10 border-b border-white/10">
-          <div className="max-w-2xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 className={`${theme.text.primary} font-bold`}>{config.icon} {formData.name}님의 분석 결과</h1>
-            <button onClick={() => setStep('result')} className={`${theme.text.accent} hover:text-white text-sm`}>
-              ← 돌아가기
-            </button>
-          </div>
-        </div>
-
-        <div className="max-w-2xl mx-auto px-4 py-8">
-          {/* 훅킹 멘트 */}
-          {ai.hooking_ment && (
-            <div className={`bg-gradient-to-r from-${theme.accent}-500/20 to-${theme.accent}-500/20 rounded-2xl p-6 mb-6 border border-${theme.accent}-500/30`}>
-              <p className={`text-lg ${theme.text.primary} text-center italic`}>"{ai.hooking_ment}"</p>
-            </div>
-          )}
-
-          {/* 재물운 전용: 등급 + 유형 */}
-          {config.showWealthGrade && (
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className={`${theme.card} rounded-2xl p-5 border flex flex-col items-center justify-center`}>
-                <WealthGradeBadge grade={ai.wealth_grade || 'A'} hook={ai.wealth_grade_hook} />
-              </div>
-              <div className={`${theme.card} rounded-2xl p-5 border`}>
-                <div className="text-center">
-                  <div className="text-3xl mb-2">
-                    {ai.money_type === '사업가형' ? '🏢' : ai.money_type === '투자자형' ? '📈' : '💰'}
-                  </div>
-                  <div className={`${theme.text.accent} font-bold`}>{ai.money_type || '복합형'}</div>
-                  <div className={`${theme.text.muted} text-xs mt-1 italic`}>"{ai.money_type_hook}"</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 재물운 전용: 전성기/주의기 */}
-          {config.showPeakDanger && (
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 rounded-xl p-4 border border-green-500/30">
-                <div className="text-green-400 text-sm mb-1">🚀 전성기</div>
-                <div className="text-white font-bold text-lg">{ai.peak_period || '45-55세'}</div>
-                <div className="text-green-300/80 text-xs mt-1">"{ai.peak_hook}"</div>
-              </div>
-              <div className="bg-gradient-to-br from-red-900/40 to-rose-900/40 rounded-xl p-4 border border-red-500/30">
-                <div className="text-red-400 text-sm mb-1">⚠️ 주의 시기</div>
-                <div className="text-white font-bold text-lg">{ai.danger_period || '38-42세'}</div>
-                <div className="text-red-300/80 text-xs mt-1">"{ai.danger_hook}"</div>
-              </div>
-            </div>
-          )}
-
-          {/* 종합 점수 + 지표 */}
-          <div className={`${theme.card} rounded-2xl p-6 mb-6 border`}>
-            <div className="text-center mb-6">
-              <div className={`text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${theme.score} mb-1`}>
-                {ai.summary_score || 85}점
-              </div>
-              <p className={`${theme.text.accent} text-sm`}>종합 점수</p>
-            </div>
-            <div className="grid grid-cols-5 gap-2">
-              {config.graphLabels.map((item, i) => (
-                <div key={i} className="text-center">
-                  <div className="text-lg">{item.emoji}</div>
-                  <div className={`${theme.text.primary} font-bold text-sm`}>{graphs[item.key] || 80}</div>
-                  <div className={`${theme.text.muted} text-xs`}>{item.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 재물운 전용: 인생 그래프 */}
-          {config.showLifetimeFlow && wealthFlow.length > 0 && (
-            <div className={`${theme.card} rounded-2xl p-6 mb-6 border`}>
-              <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>📈 인생 재물 흐름</h3>
-              <WealthFlowChart data={wealthFlow} theme={theme} />
-            </div>
-          )}
-
-          {/* 분석 10개 */}
-          <div className="space-y-3 mb-6">
-            {analyses.map((item, i) => (
-              <div key={i} className={`${theme.card} rounded-xl p-4 border`}>
-                <h3 className={`${theme.text.primary} font-medium mb-1`}>{item.topic || `분석 ${i + 1}`}</h3>
-                {item.hook && <p className={`${theme.text.accent} text-sm italic mb-2`}>"{item.hook}"</p>}
-                <p className={`${theme.text.secondary} text-sm leading-relaxed`}>
-                  {(item.summary || item.full_content || '').substring(0, 200)}
-                  {(item.summary || item.full_content || '').length > 200 && '...'}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* 처방전 */}
-          <div className={`bg-gradient-to-r from-${theme.accent}-500/20 to-${theme.accent}-500/20 rounded-2xl p-5 mb-6 border border-${theme.accent}-500/30`}>
-            <h2 className={`text-lg font-bold ${theme.text.primary} mb-3`}>{config.prescriptionTitle}</h2>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              {config.prescriptionFields.map(field => prescription[field] && (
-                <div key={field} className={`${theme.card} rounded-lg p-3`}>
-                  <span className={theme.text.accent}>{config.prescriptionLabels[field]}</span>
-                  <span className={`${theme.text.primary} ml-2`}>{prescription[field]}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* PDF 다운로드 */}
-          <a href={result?.pdfUrl} target="_blank" rel="noopener noreferrer"
-            className={`block w-full py-4 rounded-xl bg-gradient-to-r ${theme.button} font-bold text-center transition-all mb-4`}
-          >
-            📄 PDF 전체 리포트 다운로드
-          </a>
-
-          <button onClick={() => setStep('result')}
-            className={`block w-full py-3 rounded-xl ${theme.input} border font-medium transition-all`}
-          >
-            ← 돌아가기
-          </button>
-
-          <Copyright />
-        </div>
-      </div>
+      <SummaryView 
+        config={config} 
+        theme={theme} 
+        formData={formData} 
+        result={result}
+        onBack={() => setStep('result')}
+      />
     );
   }
 
@@ -656,6 +784,7 @@ export default function App() {
         <Route path="/" element={<Navigate to="/saju" replace />} />
         <Route path="/saju" element={<ProductPage productKey="saju" />} />
         <Route path="/wealth" element={<ProductPage productKey="wealth" />} />
+        <Route path="/result/:orderId" element={<ResultPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -436,10 +436,10 @@ const SummaryView = ({ config, theme, formData, result, onBack }) => {
   
   // 데이터 매핑
   const flowData = ai.lifetime_love_flow || ai.lifetime_wealth_flow || ai.lifetime_career_flow || ai.lifetime_flow || [];
-  const grade = isLove ? ai.love_grade : isWealth ? ai.wealth_grade : isCareer ? ai.career_grade : ai.saju_summary?.saju_grade;
-  const gradeHook = isLove ? ai.love_grade_hook : isWealth ? ai.wealth_grade_hook : isCareer ? ai.career_grade_hook : ai.saju_summary?.saju_grade_hook;
-  const styleType = isLove ? ai.love_style : isWealth ? ai.money_type : isCareer ? ai.career_type : ai.saju_summary?.saju_type;
-  const styleHook = isLove ? ai.love_style_hook : isWealth ? ai.money_type_hook : isCareer ? ai.career_type_hook : null;
+  const grade = isLove ? ai.love_grade : isWealth ? ai.wealth_grade : isCareer ? ai.career_grade : (ai.saju_grade || ai.saju_summary?.saju_grade);
+  const gradeHook = isLove ? ai.love_grade_hook : isWealth ? ai.wealth_grade_hook : isCareer ? ai.career_grade_hook : (ai.saju_grade_hook || ai.saju_summary?.saju_grade_hook);
+  const styleType = isLove ? ai.love_style : isWealth ? ai.money_type : isCareer ? ai.career_type : (ai.saju_type || ai.saju_summary?.saju_type);
+  const styleHook = isLove ? ai.love_style_hook : isWealth ? ai.money_type_hook : isCareer ? ai.career_type_hook : (ai.saju_type_hook || null);
   const chartColor = isLove ? '#EC4899' : isWealth ? '#FFD700' : isCareer ? '#3B82F6' : '#8B5CF6';
   const gradeType = isLove ? 'love' : isWealth ? 'wealth' : isCareer ? 'career' : 'full';
   
@@ -1214,7 +1214,7 @@ const ProductPage = ({ productKey }) => {
     const isWealth = config.showWealthGrade;
     const isCareer = config.showCareerGrade;
     const isFull = config.showFullGrade;
-    const grade = isLove ? ai.love_grade : isWealth ? ai.wealth_grade : isCareer ? ai.career_grade : ai.saju_summary?.saju_grade;
+    const grade = isLove ? ai.love_grade : isWealth ? ai.wealth_grade : isCareer ? ai.career_grade : (ai.saju_grade || ai.saju_summary?.saju_grade);
     const overallScore = ai.life_score?.overall || ai.summary_score;
     
     return (

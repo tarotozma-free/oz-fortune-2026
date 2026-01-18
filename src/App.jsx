@@ -952,7 +952,7 @@ const GradeBadge = ({ grade, hook, type = 'wealth' }) => {
 // ========================================
 // 요약본 컴포넌트 (결과 페이지용)
 // ========================================
-const SummaryView = ({ config, theme, formData, result, onBack, onShowFull }) => {
+const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, displayName }) => {
   const ai = result?.aiResponse || {};
   const prescription = ai.lucky_prescription || {};
   const graphs = ai.graphs || {};
@@ -981,6 +981,9 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull }) =>
   // life_score (full 전용)
   const lifeScore = ai.life_score || {};
 
+  // 표시할 제목 (displayName 우선, 없으면 config.title)
+  const headerTitle = displayName || config.title;
+
   const Copyright = () => (
     <p className={`text-center ${theme.text.muted} text-xs mt-8`}>
       © 2025 OZ Fortune. All rights reserved.
@@ -992,7 +995,7 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull }) =>
       {/* 헤더 */}
       <div className="bg-black/30 backdrop-blur-sm sticky top-0 z-10 border-b border-white/10">
         <div className="max-w-2xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className={`${theme.text.primary} font-bold`}>{config.icon} {formData?.name || '회원'}님의 분석 결과</h1>
+          <h1 className={`${theme.text.primary} font-bold`}>{config.icon} {formData?.name || '회원'}님의 {headerTitle}</h1>
           {onBack && (
             <button onClick={onBack} className={`${theme.text.accent} hover:text-white text-sm`}>
               ← 돌아가기
@@ -1276,7 +1279,7 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull }) =>
 // ========================================
 // 풀버전 컴포넌트 (전체 분석 내용)
 // ========================================
-const FullView = ({ config, theme, formData, result, onBack }) => {
+const FullView = ({ config, theme, formData, result, onBack, displayName }) => {
   const ai = result?.aiResponse || {};
   const prescription = ai.lucky_prescription || {};
   const analyses = ai.custom_analysis || [];
@@ -1292,6 +1295,9 @@ const FullView = ({ config, theme, formData, result, onBack }) => {
   const grade = isLove ? ai.love_grade : isWealth ? ai.wealth_grade : isCareer ? ai.career_grade : ai.saju_summary?.saju_grade;
   const gradeType = isLove ? 'love' : isWealth ? 'wealth' : isCareer ? 'career' : 'full';
 
+  // 표시할 제목 (displayName 우선, 없으면 config.title)
+  const headerTitle = displayName || config.title;
+
   const Copyright = () => (
     <p className={`text-center ${theme.text.muted} text-xs mt-8 print:hidden`}>
       © 2025 OZ Fortune. All rights reserved.
@@ -1303,7 +1309,7 @@ const FullView = ({ config, theme, formData, result, onBack }) => {
       {/* 헤더 (인쇄 시 숨김) */}
       <div className="bg-black/30 backdrop-blur-sm sticky top-0 z-10 border-b border-white/10 print:hidden">
         <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className={`${theme.text.primary} font-bold`}>{config.icon} {formData?.name || '회원'}님의 풀버전 분석</h1>
+          <h1 className={`${theme.text.primary} font-bold`}>{config.icon} {formData?.name || '회원'}님의 {headerTitle}</h1>
           <div className="flex gap-2">
             <button onClick={() => window.print()} className={`${theme.text.accent} hover:text-white text-sm px-3 py-1 rounded-lg bg-white/10`}>
               🖨️ 인쇄
@@ -1319,7 +1325,7 @@ const FullView = ({ config, theme, formData, result, onBack }) => {
 
       {/* 인쇄용 헤더 */}
       <div className="hidden print:block text-center py-8 border-b-2 border-gray-300">
-        <h1 className="text-3xl font-bold text-gray-800">{config.icon} {config.title}</h1>
+        <h1 className="text-3xl font-bold text-gray-800">{config.icon} {headerTitle}</h1>
         <p className="text-xl text-gray-600 mt-2">{formData?.name || '회원'}님의 분석 결과</p>
         <p className="text-sm text-gray-400 mt-1">생년월일: {formData?.dob} | 성별: {formData?.gender === 'male' ? '남성' : '여성'}</p>
       </div>
@@ -1502,12 +1508,21 @@ const ResultPage = () => {
   const [productKey, setProductKey] = useState('saju');
   const [showFull, setShowFull] = useState(viewMode === 'full'); // URL 파라미터로 초기값 설정
 
+  const [displayName, setDisplayName] = useState('');
+
   useEffect(() => {
     const fetchOrder = async () => {
       try {
+        // orders와 products를 join해서 display_name 가져오기
         const { data, error } = await supabase
           .from('orders')
-          .select('*')
+          .select(`
+            *,
+            products:product_id (
+              display_name,
+              name
+            )
+          `)
           .eq('id', orderId)
           .single();
 
@@ -1516,6 +1531,8 @@ const ResultPage = () => {
 
         setOrderData(data);
         setProductKey(getProductKeyById(data.product_id));
+        // display_name 설정 (없으면 name 사용)
+        setDisplayName(data.products?.display_name || data.products?.name || '운세 분석');
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -1582,6 +1599,7 @@ const ResultPage = () => {
       theme={theme} 
       formData={formData} 
       result={result}
+      displayName={displayName}
       onBack={() => setShowFull(false)}
     />
   ) : (
@@ -1590,6 +1608,7 @@ const ResultPage = () => {
       theme={theme} 
       formData={formData} 
       result={result}
+      displayName={displayName}
       onBack={null}
       onShowFull={() => setShowFull(true)}
     />
@@ -1613,6 +1632,29 @@ const ProductPage = ({ productKey }) => {
   const [result, setResult] = useState(null);
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState('');
+  const [displayName, setDisplayName] = useState(config.title); // DB에서 가져올 display_name
+
+  // 페이지 로드 시 DB에서 display_name 가져오기
+  useEffect(() => {
+    const fetchDisplayName = async () => {
+      try {
+        const { data } = await supabase
+          .from('products')
+          .select('display_name, name')
+          .eq('id', config.product_id)
+          .single();
+        
+        if (data?.display_name) {
+          setDisplayName(data.display_name);
+        } else if (data?.name) {
+          setDisplayName(data.name);
+        }
+      } catch (err) {
+        console.log('display_name 로드 실패, 기본값 사용');
+      }
+    };
+    fetchDisplayName();
+  }, [config.product_id]);
 
   useEffect(() => {
     if (!orderId || step !== 'loading') return;
@@ -1695,7 +1737,7 @@ const ProductPage = ({ productKey }) => {
         <div className={`${theme.card} backdrop-blur-lg rounded-3xl p-8 w-full max-w-md border shadow-2xl`}>
           <div className="text-center mb-8">
             <div className="text-5xl mb-4">{config.icon}</div>
-            <h1 className={`text-3xl font-bold ${theme.text.primary} mb-2`}>{config.title}</h1>
+            <h1 className={`text-3xl font-bold ${theme.text.primary} mb-2`}>{displayName}</h1>
             <p className={theme.text.secondary}>{config.subtitle}</p>
           </div>
 
@@ -1946,6 +1988,7 @@ const ProductPage = ({ productKey }) => {
         theme={theme} 
         formData={formData} 
         result={result}
+        displayName={displayName}
         onBack={() => setStep('result')}
       />
     );
@@ -1959,6 +2002,7 @@ const ProductPage = ({ productKey }) => {
         theme={theme} 
         formData={formData} 
         result={result}
+        displayName={displayName}
         onBack={() => setStep('result')}
       />
     );

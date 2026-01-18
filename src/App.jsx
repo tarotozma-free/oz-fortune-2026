@@ -261,6 +261,280 @@ const PRODUCTS = {
     showLifetimeFlow: true,
     showTenYearFortune: true,
     analysisCount: 20,
+  },
+
+  // ========================================
+  // 점성학 상품들
+  // ========================================
+  astro: {
+    product_id: '2026_astro_fortune',
+    icon: '⭐',
+    title: '2026년 점성학 운세',
+    subtitle: '별자리로 보는 2026년 운세 분석',
+    buttonText: '내 2026년 운세 보기',
+    isAstro: true,
+    theme: {
+      bg: 'from-indigo-950 via-purple-900 to-blue-950',
+      card: 'bg-black/40 border-indigo-500/30',
+      accent: 'indigo',
+      button: 'from-indigo-500 via-purple-500 to-blue-500 hover:from-indigo-400 hover:to-purple-400 text-white',
+      text: {
+        primary: 'text-white',
+        secondary: 'text-indigo-200',
+        muted: 'text-indigo-400/60',
+        accent: 'text-indigo-400',
+      },
+      input: 'bg-black/30 border-indigo-500/30 text-white placeholder-indigo-300/50 focus:ring-indigo-400',
+      select: 'bg-gray-900',
+      score: 'from-indigo-400 to-purple-500',
+    },
+    statusMessages: [
+      '⭐ 네이탈 차트를 분석하고 있습니다...',
+      '🌞 태양 별자리를 확인하고 있습니다...',
+      '🌙 달 별자리를 계산하고 있습니다...',
+      '💫 2026년 행성 트랜짓을 분석하고 있습니다...',
+      '✨ 맞춤형 운세를 작성하고 있습니다...'
+    ],
+    graphLabels: [
+      { key: 'love', label: '연애', emoji: '💕' },
+      { key: 'wealth', label: '재물', emoji: '💰' },
+      { key: 'career', label: '커리어', emoji: '💼' },
+      { key: 'health', label: '건강', emoji: '🏃' },
+      { key: 'luck', label: '행운', emoji: '🍀' },
+    ],
+    prescriptionTitle: '⭐ 2026 행운 처방전',
+    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionLabels: { 
+      color: '행운의 색상', 
+      number: '행운의 숫자', 
+      direction: '좋은 방향', 
+      item: '행운 아이템',
+      action: '운 높이는 행동',
+      avoid: '피해야 할 것'
+    },
+    showYearGrade: true,
+    showMonthlyFortune: true,
+    showSunSign: true,
+  },
+
+  'astro-wealth': {
+    product_id: 'astro_wealth_fortune',
+    icon: '💰',
+    title: '평생 재물운 (점성학)',
+    subtitle: '별자리로 보는 평생 재물운 분석',
+    buttonText: '내 재물운 분석받기',
+    isAstro: true,
+    theme: {
+      bg: 'from-gray-900 via-amber-950 to-gray-900',
+      card: 'bg-black/40 border-amber-500/30',
+      accent: 'amber',
+      button: 'from-yellow-500 via-amber-500 to-yellow-600 hover:from-yellow-400 hover:to-amber-400 text-gray-900',
+      text: {
+        primary: 'text-white',
+        secondary: 'text-amber-200',
+        muted: 'text-amber-400/60',
+        accent: 'text-amber-400',
+      },
+      input: 'bg-black/30 border-amber-500/30 text-white placeholder-amber-300/50 focus:ring-amber-400',
+      select: 'bg-gray-900',
+      score: 'from-yellow-400 to-amber-500',
+    },
+    statusMessages: [
+      '💰 네이탈 차트를 분석하고 있습니다...',
+      '🏦 2하우스 재물궁을 확인하고 있습니다...',
+      '💎 금성 배치를 분석하고 있습니다...',
+      '📈 평생 재물 흐름을 계산하고 있습니다...',
+      '✨ 맞춤형 재물 리포트를 작성하고 있습니다...'
+    ],
+    graphLabels: [
+      { key: 'wealth_luck', label: '재물', emoji: '💰' },
+      { key: 'business', label: '사업', emoji: '🏢' },
+      { key: 'investment', label: '투자', emoji: '📈' },
+      { key: 'salary', label: '급여', emoji: '💼' },
+      { key: 'windfall', label: '횡재', emoji: '🎰' },
+    ],
+    prescriptionTitle: '💎 재물 처방전',
+    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionLabels: { 
+      color: '지갑 색상', 
+      number: '재물 행운 숫자', 
+      direction: '돈이 오는 방향', 
+      item: '재물 아이템',
+      action: '돈 운 높이는 행동',
+      avoid: '재물운 막는 것'
+    },
+    showWealthGrade: true,
+    showMoneyType: true,
+    showPeakDanger: true,
+    showLifetimeFlow: true,
+    showSunSign: true,
+  },
+
+  'astro-love': {
+    product_id: 'astro_love_fortune',
+    icon: '💕',
+    title: '평생 연애·결혼운 (점성학)',
+    subtitle: '별자리로 보는 평생 연애·결혼운 분석',
+    buttonText: '내 연애운 분석받기',
+    isAstro: true,
+    theme: {
+      bg: 'from-pink-950 via-rose-900 to-red-950',
+      card: 'bg-black/40 border-pink-500/30',
+      accent: 'pink',
+      button: 'from-pink-500 via-rose-500 to-red-500 hover:from-pink-400 hover:to-rose-400 text-white',
+      text: {
+        primary: 'text-white',
+        secondary: 'text-pink-200',
+        muted: 'text-pink-400/60',
+        accent: 'text-pink-400',
+      },
+      input: 'bg-black/30 border-pink-500/30 text-white placeholder-pink-300/50 focus:ring-pink-400',
+      select: 'bg-gray-900',
+      score: 'from-pink-400 to-rose-500',
+    },
+    statusMessages: [
+      '💕 네이탈 차트를 분석하고 있습니다...',
+      '💑 금성 배치를 확인하고 있습니다...',
+      '🔥 화성 배치를 분석하고 있습니다...',
+      '💍 7하우스 결혼궁을 살펴보고 있습니다...',
+      '✨ 맞춤형 연애 리포트를 작성하고 있습니다...'
+    ],
+    graphLabels: [
+      { key: 'charm', label: '매력', emoji: '✨' },
+      { key: 'love_luck', label: '연애', emoji: '💕' },
+      { key: 'marriage_luck', label: '결혼', emoji: '💍' },
+      { key: 'sexual_chemistry', label: '속궁합', emoji: '🔥' },
+      { key: 'destiny', label: '인연', emoji: '🔗' },
+    ],
+    prescriptionTitle: '💕 연애 처방전',
+    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionLabels: { 
+      color: '연애운 색상', 
+      number: '사랑의 숫자', 
+      direction: '인연 오는 방향', 
+      item: '사랑의 보석',
+      action: '사랑 부르는 행동',
+      avoid: '연애운 막는 것'
+    },
+    showLoveGrade: true,
+    showLoveStyle: true,
+    showPeakDanger: true,
+    showLifetimeFlow: true,
+    showSunSign: true,
+    showIdealPartner: true,
+  },
+
+  'astro-career': {
+    product_id: 'astro_career_fortune',
+    icon: '🎯',
+    title: '평생 취업·합격운 (점성학)',
+    subtitle: '별자리로 보는 평생 커리어·합격운 분석',
+    buttonText: '내 합격운 분석받기',
+    isAstro: true,
+    theme: {
+      bg: 'from-slate-950 via-blue-950 to-indigo-950',
+      card: 'bg-black/40 border-blue-500/30',
+      accent: 'blue',
+      button: 'from-blue-500 via-indigo-500 to-blue-600 hover:from-blue-400 hover:to-indigo-400 text-white',
+      text: {
+        primary: 'text-white',
+        secondary: 'text-blue-200',
+        muted: 'text-blue-400/60',
+        accent: 'text-blue-400',
+      },
+      input: 'bg-black/30 border-blue-500/30 text-white placeholder-blue-300/50 focus:ring-blue-400',
+      select: 'bg-gray-900',
+      score: 'from-blue-400 to-indigo-500',
+    },
+    statusMessages: [
+      '🎯 네이탈 차트를 분석하고 있습니다...',
+      '📊 10하우스 커리어궁을 확인하고 있습니다...',
+      '🍀 목성 배치를 분석하고 있습니다...',
+      '📝 수성 시험운을 살펴보고 있습니다...',
+      '✨ 맞춤형 커리어 리포트를 작성하고 있습니다...'
+    ],
+    graphLabels: [
+      { key: 'job_luck', label: '취업', emoji: '💼' },
+      { key: 'exam_luck', label: '시험', emoji: '📝' },
+      { key: 'promotion_luck', label: '승진', emoji: '🚀' },
+      { key: 'leadership', label: '리더십', emoji: '👔' },
+      { key: 'wealth_from_career', label: '연봉', emoji: '💰' },
+    ],
+    prescriptionTitle: '🎯 합격 처방전',
+    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionLabels: { 
+      color: '면접 합격 색상', 
+      number: '합격의 숫자', 
+      direction: '좋은 직장 방향', 
+      item: '성공 아이템',
+      action: '합격 부르는 행동',
+      avoid: '커리어운 막는 것'
+    },
+    showCareerGrade: true,
+    showCareerType: true,
+    showPeakDanger: true,
+    showLifetimeFlow: true,
+    showSunSign: true,
+    showExamTiming: true,
+  },
+
+  'astro-full': {
+    product_id: 'astro_full_fortune',
+    icon: '🌟',
+    title: '평생 점성학 대풀이',
+    subtitle: '15가지 주제로 완전 분석하는 점성학 운세',
+    buttonText: '내 점성학 완전 분석받기',
+    isAstro: true,
+    theme: {
+      bg: 'from-violet-950 via-purple-900 to-indigo-950',
+      card: 'bg-black/40 border-violet-500/30',
+      accent: 'violet',
+      button: 'from-violet-500 via-purple-500 to-indigo-500 hover:from-violet-400 hover:to-purple-400 text-white',
+      text: {
+        primary: 'text-white',
+        secondary: 'text-violet-200',
+        muted: 'text-violet-400/60',
+        accent: 'text-violet-400',
+      },
+      input: 'bg-black/30 border-violet-500/30 text-white placeholder-violet-300/50 focus:ring-violet-400',
+      select: 'bg-gray-900',
+      score: 'from-violet-400 to-purple-500',
+    },
+    statusMessages: [
+      '🌟 네이탈 차트를 해석하고 있습니다...',
+      '🌞 태양 별자리를 분석하고 있습니다...',
+      '🌙 달 별자리를 확인하고 있습니다...',
+      '⬆️ 상승궁을 계산하고 있습니다...',
+      '💫 행성 배치를 분석하고 있습니다...',
+      '💰 재물운을 살펴보고 있습니다...',
+      '💕 연애운을 분석하고 있습니다...',
+      '💼 커리어운을 확인하고 있습니다...',
+      '✨ 평생 개운법을 정리하고 있습니다...',
+      '📄 15페이지 리포트를 제작하고 있습니다...'
+    ],
+    graphLabels: [
+      { key: 'overall_luck', label: '종합', emoji: '🌟' },
+      { key: 'love', label: '연애', emoji: '💕' },
+      { key: 'wealth', label: '재물', emoji: '💰' },
+      { key: 'career', label: '커리어', emoji: '💼' },
+      { key: 'health', label: '건강', emoji: '🏃' },
+    ],
+    prescriptionTitle: '✨ 평생 개운 처방전',
+    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionLabels: { 
+      color: '평생 행운 색상', 
+      number: '인생 행운 숫자', 
+      direction: '행운의 방향', 
+      item: '수호 원석',
+      action: '운 높이는 행동',
+      avoid: '피해야 할 것'
+    },
+    showFullGrade: true,
+    showSajuSummary: true,
+    showPeakDanger: true,
+    showLifetimeFlow: true,
+    showSunSign: true,
+    analysisCount: 15,
   }
 };
 
@@ -534,12 +808,94 @@ const SummaryView = ({ config, theme, formData, result, onBack }) => {
           </div>
         )}
 
+        {/* 점성학 전용: 태양/달/상승궁 표시 */}
+        {config.showSunSign && ai.sun_sign && (
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            <div className={`${theme.card} rounded-xl p-4 border text-center`}>
+              <div className="text-3xl mb-1">{ai.sun_sign_symbol || '☀️'}</div>
+              <div className={`${theme.text.accent} font-bold text-sm`}>태양</div>
+              <div className={`${theme.text.primary} text-sm`}>{ai.sun_sign}</div>
+            </div>
+            {ai.moon_sign && (
+              <div className={`${theme.card} rounded-xl p-4 border text-center`}>
+                <div className="text-3xl mb-1">🌙</div>
+                <div className={`${theme.text.accent} font-bold text-sm`}>달</div>
+                <div className={`${theme.text.primary} text-sm`}>{ai.moon_sign}</div>
+              </div>
+            )}
+            {ai.rising_sign && (
+              <div className={`${theme.card} rounded-xl p-4 border text-center`}>
+                <div className="text-3xl mb-1">⬆️</div>
+                <div className={`${theme.text.accent} font-bold text-sm`}>상승궁</div>
+                <div className={`${theme.text.primary} text-sm`}>{ai.rising_sign}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 연애운 전용: 이상형 정보 */}
+        {config.showIdealPartner && ai.ideal_partner_look && (
+          <div className={`${theme.card} rounded-xl p-4 mb-6 border`}>
+            <h3 className={`${theme.text.accent} font-bold mb-3`}>💑 운명의 상대</h3>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <div className={`${theme.text.muted}`}>외모</div>
+              <div className={`${theme.text.primary}`}>{ai.ideal_partner_look}</div>
+              <div className={`${theme.text.muted}`}>성격</div>
+              <div className={`${theme.text.primary}`}>{ai.ideal_partner_personality}</div>
+              <div className={`${theme.text.muted}`}>직업</div>
+              <div className={`${theme.text.primary}`}>{ai.ideal_partner_job}</div>
+              <div className={`${theme.text.muted}`}>나이차</div>
+              <div className={`${theme.text.primary}`}>{ai.ideal_partner_age}</div>
+              {ai.where_to_meet && (
+                <>
+                  <div className={`${theme.text.muted}`}>만나는 곳</div>
+                  <div className={`${theme.text.primary}`}>{ai.where_to_meet}</div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* 연애운: 궁합 별자리 */}
+        {config.showIdealPartner && ai.soulmate_signs && (
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="bg-gradient-to-br from-pink-900/40 to-rose-900/40 rounded-xl p-4 border border-pink-500/30">
+              <div className="text-pink-400 text-sm mb-2">💕 베스트 궁합</div>
+              <div className="text-white font-bold">{ai.soulmate_signs?.join(', ') || ai.soulmate_signs}</div>
+            </div>
+            {ai.avoid_signs && (
+              <div className="bg-gradient-to-br from-gray-900/40 to-slate-900/40 rounded-xl p-4 border border-gray-500/30">
+                <div className="text-gray-400 text-sm mb-2">⚠️ 피할 궁합</div>
+                <div className="text-white font-bold">{ai.avoid_signs?.join(', ') || ai.avoid_signs}</div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* 시험 타이밍 (커리어 전용) */}
         {isCareer && ai.exam_timing && (
           <div className="bg-gradient-to-br from-indigo-900/40 to-blue-900/40 rounded-xl p-4 mb-6 border border-indigo-500/30">
             <div className="text-indigo-400 text-sm mb-1">📝 시험 합격 타이밍</div>
             <div className="text-white font-bold text-lg">{ai.exam_timing}</div>
             <div className="text-indigo-300/80 text-xs mt-1">"{ai.exam_hook}"</div>
+          </div>
+        )}
+
+        {/* 2026 점성학: 월별 운세 */}
+        {config.showMonthlyFortune && ai.monthly_fortune && (
+          <div className={`${theme.card} rounded-2xl p-6 mb-6 border`}>
+            <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>📅 2026년 월별 운세</h3>
+            <div className="grid grid-cols-3 gap-2">
+              {ai.monthly_fortune.map((item, i) => (
+                <div key={i} className={`${theme.card} rounded-lg p-3 border text-center`}>
+                  <div className={`${theme.text.primary} font-bold`}>{item.month}</div>
+                  <div className={`text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${theme.score}`}>
+                    {item.score}
+                  </div>
+                  <div className={`${theme.text.accent} text-xs`}>{item.keyword}</div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -942,7 +1298,7 @@ const ProductPage = ({ productKey }) => {
   const [step, setStep] = useState('form');
   const [formData, setFormData] = useState({
     name: '', dob: '', dob_year: '', dob_month: '', dob_day: '',
-    birth_time: '', gender: 'male', email: ''
+    birth_time: '', birth_city: '', gender: 'male', email: ''
   });
   const [orderId, setOrderId] = useState(null);
   const [result, setResult] = useState(null);
@@ -1006,7 +1362,7 @@ const ProductPage = ({ productKey }) => {
 
   const resetForm = () => {
     setStep('form');
-    setFormData({ name: '', dob: '', dob_year: '', dob_month: '', dob_day: '', birth_time: '', gender: 'male', email: '' });
+    setFormData({ name: '', dob: '', dob_year: '', dob_month: '', dob_day: '', birth_time: '', birth_city: '', gender: 'male', email: '' });
     setOrderId(null);
     setResult(null);
     setProgress(0);
@@ -1088,6 +1444,19 @@ const ProductPage = ({ productKey }) => {
                 ))}
               </select>
             </div>
+
+            {/* 점성학 상품일 때만 출생 도시 입력 */}
+            {config.isAstro && (
+              <div>
+                <label className={`block ${theme.text.secondary} text-sm mb-2`}>태어난 도시</label>
+                <input
+                  type="text" required value={formData.birth_city}
+                  onChange={(e) => setFormData({...formData, birth_city: e.target.value})}
+                  className={`w-full px-4 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
+                  placeholder="예: 서울, 부산, 뉴욕"
+                />
+              </div>
+            )}
 
             <div>
               <label className={`block ${theme.text.secondary} text-sm mb-2`}>성별</label>
@@ -1286,11 +1655,19 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/saju" replace />} />
+        {/* 사주 상품들 */}
         <Route path="/saju" element={<ProductPage productKey="saju" />} />
         <Route path="/wealth" element={<ProductPage productKey="wealth" />} />
         <Route path="/love" element={<ProductPage productKey="love" />} />
         <Route path="/career" element={<ProductPage productKey="career" />} />
         <Route path="/full" element={<ProductPage productKey="full" />} />
+        {/* 점성학 상품들 */}
+        <Route path="/astro" element={<ProductPage productKey="astro" />} />
+        <Route path="/astro-wealth" element={<ProductPage productKey="astro-wealth" />} />
+        <Route path="/astro-love" element={<ProductPage productKey="astro-love" />} />
+        <Route path="/astro-career" element={<ProductPage productKey="astro-career" />} />
+        <Route path="/astro-full" element={<ProductPage productKey="astro-full" />} />
+        {/* 결과 페이지 */}
         <Route path="/result/:orderId" element={<ResultPage />} />
       </Routes>
     </BrowserRouter>

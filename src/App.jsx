@@ -1341,9 +1341,14 @@ const ProductPage = ({ productKey }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // 점성학 상품인데 도시 입력 안했으면 서울로 기본값
+    const submitData = {
+      ...formData,
+      birth_city: formData.birth_city || '서울'
+    };
     const { data, error } = await supabase
       .from('orders')
-      .insert({ product_id: config.product_id, input_data: formData, status: 'pending' })
+      .insert({ product_id: config.product_id, input_data: submitData, status: 'pending' })
       .select()
       .single();
 
@@ -1448,12 +1453,12 @@ const ProductPage = ({ productKey }) => {
             {/* 점성학 상품일 때만 출생 도시 입력 */}
             {config.isAstro && (
               <div>
-                <label className={`block ${theme.text.secondary} text-sm mb-2`}>태어난 도시</label>
+                <label className={`block ${theme.text.secondary} text-sm mb-2`}>태어난 도시 (선택)</label>
                 <input
-                  type="text" required value={formData.birth_city}
+                  type="text" value={formData.birth_city}
                   onChange={(e) => setFormData({...formData, birth_city: e.target.value})}
                   className={`w-full px-4 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
-                  placeholder="예: 서울, 부산, 뉴욕"
+                  placeholder="미입력시 서울로 설정"
                 />
               </div>
             )}

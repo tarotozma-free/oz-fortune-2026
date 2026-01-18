@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useParams, useSearchParams } from 'react-router-dom';
 
 const supabase = createClient(
   'https://mwgvdtwxiiluwdxtbqgz.supabase.co',
@@ -697,7 +697,7 @@ const GradeBadge = ({ grade, hook, type = 'wealth' }) => {
 // ========================================
 // 요약본 컴포넌트 (결과 페이지용)
 // ========================================
-const SummaryView = ({ config, theme, formData, result, onBack }) => {
+const SummaryView = ({ config, theme, formData, result, onBack, onShowFull }) => {
   const ai = result?.aiResponse || {};
   const prescription = ai.lucky_prescription || {};
   const graphs = ai.graphs || {};
@@ -980,6 +980,15 @@ const SummaryView = ({ config, theme, formData, result, onBack }) => {
           🖨️ 인쇄 / PDF 저장
         </button>
 
+        {/* 풀버전 보기 버튼 */}
+        {onShowFull && (
+          <button onClick={onShowFull}
+            className={`block w-full py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-center transition-all mb-4 hover:from-emerald-600 hover:to-teal-700`}
+          >
+            📖 풀버전 보기
+          </button>
+        )}
+
         {onBack && (
           <button onClick={onBack}
             className={`block w-full py-3 rounded-xl ${theme.input} border font-medium transition-all`}
@@ -1199,10 +1208,14 @@ const FullView = ({ config, theme, formData, result, onBack }) => {
 // ========================================
 const ResultPage = () => {
   const { orderId } = useParams();
+  const [searchParams] = useSearchParams();
+  const viewMode = searchParams.get('view'); // 'full' or null
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [orderData, setOrderData] = useState(null);
   const [productKey, setProductKey] = useState('saju');
+  const [showFull, setShowFull] = useState(viewMode === 'full'); // URL 파라미터로 초기값 설정
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -1277,13 +1290,23 @@ const ResultPage = () => {
     notionUrl: orderData.notion_url
   };
 
-  return (
+  // showFull 상태에 따라 요약/풀버전 표시
+  return showFull ? (
+    <FullView 
+      config={config} 
+      theme={theme} 
+      formData={formData} 
+      result={result}
+      onBack={() => setShowFull(false)}
+    />
+  ) : (
     <SummaryView 
       config={config} 
       theme={theme} 
       formData={formData} 
       result={result}
       onBack={null}
+      onShowFull={() => setShowFull(true)}
     />
   );
 };

@@ -1299,7 +1299,7 @@ const ProductPage = ({ productKey }) => {
   const [formData, setFormData] = useState({
     name: '', dob: '', dob_year: '', dob_month: '', dob_day: '',
     calendar_type: 'solar', // 'solar' = 양력, 'lunar' = 음력
-    birth_time: '', birth_city: '', gender: 'male', email: ''
+    birth_time: '', birth_hour: '', birth_minute: '', birth_time_unknown: false, birth_city: '', gender: 'male', email: ''
   });
   const [orderId, setOrderId] = useState(null);
   const [result, setResult] = useState(null);
@@ -1368,7 +1368,7 @@ const ProductPage = ({ productKey }) => {
 
   const resetForm = () => {
     setStep('form');
-    setFormData({ name: '', dob: '', dob_year: '', dob_month: '', dob_day: '', calendar_type: 'solar', birth_time: '', birth_city: '', gender: 'male', email: '' });
+    setFormData({ name: '', dob: '', dob_year: '', dob_month: '', dob_day: '', calendar_type: 'solar', birth_time: '', birth_hour: '', birth_minute: '', birth_time_unknown: false, birth_city: '', gender: 'male', email: '' });
     setOrderId(null);
     setResult(null);
     setProgress(0);
@@ -1452,19 +1452,77 @@ const ProductPage = ({ productKey }) => {
             </div>
 
             <div>
-              <label className={`block ${theme.text.secondary} text-sm mb-2`}>태어난 시간 (선택)</label>
-              <select value={formData.birth_time}
-                onChange={(e) => setFormData({...formData, birth_time: e.target.value})}
-                className={`w-full px-4 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
-              >
-                <option value="" className={theme.select}>모름</option>
-                {['자시(23:00-01:00)', '축시(01:00-03:00)', '인시(03:00-05:00)', '묘시(05:00-07:00)',
-                  '진시(07:00-09:00)', '사시(09:00-11:00)', '오시(11:00-13:00)', '미시(13:00-15:00)',
-                  '신시(15:00-17:00)', '유시(17:00-19:00)', '술시(19:00-21:00)', '해시(21:00-23:00)'
-                ].map(time => (
-                  <option key={time} value={time} className={theme.select}>{time}</option>
-                ))}
-              </select>
+              <label className={`block ${theme.text.secondary} text-sm mb-2`}>
+                태어난 시간 {config.isAstro ? '(24시간 기준, 정확히 입력!)' : '(선택)'}
+              </label>
+              
+              {/* 점성학: 시/분 직접 입력 */}
+              {config.isAstro ? (
+                <div>
+                  {/* 모름 체크박스 */}
+                  <label className="flex items-center gap-2 mb-2 cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      checked={formData.birth_time_unknown || false}
+                      onChange={(e) => setFormData({
+                        ...formData, 
+                        birth_time_unknown: e.target.checked,
+                        birth_hour: e.target.checked ? '12' : '',
+                        birth_minute: e.target.checked ? '0' : ''
+                      })}
+                      className="w-4 h-4 rounded"
+                    />
+                    <span className={`text-sm ${theme.text.muted}`}>정확한 출생 시간을 모름 (정오 12시로 계산)</span>
+                  </label>
+                  
+                  {/* 시/분 선택 (모름 체크 안했을 때만 활성화) */}
+                  <div className={`flex gap-2 ${formData.birth_time_unknown ? 'opacity-50 pointer-events-none' : ''}`}>
+                    <select value={formData.birth_hour || ''}
+                      onChange={(e) => setFormData({...formData, birth_hour: e.target.value})}
+                      className={`flex-1 px-3 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
+                      disabled={formData.birth_time_unknown}
+                    >
+                      <option value="" className={theme.select}>시</option>
+                      {Array.from({length: 24}, (_, i) => (
+                        <option key={i} value={String(i)} className={theme.select}>
+                          {i < 10 ? `0${i}` : i}시
+                        </option>
+                      ))}
+                    </select>
+                    <select value={formData.birth_minute || ''}
+                      onChange={(e) => setFormData({...formData, birth_minute: e.target.value})}
+                      className={`flex-1 px-3 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
+                      disabled={formData.birth_time_unknown}
+                    >
+                      <option value="" className={theme.select}>분</option>
+                      {[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(m => (
+                        <option key={m} value={String(m)} className={theme.select}>
+                          {m < 10 ? `0${m}` : m}분
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {!formData.birth_time_unknown && (
+                    <p className={`text-xs ${theme.text.muted} mt-1`}>
+                      예: 오전 11시 30분 → 11시 30분 / 오후 3시 → 15시 00분
+                    </p>
+                  )}
+                </div>
+              ) : (
+                /* 사주: 기존 시지 선택 */
+                <select value={formData.birth_time}
+                  onChange={(e) => setFormData({...formData, birth_time: e.target.value})}
+                  className={`w-full px-4 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
+                >
+                  <option value="" className={theme.select}>모름</option>
+                  {['자시(23:00-01:00)', '축시(01:00-03:00)', '인시(03:00-05:00)', '묘시(05:00-07:00)',
+                    '진시(07:00-09:00)', '사시(09:00-11:00)', '오시(11:00-13:00)', '미시(13:00-15:00)',
+                    '신시(15:00-17:00)', '유시(17:00-19:00)', '술시(19:00-21:00)', '해시(21:00-23:00)'
+                  ].map(time => (
+                    <option key={time} value={time} className={theme.select}>{time}</option>
+                  ))}
+                </select>
+              )}
             </div>
 
             {/* 점성학 상품일 때만 출생 도시 입력 */}

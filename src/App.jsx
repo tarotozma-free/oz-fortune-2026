@@ -1298,6 +1298,7 @@ const ProductPage = ({ productKey }) => {
   const [step, setStep] = useState('form');
   const [formData, setFormData] = useState({
     name: '', dob: '', dob_year: '', dob_month: '', dob_day: '',
+    calendar_type: 'solar', // 'solar' = 양력, 'lunar' = 음력
     birth_time: '', birth_city: '', gender: 'male', email: ''
   });
   const [orderId, setOrderId] = useState(null);
@@ -1367,7 +1368,7 @@ const ProductPage = ({ productKey }) => {
 
   const resetForm = () => {
     setStep('form');
-    setFormData({ name: '', dob: '', dob_year: '', dob_month: '', dob_day: '', birth_time: '', birth_city: '', gender: 'male', email: '' });
+    setFormData({ name: '', dob: '', dob_year: '', dob_month: '', dob_day: '', calendar_type: 'solar', birth_time: '', birth_city: '', gender: 'male', email: '' });
     setOrderId(null);
     setResult(null);
     setProgress(0);
@@ -1431,6 +1432,22 @@ const ProductPage = ({ productKey }) => {
                     <option key={day} value={day} className={theme.select}>{parseInt(day)}일</option>
                   ))}
                 </select>
+              </div>
+              {/* 양력/음력 선택 */}
+              <div className="flex gap-2 mt-2">
+                {['solar', 'lunar'].map(cal => (
+                  <label key={cal} className="flex-1">
+                    <input type="radio" name="calendar_type" value={cal} checked={formData.calendar_type === cal}
+                      onChange={(e) => setFormData({...formData, calendar_type: e.target.value})} className="sr-only" />
+                    <div className={`py-2 rounded-lg text-center text-sm cursor-pointer transition-all ${
+                      formData.calendar_type === cal 
+                        ? `bg-gradient-to-r ${theme.button} text-white` 
+                        : `${theme.input} border ${theme.text.muted}`
+                    }`}>
+                      {cal === 'solar' ? '☀️ 양력' : '🌙 음력'}
+                    </div>
+                  </label>
+                ))}
               </div>
             </div>
 

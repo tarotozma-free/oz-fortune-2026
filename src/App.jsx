@@ -260,6 +260,7 @@ const PRODUCTS = {
     showPeakDanger: true,
     showLifetimeFlow: true,
     showTenYearFortune: true,
+    showVisualData: true,  // ⬅️ 이거 추가!
     analysisCount: 20,
   },
 
@@ -534,6 +535,7 @@ const PRODUCTS = {
     showPeakDanger: true,
     showLifetimeFlow: true,
     showSunSign: true,
+    showVisualData: true,  // ⬅️ 이거 추가!
     analysisCount: 15,
   }
 };
@@ -544,6 +546,259 @@ const getProductKeyById = (productId) => {
     if (config.product_id === productId) return key;
   }
   return 'saju'; // 기본값
+};
+
+// ========================================
+// 사주 팔자표 비주얼 컴포넌트 (NEW!)
+// ========================================
+const SajuPillarsChart = ({ visualData, theme }) => {
+  if (!visualData?.saju_pillars) return null;
+  
+  const { saju_pillars, ohaeng_balance, ilgan, yongshin, gyeokguk } = visualData;
+  
+  const elementColors = {
+    '목': 'from-green-500 to-emerald-600', '화': 'from-red-500 to-orange-600',
+    '토': 'from-yellow-600 to-amber-700', '금': 'from-gray-300 to-slate-400',
+    '수': 'from-blue-500 to-indigo-600',
+    'wood': 'from-green-500 to-emerald-600', 'fire': 'from-red-500 to-orange-600',
+    'earth': 'from-yellow-600 to-amber-700', 'metal': 'from-gray-300 to-slate-400',
+    'water': 'from-blue-500 to-indigo-600',
+  };
+  
+  const ohaengKorean = { 'wood': '목', 'fire': '화', 'earth': '토', 'metal': '금', 'water': '수' };
+  const ohaengEmoji = { 'wood': '🌳', 'fire': '🔥', 'earth': '🏔️', 'metal': '⚙️', 'water': '💧' };
+
+  return (
+    <div className="space-y-6">
+      <div className={`${theme.card} rounded-2xl p-6 border`}>
+        <h3 className={`${theme.text.accent} font-bold mb-4 text-center text-lg`}>📜 당신의 사주 팔자</h3>
+        
+        <div className="grid grid-cols-4 gap-2 mb-6">
+          {['시주', '일주', '월주', '년주'].map((label, i) => (
+            <div key={i} className={`text-center ${theme.text.muted} text-sm py-2`}>{label}</div>
+          ))}
+          
+          {['hour', 'day', 'month', 'year'].map((pillar, i) => {
+            const data = saju_pillars[pillar];
+            if (!data) return <div key={`c${i}`} className="text-center">-</div>;
+            const element = data.천간_element || data.천간_kr?.slice(-1);
+            return (
+              <div key={`c${i}`} className={`text-center p-3 rounded-xl bg-gradient-to-br ${elementColors[element] || 'from-gray-500 to-gray-600'}`}>
+                <div className="text-2xl font-bold text-white">{data.천간}</div>
+                <div className="text-xs text-white/80">{data.천간_kr}</div>
+              </div>
+            );
+          })}
+          
+          {['hour', 'day', 'month', 'year'].map((pillar, i) => {
+            const data = saju_pillars[pillar];
+            if (!data) return <div key={`j${i}`} className="text-center">-</div>;
+            const element = data.지지_element || data.지지_kr?.slice(-1);
+            return (
+              <div key={`j${i}`} className={`text-center p-3 rounded-xl bg-gradient-to-br ${elementColors[element] || 'from-gray-500 to-gray-600'}`}>
+                <div className="text-2xl font-bold text-white">{data.지지}</div>
+                <div className="text-xs text-white/80">{data.지지_kr}</div>
+              </div>
+            );
+          })}
+        </div>
+        
+        <div className="grid grid-cols-3 gap-3">
+          {ilgan && (
+            <div className={`${theme.card} rounded-xl p-3 border text-center`}>
+              <div className="text-2xl mb-1">{ilgan.char}</div>
+              <div className={`${theme.text.accent} font-bold text-sm`}>일간</div>
+              <div className={`${theme.text.primary} text-sm`}>{ilgan.name}</div>
+              <div className={`${theme.text.muted} text-xs mt-1`}>{ilgan.desc}</div>
+            </div>
+          )}
+          {yongshin && (
+            <div className={`${theme.card} rounded-xl p-3 border text-center`}>
+              <div className="text-2xl mb-1">{yongshin.char}</div>
+              <div className={`${theme.text.accent} font-bold text-sm`}>용신</div>
+              <div className={`${theme.text.primary} text-sm`}>{yongshin.name}</div>
+              <div className={`${theme.text.muted} text-xs mt-1`}>{yongshin.desc}</div>
+            </div>
+          )}
+          {gyeokguk && (
+            <div className={`${theme.card} rounded-xl p-3 border text-center`}>
+              <div className="text-2xl mb-1">⚖️</div>
+              <div className={`${theme.text.accent} font-bold text-sm`}>격국</div>
+              <div className={`${theme.text.primary} text-sm`}>{gyeokguk.name || gyeokguk}</div>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {ohaeng_balance && (
+        <div className={`${theme.card} rounded-2xl p-6 border`}>
+          <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>⚖️ 오행 밸런스</h3>
+          <div className="space-y-3">
+            {Object.entries(ohaeng_balance).map(([element, data]) => {
+              const percent = data.percent || 0;
+              const status = data.status;
+              const korean = ohaengKorean[element] || element;
+              const emoji = ohaengEmoji[element] || '⭐';
+              
+              return (
+                <div key={element} className="flex items-center gap-3">
+                  <div className="w-12 text-center">
+                    <span className="text-lg">{emoji}</span>
+                    <div className={`${theme.text.primary} text-xs`}>{korean}</div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="h-4 bg-black/30 rounded-full overflow-hidden">
+                      <div className={`h-full bg-gradient-to-r ${elementColors[element]} transition-all duration-500 rounded-full`}
+                        style={{ width: `${percent}%` }} />
+                    </div>
+                  </div>
+                  <div className={`w-16 text-right ${theme.text.primary} text-sm font-bold`}>{percent}%</div>
+                  {status && status !== '적정' && (
+                    <div className={`text-xs px-2 py-1 rounded ${status === '부족' ? 'bg-red-500/30 text-red-300' : 'bg-yellow-500/30 text-yellow-300'}`}>
+                      {status}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ========================================
+// 점성학 행성 배치표 비주얼 컴포넌트 (NEW!)
+// ========================================
+const AstroPlanetsChart = ({ visualData, theme }) => {
+  if (!visualData) return null;
+  
+  const { big_three, planets, element_balance, dominant_planet, chart_pattern } = visualData;
+  
+  const elementColors = {
+    'fire': 'from-red-500 to-orange-600', 'earth': 'from-yellow-600 to-amber-700',
+    'air': 'from-cyan-400 to-blue-500', 'water': 'from-blue-500 to-indigo-600',
+  };
+  const elementKorean = { 'fire': '🔥 불', 'earth': '🌍 흙', 'air': '💨 공기', 'water': '💧 물' };
+  const planetEmoji = {
+    'mercury': '☿', 'venus': '♀', 'mars': '♂', 'jupiter': '♃',
+    'saturn': '♄', 'uranus': '♅', 'neptune': '♆', 'pluto': '♇'
+  };
+  const planetKorean = {
+    'mercury': '수성', 'venus': '금성', 'mars': '화성', 'jupiter': '목성',
+    'saturn': '토성', 'uranus': '천왕성', 'neptune': '해왕성', 'pluto': '명왕성'
+  };
+
+  return (
+    <div className="space-y-6">
+      {big_three && (
+        <div className={`${theme.card} rounded-2xl p-6 border`}>
+          <h3 className={`${theme.text.accent} font-bold mb-4 text-center text-lg`}>🌟 당신의 빅 쓰리</h3>
+          <div className="grid grid-cols-3 gap-4">
+            {big_three.sun && (
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center mb-2 shadow-lg shadow-yellow-500/30">
+                  <span className="text-3xl">{big_three.sun.symbol || '☉'}</span>
+                </div>
+                <div className={`${theme.text.accent} font-bold`}>태양</div>
+                <div className={`${theme.text.primary} text-lg font-bold`}>{big_three.sun.sign}</div>
+                {big_three.sun.degree && <div className={`${theme.text.muted} text-xs`}>{big_three.sun.degree}</div>}
+                {big_three.sun.house && <div className={`${theme.text.muted} text-xs`}>{big_three.sun.house}하우스</div>}
+              </div>
+            )}
+            {big_three.moon && (
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-slate-300 to-slate-500 flex items-center justify-center mb-2 shadow-lg shadow-slate-500/30">
+                  <span className="text-3xl">{big_three.moon.symbol || '☽'}</span>
+                </div>
+                <div className={`${theme.text.accent} font-bold`}>달</div>
+                <div className={`${theme.text.primary} text-lg font-bold`}>{big_three.moon.sign}</div>
+                {big_three.moon.degree && <div className={`${theme.text.muted} text-xs`}>{big_three.moon.degree}</div>}
+                {big_three.moon.house && <div className={`${theme.text.muted} text-xs`}>{big_three.moon.house}하우스</div>}
+              </div>
+            )}
+            {big_three.rising && (
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-purple-400 to-indigo-600 flex items-center justify-center mb-2 shadow-lg shadow-purple-500/30">
+                  <span className="text-3xl">{big_three.rising.symbol || '⬆'}</span>
+                </div>
+                <div className={`${theme.text.accent} font-bold`}>상승궁</div>
+                <div className={`${theme.text.primary} text-lg font-bold`}>{big_three.rising.sign}</div>
+                {big_three.rising.degree && <div className={`${theme.text.muted} text-xs`}>{big_three.rising.degree}</div>}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      
+      {planets && Object.keys(planets).length > 0 && (
+        <div className={`${theme.card} rounded-2xl p-6 border`}>
+          <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>💫 행성 배치</h3>
+          <div className="space-y-2">
+            {Object.entries(planets).map(([planet, data]) => (
+              <div key={planet} className={`flex items-center gap-3 ${theme.card} rounded-lg p-3 border`}>
+                <div className="w-8 text-center text-xl">{planetEmoji[planet] || data.symbol || '⭐'}</div>
+                <div className="w-16">
+                  <div className={`${theme.text.primary} font-bold text-sm`}>{planetKorean[planet] || planet}</div>
+                </div>
+                <div className="flex-1">
+                  <div className={`${theme.text.secondary}`}>{data.sign} {data.symbol}</div>
+                </div>
+                <div className={`${theme.text.muted} text-sm`}>{data.degree}</div>
+                <div className={`${theme.text.muted} text-sm w-12`}>{data.house}H</div>
+                {data.retrograde && (
+                  <div className="text-xs px-2 py-1 rounded bg-red-500/30 text-red-300">Ⓡ</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      {element_balance && (
+        <div className={`${theme.card} rounded-2xl p-6 border`}>
+          <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>🌈 원소 밸런스</h3>
+          <div className="grid grid-cols-4 gap-3">
+            {Object.entries(element_balance).map(([element, data]) => {
+              const percent = data.percent || 0;
+              return (
+                <div key={element} className="text-center">
+                  <div className="h-24 bg-black/30 rounded-xl overflow-hidden flex flex-col justify-end">
+                    <div className={`bg-gradient-to-t ${elementColors[element]} transition-all duration-500 rounded-b-xl`}
+                      style={{ height: `${percent}%` }} />
+                  </div>
+                  <div className={`${theme.text.primary} font-bold mt-2`}>{percent}%</div>
+                  <div className={`${theme.text.muted} text-xs`}>{elementKorean[element]}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+      
+      {(dominant_planet || chart_pattern) && (
+        <div className="grid grid-cols-2 gap-4">
+          {dominant_planet && (
+            <div className={`${theme.card} rounded-xl p-4 border text-center`}>
+              <div className="text-2xl mb-2">⭐</div>
+              <div className={`${theme.text.accent} font-bold text-sm`}>지배 행성</div>
+              <div className={`${theme.text.primary} font-bold`}>{dominant_planet.planet}</div>
+              <div className={`${theme.text.muted} text-xs mt-1`}>{dominant_planet.reason}</div>
+            </div>
+          )}
+          {chart_pattern && (
+            <div className={`${theme.card} rounded-xl p-4 border text-center`}>
+              <div className="text-2xl mb-2">📊</div>
+              <div className={`${theme.text.accent} font-bold text-sm`}>차트 패턴</div>
+              <div className={`${theme.text.primary} font-bold`}>{chart_pattern.type}</div>
+              <div className={`${theme.text.muted} text-xs mt-1`}>{chart_pattern.description}</div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 };
 
 // ========================================
@@ -753,6 +1008,21 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull }) =>
             <p className={`text-lg ${theme.text.primary} text-center italic`}>"{ai.hooking_ment}"</p>
           </div>
         )}
+
+        {/* 🎨 Visual Data - 사주 팔자표 */}
+{config.showVisualData && ai.visual_data && !config.isAstro && (
+  <div className="mb-6">
+    <SajuPillarsChart visualData={ai.visual_data} theme={theme} />
+  </div>
+)}
+
+{/* 🎨 Visual Data - 점성학 행성 배치표 */}
+{config.showVisualData && ai.visual_data && config.isAstro && (
+  <div className="mb-6">
+    <AstroPlanetsChart visualData={ai.visual_data} theme={theme} />
+  </div>
+)}
+
 
         {/* 등급 + 유형 */}
         {(isWealth || isLove || isCareer || isFull) && (
@@ -1063,6 +1333,21 @@ const FullView = ({ config, theme, formData, result, onBack }) => {
             </p>
           </div>
         )}
+
+        {/* 🎨 Visual Data - 사주 팔자표 */}
+{config.showVisualData && ai.visual_data && !config.isAstro && (
+  <div className="mb-6">
+    <SajuPillarsChart visualData={ai.visual_data} theme={theme} />
+  </div>
+)}
+
+{/* 🎨 Visual Data - 점성학 행성 배치표 */}
+{config.showVisualData && ai.visual_data && config.isAstro && (
+  <div className="mb-6">
+    <AstroPlanetsChart visualData={ai.visual_data} theme={theme} />
+  </div>
+)}
+
 
         {/* 등급 + 점수 요약 */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">

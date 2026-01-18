@@ -246,15 +246,15 @@ const PRODUCTS = {
       { key: 'family', label: '가족', emoji: '👨‍👩‍👧' },
     ],
     prescriptionTitle: '✨ 평생 개운 처방전',
-    prescriptionFields: ['best_color', 'lucky_number', 'lucky_direction', 'lucky_item', 'lucky_food', 'avoid_action'],
-    prescriptionLabels: { 
-      best_color: '행운 색상', 
-      lucky_number: '행운의 숫자', 
-      lucky_direction: '좋은 방향', 
-      lucky_item: '행운 아이템',
-      lucky_food: '좋은 음식',
-      avoid_action: '피해야 할 것'
-    },
+    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+prescriptionLabels: { 
+  color: '행운 색상', 
+  number: '행운의 숫자', 
+  direction: '좋은 방향', 
+  item: '행운 아이템',
+  action: '운 높이는 행동',
+  avoid: '피해야 할 것'
+},
     showFullGrade: true,
     showSajuSummary: true,
     showPeakDanger: true,

@@ -390,6 +390,7 @@ const ProfileManage = () => {
         </div>
       </div>
     </div>
+    </div>
   )
 }
 

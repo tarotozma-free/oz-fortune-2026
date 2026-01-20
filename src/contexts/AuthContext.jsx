@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { supabase, auth } from '../lib/supabase'
+import { supabase } from '../lib/supabase'
 
 const AuthContext = createContext({})
 
@@ -35,7 +35,14 @@ export const AuthProvider = ({ children }) => {
 
   const checkUser = async () => {
     try {
-      const { session } = await auth.getSession()
+      // 수정: supabase.auth.getSession() 직접 호출
+      const { data: { session }, error } = await supabase.auth.getSession()
+      
+      if (error) {
+        console.error('Session error:', error)
+        return
+      }
+      
       setSession(session)
       setUser(session?.user ?? null)
     } catch (error) {
@@ -47,8 +54,14 @@ export const AuthProvider = ({ children }) => {
 
   const signInWithKakao = async () => {
     try {
-      const { error } = await auth.signInWithKakao()
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'kakao',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      })
       if (error) throw error
+      return { data, error }
     } catch (error) {
       console.error('Error signing in:', error)
       throw error
@@ -57,7 +70,7 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = async () => {
     try {
-      const { error } = await auth.signOut()
+      const { error } = await supabase.auth.signOut()
       if (error) throw error
       setUser(null)
       setSession(null)

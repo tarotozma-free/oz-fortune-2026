@@ -1623,6 +1623,23 @@ const ResultPage = () => {
 };
 
 // ========================================
+// 메인 리다이렉트 컴포넌트
+// ========================================
+const MainRedirect = () => {
+  const { user, loading } = useAuth()
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      </div>
+    )
+  }
+  
+  return user ? <Navigate to="/programs" replace /> : <Navigate to="/login" replace />
+}
+
+// ========================================
 // 메인 상품 컴포넌트
 // ========================================
 const ProductPage = ({ productKey }) => {
@@ -2100,7 +2117,7 @@ export default function App() {
           <Route path="/programs" element={<ProtectedRoute><ProgramSelect /></ProtectedRoute>} />
           <Route path="/profile-select" element={<ProtectedRoute><ProfileManage /></ProtectedRoute>} />
           
-        <Route path="/" element={<Navigate to="/saju" replace />} />
+        <Route path="/" element={<MainRedirect />} />
         {/* 사주 상품들 */}
         <Route path="/saju" element={<ProductPage productKey="saju" />} />
         <Route path="/wealth" element={<ProductPage productKey="wealth" />} />

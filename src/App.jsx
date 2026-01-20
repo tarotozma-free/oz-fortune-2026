@@ -2,6 +2,13 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { BrowserRouter, Routes, Route, Navigate, useParams, useSearchParams } from 'react-router-dom';
 
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Login from './pages/Login';
+import AuthCallback from './pages/AuthCallback';
+import ProgramSelect from './pages/ProgramSelect';
+import ProfileManage from './pages/ProfileManage';
+
 const supabase = createClient(
   'https://mwgvdtwxiiluwdxtbqgz.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13Z3ZkdHd4aWlsdXdkeHRicWd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NDM2NzEsImV4cCI6MjA4NDAxOTY3MX0.XnK-V2r2Sb6Ndqw2HocTmrE2ujOLY-etBqpzD9dOZoo'
@@ -2085,7 +2092,14 @@ const ProductPage = ({ productKey }) => {
 export default function App() {
   return (
     <BrowserRouter>
+    <AuthProvider>
       <Routes>
+        {/* 새로 추가된 라우트 */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/programs" element={<ProtectedRoute><ProgramSelect /></ProtectedRoute>} />
+          <Route path="/profile-select" element={<ProtectedRoute><ProfileManage /></ProtectedRoute>} />
+          
         <Route path="/" element={<Navigate to="/saju" replace />} />
         {/* 사주 상품들 */}
         <Route path="/saju" element={<ProductPage productKey="saju" />} />
@@ -2102,6 +2116,7 @@ export default function App() {
         {/* 결과 페이지 */}
         <Route path="/result/:orderId" element={<ResultPage />} />
       </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

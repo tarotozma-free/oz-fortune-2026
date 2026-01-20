@@ -53,7 +53,7 @@ export const products = {
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .order('created_at', { ascending: true })
+      .order('display_order', { ascending: true })  // display_order로 정렬
     return { data, error }
   }
 }

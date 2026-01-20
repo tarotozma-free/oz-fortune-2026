@@ -130,11 +130,9 @@ const ProfileManage = () => {
 
       if (createError) throw createError
 
-      if (productId) {
-        navigate(`/product/${productId}?profileId=${data.id}`)
-      } else {
-        navigate('/programs')
-      }
+      alert('프로필이 생성되었습니다!')
+      navigate('/programs')
+      
     } catch (err) {
       console.error('Profile creation error:', err)
       setError(`프로필 생성 중 오류가 발생했습니다: ${err.message || ''}`)
@@ -345,7 +343,7 @@ const ProfileManage = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate('/programs')}
                 className="flex-1 bg-stone-200 text-amber-900 py-4 rounded-lg font-semibold hover:bg-stone-300 transition-colors"
               >
                 취소

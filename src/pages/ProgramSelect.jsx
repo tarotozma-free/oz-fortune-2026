@@ -50,7 +50,6 @@ const ProfileManage = () => {
     e.preventDefault()
     setError('')
 
-    // 유효성 검사
     if (!formData.profile_name.trim()) {
       setError('프로필 이름을 입력해주세요')
       return
@@ -85,7 +84,6 @@ const ProfileManage = () => {
       return
     }
 
-    // 시간 유효성 검사
     if (!formData.birth_time_unknown && formData.birth_hour !== '') {
       const hour = parseInt(formData.birth_hour)
       if (hour < 0 || hour > 23) {
@@ -105,10 +103,8 @@ const ProfileManage = () => {
     setLoading(true)
 
     try {
-      // birth_date 생성
       const birthDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
       
-      // birth_time 생성
       let birthTime = null
       if (formData.birth_time_unknown) {
         birthTime = '00:00:00'
@@ -141,7 +137,6 @@ const ProfileManage = () => {
 
       console.log('Profile created:', data)
 
-      // 성공 시 다음 페이지로 이동
       if (productId) {
         navigate(`/product/${productId}?profileId=${data.id}`)
       } else {
@@ -167,7 +162,6 @@ const ProfileManage = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* 프로필 이름 */}
             <div>
               <label className="block text-sm font-medium text-amber-900 mb-2">
                 프로필 이름
@@ -182,7 +176,6 @@ const ProfileManage = () => {
               />
             </div>
 
-            {/* 이름 */}
             <div>
               <label className="block text-sm font-medium text-amber-900 mb-2">
                 이름
@@ -197,7 +190,6 @@ const ProfileManage = () => {
               />
             </div>
 
-            {/* 생년월일 */}
             <div>
               <label className="block text-sm font-medium text-amber-900 mb-2">
                 생년월일
@@ -237,7 +229,6 @@ const ProfileManage = () => {
               <p className="text-xs text-amber-600 mt-1">년(4자리) - 월 - 일</p>
             </div>
 
-            {/* 양력/음력 */}
             <div>
               <label className="block text-sm font-medium text-amber-900 mb-2">
                 양력/음력
@@ -268,13 +259,11 @@ const ProfileManage = () => {
               </div>
             </div>
 
-            {/* 태어난 시간 */}
             <div>
               <label className="block text-sm font-medium text-amber-900 mb-2">
                 태어난 시간 (선택사항)
               </label>
               
-              {/* 생시 모름 체크박스 */}
               <div className="mb-3">
                 <label className="flex items-center cursor-pointer">
                   <input
@@ -288,7 +277,6 @@ const ProfileManage = () => {
                 </label>
               </div>
 
-              {/* 시간 입력 */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <input
@@ -321,7 +309,6 @@ const ProfileManage = () => {
               </div>
             </div>
 
-            {/* 태어난 위치 */}
             <div>
               <label className="block text-sm font-medium text-amber-900 mb-2">
                 태어난 위치
@@ -336,7 +323,6 @@ const ProfileManage = () => {
               />
             </div>
 
-            {/* 성별 */}
             <div>
               <label className="block text-sm font-medium text-amber-900 mb-2">
                 성별
@@ -352,7 +338,6 @@ const ProfileManage = () => {
               </select>
             </div>
 
-            {/* 결과 수신 이메일 (읽기 전용) */}
             <div>
               <label className="block text-sm font-medium text-amber-900 mb-2">
                 결과 수신 이메일
@@ -365,7 +350,6 @@ const ProfileManage = () => {
               </p>
             </div>
 
-            {/* 기본 프로필 */}
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -380,14 +364,12 @@ const ProfileManage = () => {
               </label>
             </div>
 
-            {/* 에러 메시지 */}
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                 {error}
               </div>
             )}
 
-            {/* 버튼 */}
             <div className="flex gap-4">
               <button
                 type="submit"

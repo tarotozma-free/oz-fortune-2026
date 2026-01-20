@@ -21,7 +21,7 @@ const ProfileManage = () => {
     birth_time_unknown: false,
     is_lunar: false,
     birth_city: '서울',
-    gender: 'male',
+    gender: '남성',
     is_default: false
   })
 
@@ -85,7 +85,7 @@ const ProfileManage = () => {
       return
     }
 
-    // 시간 유효성 검사 (생시 모름이 아닌 경우만)
+    // 시간 유효성 검사
     if (!formData.birth_time_unknown && formData.birth_hour !== '') {
       const hour = parseInt(formData.birth_hour)
       if (hour < 0 || hour > 23) {
@@ -105,10 +105,10 @@ const ProfileManage = () => {
     setLoading(true)
 
     try {
-      // 생년월일 조합
+      // birth_date 생성
       const birthDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
       
-      // 시간 정보
+      // birth_time 생성
       let birthTime = null
       if (formData.birth_time_unknown) {
         birthTime = '00:00:00'
@@ -130,9 +130,16 @@ const ProfileManage = () => {
         is_default: formData.is_default
       }
 
+      console.log('Sending profile data:', profileData)
+
       const { data, error: createError } = await profiles.create(profileData)
 
-      if (createError) throw createError
+      if (createError) {
+        console.error('Profile creation error:', createError)
+        throw createError
+      }
+
+      console.log('Profile created:', data)
 
       // 성공 시 다음 페이지로 이동
       if (productId) {
@@ -142,27 +149,27 @@ const ProfileManage = () => {
       }
     } catch (err) {
       console.error('Profile creation error:', err)
-      setError('프로필 생성 중 오류가 발생했습니다')
+      setError(`프로필 생성 중 오류가 발생했습니다: ${err.message || ''}`)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <h1 className="text-3xl font-bold text-center text-purple-600 mb-2">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 border border-amber-100">
+          <h1 className="text-3xl font-bold text-center text-amber-800 mb-2">
             프로필 만들기
           </h1>
-          <p className="text-center text-gray-600 mb-8">
+          <p className="text-center text-amber-700 mb-8">
             누구의 운세를 보시겠어요?
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* 프로필 이름 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-amber-900 mb-2">
                 프로필 이름
               </label>
               <input
@@ -171,13 +178,13 @@ const ProfileManage = () => {
                 value={formData.profile_name}
                 onChange={handleChange}
                 placeholder="본인"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-amber-50/30"
               />
             </div>
 
             {/* 이름 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-amber-900 mb-2">
                 이름
               </label>
               <input
@@ -186,13 +193,13 @@ const ProfileManage = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="장세나"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-amber-50/30"
               />
             </div>
 
             {/* 생년월일 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-amber-900 mb-2">
                 생년월일
               </label>
               <div className="grid grid-cols-3 gap-3">
@@ -204,7 +211,7 @@ const ProfileManage = () => {
                   placeholder="1980"
                   min="1900"
                   max="2100"
-                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="px-4 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-amber-50/30"
                 />
                 <input
                   type="number"
@@ -214,7 +221,7 @@ const ProfileManage = () => {
                   placeholder="12"
                   min="1"
                   max="12"
-                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="px-4 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-amber-50/30"
                 />
                 <input
                   type="number"
@@ -224,60 +231,60 @@ const ProfileManage = () => {
                   placeholder="14"
                   min="1"
                   max="31"
-                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="px-4 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-amber-50/30"
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">년(4자리) - 월 - 일</p>
+              <p className="text-xs text-amber-600 mt-1">년(4자리) - 월 - 일</p>
             </div>
 
             {/* 양력/음력 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-amber-900 mb-2">
                 양력/음력
               </label>
               <div className="flex gap-4">
-                <label className="flex items-center">
+                <label className="flex items-center cursor-pointer">
                   <input
                     type="radio"
                     name="is_lunar"
                     value="false"
                     checked={!formData.is_lunar}
                     onChange={() => setFormData(prev => ({ ...prev, is_lunar: false }))}
-                    className="mr-2"
+                    className="mr-2 text-amber-600 focus:ring-amber-500"
                   />
-                  <span>양력</span>
+                  <span className="text-amber-900">양력</span>
                 </label>
-                <label className="flex items-center">
+                <label className="flex items-center cursor-pointer">
                   <input
                     type="radio"
                     name="is_lunar"
                     value="true"
                     checked={formData.is_lunar}
                     onChange={() => setFormData(prev => ({ ...prev, is_lunar: true }))}
-                    className="mr-2"
+                    className="mr-2 text-amber-600 focus:ring-amber-500"
                   />
-                  <span>음력</span>
+                  <span className="text-amber-900">음력</span>
                 </label>
               </div>
             </div>
 
             {/* 태어난 시간 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-amber-900 mb-2">
                 태어난 시간 (선택사항)
               </label>
               
               {/* 생시 모름 체크박스 */}
               <div className="mb-3">
-                <label className="flex items-center">
+                <label className="flex items-center cursor-pointer">
                   <input
                     type="checkbox"
                     name="birth_time_unknown"
                     checked={formData.birth_time_unknown}
                     onChange={handleBirthTimeUnknownChange}
-                    className="mr-2"
+                    className="mr-2 text-amber-600 focus:ring-amber-500"
                   />
-                  <span className="text-sm text-gray-700">생시를 모릅니다</span>
+                  <span className="text-sm text-amber-900">생시를 모릅니다</span>
                 </label>
               </div>
 
@@ -293,9 +300,9 @@ const ProfileManage = () => {
                     min="0"
                     max="23"
                     disabled={formData.birth_time_unknown}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent disabled:bg-stone-100 disabled:cursor-not-allowed bg-amber-50/30"
                   />
-                  <p className="text-xs text-gray-500 mt-1">시 (24시간 형식)</p>
+                  <p className="text-xs text-amber-600 mt-1">시 (24시간 형식)</p>
                 </div>
                 <div>
                   <input
@@ -307,16 +314,16 @@ const ProfileManage = () => {
                     min="0"
                     max="59"
                     disabled={formData.birth_time_unknown}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent disabled:bg-stone-100 disabled:cursor-not-allowed bg-amber-50/30"
                   />
-                  <p className="text-xs text-gray-500 mt-1">분</p>
+                  <p className="text-xs text-amber-600 mt-1">분</p>
                 </div>
               </div>
             </div>
 
             {/* 태어난 위치 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-amber-900 mb-2">
                 태어난 위치
               </label>
               <input
@@ -325,35 +332,35 @@ const ProfileManage = () => {
                 value={formData.birth_city}
                 onChange={handleChange}
                 placeholder="서울"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-amber-50/30"
               />
             </div>
 
             {/* 성별 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-amber-900 mb-2">
                 성별
               </label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-amber-50/30"
               >
-                <option value="male">남성</option>
-                <option value="female">여성</option>
+                <option value="남성">남성</option>
+                <option value="여성">여성</option>
               </select>
             </div>
 
             {/* 결과 수신 이메일 (읽기 전용) */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-amber-900 mb-2">
                 결과 수신 이메일
               </label>
-              <div className="px-4 py-3 border border-gray-200 rounded-lg bg-gray-50">
-                <p className="text-gray-700">{user?.email || '이메일 없음'}</p>
+              <div className="px-4 py-3 border border-amber-200 rounded-lg bg-stone-50">
+                <p className="text-amber-900">{user?.email || '이메일 없음'}</p>
               </div>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-amber-600 mt-1">
                 운세 결과가 이 이메일로 전송됩니다
               </p>
             </div>
@@ -365,17 +372,17 @@ const ProfileManage = () => {
                 name="is_default"
                 checked={formData.is_default}
                 onChange={handleChange}
-                className="mr-2"
+                className="mr-2 text-amber-600 focus:ring-amber-500"
                 id="is_default"
               />
-              <label htmlFor="is_default" className="text-sm text-gray-700">
+              <label htmlFor="is_default" className="text-sm text-amber-900 cursor-pointer">
                 기본 프로필로 설정
               </label>
             </div>
 
             {/* 에러 메시지 */}
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                 {error}
               </div>
             )}
@@ -385,23 +392,17 @@ const ProfileManage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-purple-600 text-white py-4 rounded-lg font-semibold hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 bg-gradient-to-r from-amber-600 to-amber-700 text-white py-4 rounded-lg font-semibold hover:from-amber-700 hover:to-amber-800 disabled:bg-stone-400 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
               >
                 {loading ? '저장 중...' : '저장'}
               </button>
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="flex-1 bg-gray-200 text-gray-700 py-4 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                className="flex-1 bg-stone-200 text-amber-900 py-4 rounded-lg font-semibold hover:bg-stone-300 transition-colors"
               >
                 취소
               </button>
             </div>
           </form>
         </div>
-      </div>
-    </div>
-  )
-}
-
-export default ProfileManage

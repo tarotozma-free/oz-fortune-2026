@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { profiles } from '../lib/supabase'
@@ -50,7 +50,6 @@ const ProfileManage = () => {
     e.preventDefault()
     setError('')
 
-    // 유효성 검사
     if (!formData.profile_name.trim()) {
       setError('프로필 이름을 입력해주세요')
       return
@@ -85,7 +84,6 @@ const ProfileManage = () => {
       return
     }
 
-    // 시간 유효성 검사
     if (!formData.birth_time_unknown && formData.birth_hour !== '') {
       const hour = parseInt(formData.birth_hour)
       if (hour < 0 || hour > 23) {
@@ -105,10 +103,8 @@ const ProfileManage = () => {
     setLoading(true)
 
     try {
-      // birth_date 생성
       const birthDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
       
-      // birth_time 생성
       let birthTime = null
       if (formData.birth_time_unknown) {
         birthTime = '00:00:00'
@@ -130,18 +126,10 @@ const ProfileManage = () => {
         is_default: formData.is_default
       }
 
-      console.log('Sending profile data:', profileData)
-
       const { data, error: createError } = await profiles.create(profileData)
 
-      if (createError) {
-        console.error('Profile creation error:', createError)
-        throw createError
-      }
+      if (createError) throw createError
 
-      console.log('Profile created:', data)
-
-      // 성공 시 다음 페이지로 이동
       if (productId) {
         navigate(`/product/${productId}?profileId=${data.id}`)
       } else {
@@ -159,19 +147,12 @@ const ProfileManage = () => {
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-8 border border-amber-100">
-          <h1 className="text-3xl font-bold text-center text-amber-800 mb-2">
-            프로필 만들기
-          </h1>
-          <p className="text-center text-amber-700 mb-8">
-            누구의 운세를 보시겠어요?
-          </p>
+          <h1 className="text-3xl font-bold text-center text-amber-800 mb-2">프로필 만들기</h1>
+          <p className="text-center text-amber-700 mb-8">누구의 운세를 보시겠어요?</p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* 프로필 이름 */}
             <div>
-              <label className="block text-sm font-medium text-amber-900 mb-2">
-                프로필 이름
-              </label>
+              <label className="block text-sm font-medium text-amber-900 mb-2">프로필 이름</label>
               <input
                 type="text"
                 name="profile_name"
@@ -182,11 +163,8 @@ const ProfileManage = () => {
               />
             </div>
 
-            {/* 이름 */}
             <div>
-              <label className="block text-sm font-medium text-amber-900 mb-2">
-                이름
-              </label>
+              <label className="block text-sm font-medium text-amber-900 mb-2">이름</label>
               <input
                 type="text"
                 name="name"
@@ -197,11 +175,8 @@ const ProfileManage = () => {
               />
             </div>
 
-            {/* 생년월일 */}
             <div>
-              <label className="block text-sm font-medium text-amber-900 mb-2">
-                생년월일
-              </label>
+              <label className="block text-sm font-medium text-amber-900 mb-2">생년월일</label>
               <div className="grid grid-cols-3 gap-3">
                 <input
                   type="number"
@@ -237,20 +212,16 @@ const ProfileManage = () => {
               <p className="text-xs text-amber-600 mt-1">년(4자리) - 월 - 일</p>
             </div>
 
-            {/* 양력/음력 */}
             <div>
-              <label className="block text-sm font-medium text-amber-900 mb-2">
-                양력/음력
-              </label>
+              <label className="block text-sm font-medium text-amber-900 mb-2">양력/음력</label>
               <div className="flex gap-4">
                 <label className="flex items-center cursor-pointer">
                   <input
                     type="radio"
                     name="is_lunar"
-                    value="false"
                     checked={!formData.is_lunar}
                     onChange={() => setFormData(prev => ({ ...prev, is_lunar: false }))}
-                    className="mr-2 text-amber-600 focus:ring-amber-500"
+                    className="mr-2"
                   />
                   <span className="text-amber-900">양력</span>
                 </label>
@@ -258,23 +229,17 @@ const ProfileManage = () => {
                   <input
                     type="radio"
                     name="is_lunar"
-                    value="true"
                     checked={formData.is_lunar}
                     onChange={() => setFormData(prev => ({ ...prev, is_lunar: true }))}
-                    className="mr-2 text-amber-600 focus:ring-amber-500"
+                    className="mr-2"
                   />
                   <span className="text-amber-900">음력</span>
                 </label>
               </div>
             </div>
 
-            {/* 태어난 시간 */}
             <div>
-              <label className="block text-sm font-medium text-amber-900 mb-2">
-                태어난 시간 (선택사항)
-              </label>
-              
-              {/* 생시 모름 체크박스 */}
+              <label className="block text-sm font-medium text-amber-900 mb-2">태어난 시간 (선택사항)</label>
               <div className="mb-3">
                 <label className="flex items-center cursor-pointer">
                   <input
@@ -282,13 +247,11 @@ const ProfileManage = () => {
                     name="birth_time_unknown"
                     checked={formData.birth_time_unknown}
                     onChange={handleBirthTimeUnknownChange}
-                    className="mr-2 text-amber-600 focus:ring-amber-500"
+                    className="mr-2"
                   />
                   <span className="text-sm text-amber-900">생시를 모릅니다</span>
                 </label>
               </div>
-
-              {/* 시간 입력 */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <input
@@ -321,11 +284,8 @@ const ProfileManage = () => {
               </div>
             </div>
 
-            {/* 태어난 위치 */}
             <div>
-              <label className="block text-sm font-medium text-amber-900 mb-2">
-                태어난 위치
-              </label>
+              <label className="block text-sm font-medium text-amber-900 mb-2">태어난 위치</label>
               <input
                 type="text"
                 name="birth_city"
@@ -336,11 +296,8 @@ const ProfileManage = () => {
               />
             </div>
 
-            {/* 성별 */}
             <div>
-              <label className="block text-sm font-medium text-amber-900 mb-2">
-                성별
-              </label>
+              <label className="block text-sm font-medium text-amber-900 mb-2">성별</label>
               <select
                 name="gender"
                 value={formData.gender}
@@ -352,42 +309,32 @@ const ProfileManage = () => {
               </select>
             </div>
 
-            {/* 결과 수신 이메일 (읽기 전용) */}
             <div>
-              <label className="block text-sm font-medium text-amber-900 mb-2">
-                결과 수신 이메일
-              </label>
+              <label className="block text-sm font-medium text-amber-900 mb-2">결과 수신 이메일</label>
               <div className="px-4 py-3 border border-amber-200 rounded-lg bg-stone-50">
                 <p className="text-amber-900">{user?.email || '이메일 없음'}</p>
               </div>
-              <p className="text-xs text-amber-600 mt-1">
-                운세 결과가 이 이메일로 전송됩니다
-              </p>
+              <p className="text-xs text-amber-600 mt-1">운세 결과가 이 이메일로 전송됩니다</p>
             </div>
 
-            {/* 기본 프로필 */}
             <div className="flex items-center">
               <input
                 type="checkbox"
                 name="is_default"
                 checked={formData.is_default}
                 onChange={handleChange}
-                className="mr-2 text-amber-600 focus:ring-amber-500"
+                className="mr-2"
                 id="is_default"
               />
-              <label htmlFor="is_default" className="text-sm text-amber-900 cursor-pointer">
-                기본 프로필로 설정
-              </label>
+              <label htmlFor="is_default" className="text-sm text-amber-900 cursor-pointer">기본 프로필로 설정</label>
             </div>
 
-            {/* 에러 메시지 */}
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                 {error}
               </div>
             )}
 
-            {/* 버튼 */}
             <div className="flex gap-4">
               <button
                 type="submit"
@@ -406,3 +353,9 @@ const ProfileManage = () => {
             </div>
           </form>
         </div>
+      </div>
+    </div>
+  )
+}
+
+export default ProfileManage

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { BrowserRouter, Routes, Route, Navigate, useParams, useSearchParams } from 'react-router-dom';
 
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';  // ← useAuth 추가!
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import AuthCallback from './pages/AuthCallback';

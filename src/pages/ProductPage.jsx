@@ -1,7 +1,7 @@
-import SajuPillarsChart from './SajuPillarsChart';
-import AstroPlanetsChart from './AstroPlanetsChart';
-import LifetimeFlowChart from './LifetimeFlowChart';
-import GradeBadge from './GradeBadge';
+import SajuPillarsChart from '../components/SajuPillarsChart';
+import AstroPlanetsChart from '../components/AstroPlanetsChart';
+import LifetimeFlowChart from '../components/LifetimeFlowChart';
+import GradeBadge from '../components/GradeBadge';
 
 const FullView = ({ config, theme, formData, result, onBack, displayName }) => {
   const ai = result?.aiResponse || {};

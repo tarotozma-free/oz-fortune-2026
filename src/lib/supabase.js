@@ -35,6 +35,16 @@ export const profiles = {
     return { data, error }
   },
 
+  export const products = {
+  getAll: async () => {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('display_order', { ascending: true })
+    return { data, error }
+  }
+},
+
   getAll: async (userId) => {
     const { data, error } = await supabase
       .from('profiles')

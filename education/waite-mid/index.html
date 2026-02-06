@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유니버셜 웨이트 타로 - 중급 과정</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-beige: #F5F1E8;
+            --secondary-beige: #E8DCC8;
+            --accent-brown: #A67C52;
+            --dark-brown: #6B5744;
+            --text-dark: #3A3226;
+            --border-color: #D4C5AE;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--primary-beige);
+            color: var(--text-dark);
+            line-height: 1.8;
+            font-size: 16px;
+            position: relative;
+        }
+
+        /* 워터마크 스타일 */
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            opacity: 0.4;
+            z-index: 999;
+            pointer-events: none;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .watermark img {
+            width: 100%;
+            height: auto;
+        }
+
+        .cover {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--secondary-beige) 0%, var(--primary-beige) 100%);
+            padding: 40px 20px;
+            page-break-after: always;
+        }
+
+        .cover-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 300;
+            margin-bottom: 20px;
+            color: var(--dark-brown);
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .cover-subtitle {
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-weight: 500;
+            color: var(--accent-brown);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .cover-level {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--accent-brown);
+            margin-bottom: 40px;
+            padding: 12px 30px;
+            border: 2px solid var(--accent-brown);
+            border-radius: 50px;
+            text-align: center;
+        }
+
+        .cover-description {
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+            color: var(--dark-brown);
+            margin-bottom: 60px;
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.8;
+            padding: 0 15px;
+        }
+
+        .cover-footer {
+            margin-top: auto;
+            text-align: center;
+            color: var(--dark-brown);
+            font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+        }
+
+        .cover-creator {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: var(--accent-brown);
+        }
+
+        .cover-copyright {
+            font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+            color: var(--dark-brown);
+            opacity: 0.8;
+            padding: 0 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: clamp(30px, 5vw, 60px) clamp(15px, 4vw, 40px);
+            background-color: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.05);
+        }
+
+        .toc {
+            padding: clamp(20px, 4vw, 40px);
+            margin-bottom: 60px;
+            page-break-after: always;
+        }
+
+        .toc h2 {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            color: var(--dark-brown);
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .toc-item {
+            padding: clamp(12px, 3vw, 20px);
+            margin-bottom: 12px;
+            background-color: var(--primary-beige);
+            border-left: 4px solid var(--accent-brown);
+            transition: all 0.3s ease;
+        }
+
+        .toc-item:hover {
+            background-color: var(--secondary-beige);
+            transform: translateX(5px);
+        }
+
+        .toc-day {
+            font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+            font-weight: 600;
+            color: var(--accent-brown);
+            margin-bottom: 8px;
+        }
+
+        .toc-topics {
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+            color: var(--dark-brown);
+            padding-left: 15px;
+            line-height: 1.6;
+        }
+
+        .day-section {
+            margin-bottom: 60px;
+            padding-top: 20px;
+        }
+        
+        .day-section:not(:first-of-type) {
+            page-break-before: always;
+        }
+
+        .day-header {
+            background: linear-gradient(135deg, var(--accent-brown) 0%, var(--dark-brown) 100%);
+            color: white;
+            padding: clamp(20px, 4vw, 30px);
+            margin-bottom: 30px;
+            border-radius: 10px;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
+
+        .day-number {
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            opacity: 0.9;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .day-title {
+            font-size: clamp(1.3rem, 3.5vw, 2rem);
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .session {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+
+        .session-header {
+            background-color: var(--secondary-beige);
+            padding: clamp(15px, 3vw, 20px);
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent-brown);
+            border-radius: 5px;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
+
+        .session-title {
+            font-size: clamp(1.15rem, 2.8vw, 1.5rem);
+            color: var(--dark-brown);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .content-block {
+            margin-bottom: 25px;
+            padding: clamp(15px, 3vw, 25px);
+            background-color: #FAFAF8;
+            border-radius: 8px;
+            page-break-inside: avoid;
+        }
+
+        .content-block h3 {
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            color: var(--accent-brown);
+            margin-bottom: 12px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .content-block h4 {
+            font-size: clamp(1rem, 2.2vw, 1.1rem);
+            color: var(--dark-brown);
+            margin: 15px 0 10px 0;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .content-block p {
+            margin-bottom: 12px;
+            line-height: 1.8;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .content-block ul {
+            margin-left: clamp(18px, 4vw, 25px);
+            margin-bottom: 12px;
+        }
+
+        .content-block li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .highlight-box {
+            background-color: var(--secondary-beige);
+            border-left: 4px solid var(--accent-brown);
+            padding: clamp(15px, 3vw, 20px);
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-brown);
+        }
+
+        .example-box {
+            background-color: #FFF9F0;
+            border: 2px dashed var(--accent-brown);
+            padding: clamp(15px, 3vw, 25px);
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .example-title {
+            color: var(--accent-brown);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: clamp(1rem, 2.2vw, 1.1rem);
+        }
+
+        .practice-box {
+            background-color: #F0FFF0;
+            border: 2px solid #5A8F5A;
+            padding: clamp(15px, 3vw, 25px);
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .practice-box::before {
+            content: "🎯 실습";
+            display: block;
+            font-weight: 600;
+            color: #5A8F5A;
+            margin-bottom: 10px;
+            font-size: clamp(1rem, 2.2vw, 1.1rem);
+        }
+
+        .spread-diagram {
+            background-color: white;
+            padding: clamp(15px, 3vw, 25px);
+            margin: 20px 0;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .card-item {
+            background-color: white;
+            padding: clamp(12px, 2.5vw, 15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .card-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-size: clamp(1rem, 2.2vw, 1.1rem);
+            font-weight: 600;
+            color: var(--accent-brown);
+            margin-bottom: 8px;
+        }
+
+        .number-table, .keyword-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+        }
+
+        .number-table th, .keyword-table th {
+            background-color: var(--accent-brown);
+            color: white;
+            padding: clamp(10px, 2vw, 15px);
+            text-align: left;
+            font-weight: 600;
+            font-size: clamp(0.85rem, 1.8vw, 1rem);
+        }
+
+        .number-table td, .keyword-table td {
+            padding: clamp(8px, 2vw, 12px) clamp(10px, 2vw, 15px);
+            border-bottom: 1px solid var(--border-color);
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+        }
+
+        .number-table tr:hover, .keyword-table tr:hover {
+            background-color: var(--primary-beige);
+        }
+
+        /* PDF 다운로드 버튼 */
+        .pdf-download-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, var(--accent-brown) 0%, var(--dark-brown) 100%);
+            color: white;
+            padding: clamp(12px, 2.5vw, 15px) clamp(22px, 4.5vw, 30px);
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2.2vw, 1rem);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .pdf-download-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .pdf-download-btn::before {
+            content: "📥";
+            font-size: clamp(1rem, 2.2vw, 1.2rem);
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                font-size: 12pt;
+            }
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+                padding: 30px;
+            }
+            .day-section, .toc {
+                page-break-before: always;
+            }
+            .pdf-download-btn, .watermark {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cover {
+                padding: 30px 15px;
+            }
+            
+            .container {
+                padding: 25px 15px;
+            }
+            
+            .toc-item {
+                padding: 15px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .number-table, .keyword-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+            
+            .number-table thead, .keyword-table thead {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+            
+            .pdf-download-btn {
+                top: 10px;
+                right: 10px;
+                padding: 10px 18px;
+            }
+
+            .watermark {
+                width: 80px;
+                bottom: 15px;
+                right: 15px;
+                opacity: 0.5;
+            }
+            
+            /* 부록 테이블 모바일 최적화 */
+            .appendix .keyword-table {
+                font-size: 0.8rem;
+            }
+            
+            .appendix .keyword-table th,
+            .appendix .keyword-table td {
+                padding: 8px 6px;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+            
+            .cover-level {
+                margin-bottom: 30px;
+            }
+            
+            .cover-description {
+                margin-bottom: 40px;
+            }
+
+            .watermark {
+                width: 70px;
+                bottom: 10px;
+                right: 10px;
+                opacity: 0.45;
+            }
+        }
+    </style>
+    
+    <!-- jsPDF 라이브러리 CDN -->
+    
+</head>
+<body>
+
+<!-- 워터마크 -->
+<div class="watermark">
+    <img src="data:image/png;base64,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" alt="OZMA">
+</div>
+
+<button class="pdf-download-btn" onclick="handlePdfSave()" aria-label="PDF로 저장" ontouchstart="">📄 PDF 저장</button>
+
+<script>
+function handlePdfSave() {
+    // 모바일 감지
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        // 모바일에서는 안내 후 바로 실행
+        alert('📱 모바일 PDF 저장 안내\n\n인쇄 화면이 열리면:\n\n[Android]\n• 대상: "PDF로 저장" 선택\n• 저장 위치 선택\n\n[iPhone/iPad]\n• 하단 공유 버튼 탭\n• "PDF로 저장" 선택');
+        
+        // alert 후 바로 실행
+        setTimeout(function() {
+            window.print();
+        }, 100);
+    } else {
+        // PC에서는 바로 인쇄 대화상자
+        window.print();
+    }
+}
+
+// 페이지 로드 시 이벤트 리스너 추가
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.querySelector('.pdf-download-btn');
+    if (btn) {
+        // 터치 이벤트도 추가
+        btn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            handlePdfSave();
+        }, {passive: false});
+    }
+});
+</script>
+
+
+<div class="cover">
+    <div class="cover-title">유니버셜 웨이트 타로</div>
+    <div class="cover-subtitle">6일 완성 교육 과정</div>
+    <div class="cover-level">중급 과정</div>
+    <div class="cover-description">
+        점성학적 연결과 실전 상담 스킬<br>
+        낱장의 카드를 문장으로 연결하고,<br>
+        점성학 지식을 더해 디테일한 시기/장소/성향을 맞춘다
+    </div>
+    <div class="cover-footer">
+        <div class="cover-creator">Created by OZMA</div>
+        <div class="cover-copyright">
+            © 2025 OZMA Tarot & Astrology Institute. All rights reserved.<br>
+            본 교재의 무단 복제 및 배포를 금지합니다.
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+<div class="toc">
+    <h2>📚 목차</h2>
+    
+    <div class="toc-item">
+        <div class="toc-day">Day 1. 상징의 확장 & 역방향 리딩</div>
+        <div class="toc-topics">
+            • 타로 속의 색채 심리 (Color Psychology)<br>
+            • 상징(Symbol) 디코딩 - 숨은 그림 찾기<br>
+            • 역방향(Reversal) 두려움 없애기
+        </div>
+    </div>
+
+    <div class="toc-item">
+        <div class="toc-day">Day 2. 오즈의 비기 : 타로와 점성학</div>
+        <div class="toc-topics">
+            • 12별자리와 메이저 카드 매칭<br>
+            • 7행성과 마이너 카드 (Decans)<br>
+            • 시기(Timing) 추론법 - "언제 될까요?"
+        </div>
+    </div>
+
+    <div class="toc-item">
+        <div class="toc-day">Day 3. 배열의 확장 : 관계와 흐름 읽기</div>
+        <div class="toc-topics">
+            • 시선 처리(Gaze Direction) - 카드는 살아있다<br>
+            • 연계 리딩 (Flow Reading) - 문장 만들기<br>
+            • 양자택일(Two Paths) 스프레드 심화
+        </div>
+    </div>
+
+    <div class="toc-item">
+        <div class="toc-day">Day 4. 상담의 꽃 : 켈틱 크로스</div>
+        <div class="toc-topics">
+            • 켈틱 크로스 구조 분석 - 십자가와 기둥<br>
+            • 핵심 위치(Key Position) 분석법<br>
+            • 실전 사례 분석 (Case Study)
+        </div>
+    </div>
+
+    <div class="toc-item">
+        <div class="toc-day">Day 5. 주제별 실전 상담</div>
+        <div class="toc-topics">
+            • Love Tarot (속마음, 재회, 썸)<br>
+            • Business Tarot (사업, 이직, 재물)<br>
+            • 건강 & 1년 운세(Yearly Spread)
+        </div>
+    </div>
+
+    <div class="toc-item">
+        <div class="toc-day">Day 6. 프로 상담가의 길</div>
+        <div class="toc-topics">
+            • 내담자를 치유하는 화법 (Reframing)<br>
+            • 온/오프라인 창업 가이드<br>
+            • 과정 마무리 & 마스터 인증
+        </div>
+    </div>
+
+    <div class="toc-item">
+        <div class="toc-day">부록. 실전 리딩 가이드</div>
+        <div class="toc-topics">
+            • 주제별 핵심 카드 조합<br>
+            • 역방향 해석 빠른 참조<br>
+            • 상담 시나리오별 대응법
+        </div>
+    </div>
+</div>
+
+
+<div class="day-section">
+    <div class="day-header">
+        <div class="day-number">DAY 1</div>
+        <div class="day-title">상징의 확장 & 역방향 리딩</div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">1교시: 타로 속의 색채 심리 (Color Psychology)</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; color: var(--accent-brown); margin-bottom: 20px;">
+                타로 카드의 배경색은 <strong>'그 상황의 분위기(Mood)'</strong>를 결정짓는 가장 강력한 힌트입니다.
+            </p>
+        </div>
+
+        <div class="color-box">
+            <div class="color-name" style="display: flex; align-items: center; gap: 10px;">
+                <span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FFD700, #FFA500); border-radius: 50%; border: 3px solid #FFF; box-shadow: 0 2px 8px rgba(255,215,0,0.5);"></span>
+                <span>노란색 (Yellow)</span>
+            </div>
+            <div class="color-meaning">지성, 축복, 명확함</div>
+            <p><strong>의미:</strong> 태양의 빛입니다. 숨길 것이 없고 긍정적인 에너지가 가득한 상태입니다.</p>
+            <p><strong>예시:</strong> 마법사(Magician)의 배경 - 그는 자신의 능력을 명확히 알고 있습니다. 힘(Strength)의 배경 - 본능을 이성으로 통제하는 지혜를 뜻합니다.</p>
+        </div>
+
+        <div class="color-box">
+            <div class="color-name" style="display: flex; align-items: center; gap: 10px;">
+                <span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #808080, #A9A9A9); border-radius: 50%; border: 3px solid #FFF; box-shadow: 0 2px 8px rgba(128,128,128,0.5);"></span>
+                <span>회색 (Grey)</span>
+            </div>
+            <div class="color-meaning">중립, 모호함, 현실적 판단</div>
+            <p><strong>의미:</strong> 흑과 백이 섞인 색입니다. 감정을 배제하고 객관적이거나, 혹은 상황이 불투명하여 안개가 낀 상태입니다.</p>
+            <p><strong>예시:</strong> 은둔자(Hermit) - 세상과 단절된 고독한 회색. 심판(Judgement) - 감정이 아닌 팩트로만 판결하는 냉정함.</p>
+        </div>
+
+        <div class="color-box">
+            <div class="color-name" style="display: flex; align-items: center; gap: 10px;">
+                <span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #1a1a1a, #333333); border-radius: 50%; border: 3px solid #FFF; box-shadow: 0 2px 8px rgba(0,0,0,0.6);"></span>
+                <span>검은색 (Black)</span>
+            </div>
+            <div class="color-meaning">끝, 무지(Unknown), 잠재력</div>
+            <p><strong>의미:</strong> 빛이 없는 상태입니다. 절망일 수도 있지만, 모든 것이 탄생하기 전의 '자궁'과 같은 잠재력을 뜻하기도 합니다.</p>
+            <p><strong>예시:</strong> 죽음(Death) - 철저한 종결. 악마(Devil) - 벗어날 수 없는 어두운 욕망의 공간.</p>
+        </div>
+
+        <div class="color-box">
+            <div class="color-name" style="display: flex; align-items: center; gap: 10px;">
+                <span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #4169E1, #1E90FF); border-radius: 50%; border: 3px solid #FFF; box-shadow: 0 2px 8px rgba(65,105,225,0.5);"></span>
+                <span>파란색 (Blue)</span>
+            </div>
+            <div class="color-meaning">무의식, 직관, 차가움</div>
+            <p><strong>의미:</strong> 물과 하늘의 색입니다. 이성보다는 감성, 현실보다는 내면의 세계를 다룹니다.</p>
+            <p><strong>예시:</strong> 고위 여사제(High Priestess) - 깊은 무의식과 비밀.</p>
+        </div>
+
+        <div class="color-box">
+            <div class="color-name" style="display: flex; align-items: center; gap: 10px;">
+                <span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #DC143C, #FF6347); border-radius: 50%; border: 3px solid #FFF; box-shadow: 0 2px 8px rgba(220,20,60,0.5);"></span>
+                <span>붉은색 (Red)</span>
+            </div>
+            <div class="color-meaning">열정, 욕망, 행동력</div>
+            <p><strong>의미:</strong> 피와 불의 색입니다. 강한 에너지와 남성성을 상징합니다.</p>
+            <p><strong>예시:</strong> 황제(Emperor)의 옷 - 권력욕과 지배욕.</p>
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">2교시: 상징(Symbol) 디코딩 - 숨은 그림 찾기</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                작은 그림 하나가 리딩의 <strong>'한 끗'</strong>을 바꿉니다.
+            </p>
+        </div>
+
+        <div class="symbol-box">
+            <div class="symbol-name" style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.8rem;">🏆</span>
+                <span>월계관 (Wreath)</span>
+            </div>
+            <p>승리와 완성. 단순한 성공이 아니라 '고난을 이겨낸 후의 영광'입니다.</p>
+            <p style="font-size: 0.9rem; color: var(--dark-brown); margin-top: 10px;">
+                <strong>등장 카드:</strong> 월드, 6 지팡이
+            </p>
+        </div>
+
+        <div class="symbol-box">
+            <div class="symbol-name" style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.8rem;">🍎</span>
+                <span>석류 (Pomegranate)</span>
+            </div>
+            <p>여성성, 다산, 그리고 '페르세포네의 비밀'. 겉으로는 드러나지 않는 숨겨진 지혜나 비밀스러운 관계를 암시합니다.</p>
+            <p style="font-size: 0.9rem; color: var(--dark-brown); margin-top: 10px;">
+                <strong>등장 카드:</strong> 고위 여사제, 여황제
+            </p>
+        </div>
+
+        <div class="symbol-box">
+            <div class="symbol-name" style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.8rem;">🐕</span>
+                <span>강아지/개 (Dog)</span>
+            </div>
+            <p>본능적인 경고 혹은 충성심.</p>
+            <ul style="margin-top: 10px;">
+                <li><strong>바보(Fool)의 개:</strong> 위험을 경고해 주는 동반자</li>
+                <li><strong>달(Moon)의 개:</strong> 불안에 떨며 짖어대는 본능적 공포</li>
+            </ul>
+        </div>
+
+        <div class="symbol-box">
+            <div class="symbol-name" style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.8rem; font-weight: bold; color: var(--accent-brown);">∞</span>
+                <span>무한대 기호 (Lemniscate, ∞)</span>
+            </div>
+            <p>영원한 순환, 신성한 힘. 인간의 힘을 초월한 에너지가 작용함을 뜻합니다.</p>
+            <p style="font-size: 0.9rem; color: var(--dark-brown); margin-top: 10px;">
+                <strong>등장 카드:</strong> 마법사, 힘, 2 펜타클
+            </p>
+        </div>
+
+        <div class="symbol-box">
+            <div class="symbol-name" style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.8rem;">🏰</span>
+                <span>성 (Castle)</span>
+            </div>
+            <p>도달해야 할 목표, 혹은 내가 보호받는 안식처. 거리가 멀어 보이면 아직 갈 길이 먼 것입니다.</p>
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">3교시: 역방향(Reversal) 두려움 없애기</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; color: var(--accent-brown); margin-bottom: 20px;">
+                초보자가 가장 두려워하는 역방향, <strong>'반대'가 아니라 '흐름의 장애'</strong>로 해석하세요.
+            </p>
+        </div>
+
+        <div class="reversal-pattern">
+            <div class="pattern-number">패턴 1</div>
+            <h4 style="margin: 10px 0;">에너지의 과잉 (Too much)</h4>
+            <p>좋은 것도 과하면 독이 됩니다.</p>
+            <div class="example-box">
+                <div class="example-title">예시</div>
+                <p><strong>여황제 역방향</strong> → 풍요가 과해서 게으름, 사치, 집착이 됨.</p>
+            </div>
+        </div>
+
+        <div class="reversal-pattern">
+            <div class="pattern-number">패턴 2</div>
+            <h4 style="margin: 10px 0;">에너지의 부족/지연 (Not enough / Delay)</h4>
+            <p>되긴 되는데 시간이 걸리거나 힘이 딸립니다.</p>
+            <div class="example-box">
+                <div class="example-title">예시</div>
+                <p><strong>전차 역방향</strong> → 가고는 싶은데 엔진이 고장 남. 출발이 지연됨.</p>
+            </div>
+        </div>
+
+        <div class="reversal-pattern">
+            <div class="pattern-number">패턴 3</div>
+            <h4 style="margin: 10px 0;">내면화 (Internalized)</h4>
+            <p>겉으로 드러나지 않고 속으로만 삭이는 상태.</p>
+            <div class="example-box">
+                <div class="example-title">예시</div>
+                <p><strong>검 3 역방향</strong> → 남들은 모르지만 나 혼자 속이 문드러짐. 혹은 이제 상처가 아물어가는 중.</p>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            초보 시절에는 정방향만 사용해도 좋지만, 중급부터는 역방향을 섞어야 "겉으론 웃지만 속은 우는" 디테일한 심리를 읽을 수 있습니다.
+        </div>
+    </div>
+</div>
+
+
+<div class="day-section">
+    <div class="day-header">
+        <div class="day-number">DAY 2</div>
+        <div class="day-title">오즈의 비기 : 타로와 점성학 (Astrology)</div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">1교시: 12별자리와 메이저 카드 매칭</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                타로 카드는 점성학의 <strong>'골든 던(Golden Dawn)'</strong> 체계를 따릅니다. 
+                이 연결고리를 알면 성격 묘사가 소름 돋게 정확해집니다.
+            </p>
+        </div>
+
+        <table class="zodiac-table">
+            <thead>
+                <tr style="background-color: #FAFAF8;">
+                    <th>별자리</th>
+                    <th>연결 카드</th>
+                    <th>핵심 특징</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>양자리 (Aries)</strong></td>
+                    <td>황제 (The Emperor)</td>
+                    <td>개척자, 리더, "나를 따르라". 불같은 성격</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>황소자리 (Taurus)</strong></td>
+                    <td>교황 (The Hierophant)</td>
+                    <td>보수적, 오감 만족, 신뢰 중시. 변화를 싫어함</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>쌍둥이자리 (Gemini)</strong></td>
+                    <td>연인 (The Lovers)</td>
+                    <td>소통, 호기심, 두 가지 마음, 정보 전달자</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>게자리 (Cancer)</strong></td>
+                    <td>전차 (The Chariot)</td>
+                    <td>겉은 딱딱(갑옷)하지만 속은 여림. 내 사람을 지키려는 본능</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>사자자리 (Leo)</strong></td>
+                    <td>힘 (Strength)</td>
+                    <td>주인공 의식, 자존심, 그러나 따뜻한 마음</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>처녀자리 (Virgo)</strong></td>
+                    <td>은둔자 (The Hermit)</td>
+                    <td>분석적, 완벽주의, 봉사, 비판적 시각</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>천칭자리 (Libra)</strong></td>
+                    <td>정의 (Justice)</td>
+                    <td>균형, 우유부단, 평화주의, 외모 중시</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>전갈자리 (Scorpio)</strong></td>
+                    <td>죽음 (Death)</td>
+                    <td>깊은 통찰, 집착, 파괴와 재생, 비밀</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>사수자리 (Sagittarius)</strong></td>
+                    <td>절제 (Temperance)</td>
+                    <td>이상주의, 모험, 융통성, 철학적</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>염소자리 (Capricorn)</strong></td>
+                    <td>악마 (The Devil)</td>
+                    <td>야망, 물질주의, 책임감, 현실적 성공욕</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>물병자리 (Aquarius)</strong></td>
+                    <td>별 (The Star)</td>
+                    <td>독창성, 인류애, 엉뚱함, 미래지향적</td>
+                </tr>
+                <tr style="background-color: #FAFAF8;">
+                    <td><strong>물고기자리 (Pisces)</strong></td>
+                    <td>달 (The Moon)</td>
+                    <td>풍부한 감수성, 혼란, 예술성, 희생</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">2교시: 7행성과 마이너 카드 (Decans)</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-style: italic; color: var(--accent-brown); margin-bottom: 20px;">
+                "왜 검 5번은 패배하고 싸우는 그림일까요?" → 금성(평화)이 물병자리(독특함)에서 길을 잃었기 때문입니다.
+            </p>
+            <p style="font-size: 0.9rem; margin-bottom: 20px;">(심화 과정 맛보기)</p>
+
+            <h3>쉽게 적용하는 법</h3>
+        </div>
+
+        <div class="content-block">
+            <h4>화성(Mars) 카드</h4>
+            <p><strong>예시:</strong> 탑, 5 지팡이</p>
+            <p><strong>의미:</strong> 다툼, 사고, 급작스러운 사건, 염증 주의</p>
+        </div>
+
+        <div class="content-block">
+            <h4>금성(Venus) 카드</h4>
+            <p><strong>예시:</strong> 여황제, 3 컵</p>
+            <p><strong>의미:</strong> 즐거움, 연애, 지출(쇼핑), 게으름</p>
+        </div>
+
+        <div class="content-block">
+            <h4>토성(Saturn) 카드</h4>
+            <p><strong>예시:</strong> 월드, 3 검</p>
+            <p><strong>의미:</strong> 제한, 인내, 오래 걸림, 뼈/피부 질환</p>
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">3교시: 시기(Timing) 추론법 - "언제 될까요?"</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                고객이 가장 많이 묻는 질문입니다. 원소와 점성학적 속도(Speed)를 이용합니다.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h3>Wands (불): 가장 빠름</h3>
+            <p><strong>시기:</strong> Days ~ Weeks</p>
+            <p><strong>계절:</strong> 봄</p>
+            <p><strong>성질:</strong> 후다닥 해치움</p>
+        </div>
+
+        <div class="content-block">
+            <h3>Cups (물): 보통</h3>
+            <p><strong>시기:</strong> Weeks ~ Months</p>
+            <p><strong>계절:</strong> 여름</p>
+            <p><strong>성질:</strong> 감정이 무르익을 시간이 필요함</p>
+        </div>
+
+        <div class="content-block">
+            <h3>Swords (공기): 빠르지만 지연됨</h3>
+            <p><strong>시기:</strong> Weeks</p>
+            <p><strong>계절:</strong> 가을</p>
+            <p><strong>성질:</strong> 생각하느라 행동이 늦어질 수 있음</p>
+        </div>
+
+        <div class="content-block">
+            <h3>Pentacles (흙): 가장 느림</h3>
+            <p><strong>시기:</strong> Months ~ Years</p>
+            <p><strong>계절:</strong> 겨울</p>
+            <p><strong>성질:</strong> 결과가 확실히 나올 때까지 움직이지 않음</p>
+        </div>
+
+        <div class="tip-box">
+            <strong>실전 팁:</strong> "펜타클 기사(Knight of Pentacles)가 떴네요. 이 일은 최소 6개월 이상, 길게는 1년까지 보셔야 결과가 나옵니다. 조급해하지 마세요."
+        </div>
+    </div>
+</div>
+
+<div class="day-section">
+    <div class="day-header">
+        <div class="day-number">DAY 3</div>
+        <div class="day-title">배열의 확장 : 관계와 흐름 읽기</div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">1교시: 시선 처리(Gaze Direction) - 카드는 살아있다</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                스프레드에 깔린 인물 카드들이 <strong>'어디를 보고 있는지'</strong> 확인하세요. 
+                이것만 봐도 관계도가 나옵니다.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h4>서로 마주 보는 경우</h4>
+            <p>소통이 됨, 관심이 있음, 긍정적 교류</p>
+        </div>
+
+        <div class="content-block">
+            <h4>서로 등 돌린 경우</h4>
+            <p>갈등, 이별, 서로 딴생각 중</p>
+        </div>
+
+        <div class="content-block">
+            <h4>한 명은 보는데, 한 명은 딴 곳을 보는 경우</h4>
+            <p>짝사랑, 한쪽의 일방적인 구애, 무시</p>
+        </div>
+
+        <div class="content-block">
+            <h4>정면을 응시하는 경우</h4>
+            <p><strong>예:</strong> 정의, 교황</p>
+            <p>당신(내담자)에게 말을 걸고 있음. 혹은 독단적인 상태</p>
+        </div>
+
+        <div class="practice-box">
+            킹 컵과 퀸 컵을 나란히 놓아보세요. 둘은 서로를 그윽하게 바라봅니다. 
+            하지만 그 사이에 '검 3'을 끼워 넣으면? 시선이 차단됩니다. (상처 때문에 서로를 못 봄)
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">2교시: 연계 리딩 (Flow Reading) - 문장 만들기</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                카드 A, B, C를 따로 읽지 말고 <strong>접속사로 연결하는</strong> 훈련입니다.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h3>패턴 1: 인과관계 (Because)</h3>
+            <div class="example-box">
+                <p><strong>(원인)</strong> 검 5 + <strong>(결과)</strong> 은둔자</p>
+                <p style="margin-top: 15px; font-style: italic;">
+                    "사람들과의 다툼과 패배감(검5) 때문에, 스스로 마음의 문을 닫고 잠적(은둔자)하셨네요."
+                </p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3>패턴 2: 역접 (But)</h3>
+            <div class="example-box">
+                <p><strong>(상황)</strong> 컵 10 + <strong>(속마음)</strong> 검 9</p>
+                <p style="margin-top: 15px; font-style: italic;">
+                    "겉으로는 화목한 가정처럼 행복해 보이지만(컵10), 사실 속으로는 밤잠을 설칠 만큼 불안한 고민(검9)이 있으시군요."
+                </p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3>패턴 3: 시간의 경과 (And then)</h3>
+            <div class="example-box">
+                <p><strong>(현재)</strong> 바보 + <strong>(미래)</strong> 마법사</p>
+                <p style="margin-top: 15px; font-style: italic;">
+                    "지금은 아무 준비 없이 시작하는 것 같지만(바보), 시간이 지나면 당신의 숨겨진 재능을 발휘해서 능숙하게 처리(마법사)하게 될 겁니다."
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">3교시: 양자택일(Two Paths) 스프레드 심화</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                단순히 "A가 좋아요, B가 좋아요?"를 넘어, <strong>성격(Nature)</strong>을 분석해 줍니다.
+            </p>
+
+            <h3>배열법</h3>
+            <ul>
+                <li><strong>가운데:</strong> 현재 상황 (1장)</li>
+                <li><strong>왼쪽(A선택):</strong> 과정(1) - 결과(1)</li>
+                <li><strong>오른쪽(B선택):</strong> 과정(1) - 결과(1)</li>
+            </ul>
+        </div>
+
+        <div class="example-box">
+            <div class="example-title">리딩 포인트</div>
+            <p><strong>A쪽 결과:</strong> '펜타클 10' (돈은 많이 벌지만 보수적임)</p>
+            <p><strong>B쪽 결과:</strong> '컵 3' (돈은 적지만 즐겁고 사람이 많음)</p>
+            
+            <p style="margin-top: 20px; font-weight: 600; color: var(--accent-brown);">조언:</p>
+            <p style="font-style: italic;">
+                "금전적 안정이 목표라면 A가 맞지만, 선생님이 지금 삶의 즐거움을 원하신다면 B가 훨씬 만족도가 높습니다."
+            </p>
+        </div>
+
+        <div class="tip-box">
+            무조건 좋은 카드가 정답이 아니라, 내담자의 <strong>'니즈'</strong>에 맞는 카드를 추천하는 것이 고수의 스킬입니다.
+        </div>
+    </div>
+</div>
+
+
+<div class="day-section">
+    <div class="day-header">
+        <div class="day-number">DAY 4</div>
+        <div class="day-title">상담의 꽃 : 켈틱 크로스 (Celtic Cross)</div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">1교시: 켈틱 크로스 구조 분석 - 십자가와 기둥</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                10장의 카드는 아무렇게나 놓인 게 아닙니다. <strong>두 개의 큰 덩어리</strong>로 나눠서 보세요.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h3>1부: 십자가 (The Cross / 카드 1~6번)</h3>
+            <h4>"현재의 사건 현장"</h4>
+            <p>내담자가 처한 현재 상황과 직접적인 방해물, 가까운 과거와 미래를 보여줍니다.</p>
+            <div class="highlight-box">
+                <strong>핵심:</strong> 여기서는 사건의 '팩트(Fact)'를 파악해야 합니다.
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3>2부: 기둥 (The Staff / 카드 7~10번)</h3>
+            <h4>"사건의 배경과 맥락"</h4>
+            <p>내담자의 심리, 주변 환경, 두려움, 그리고 최종 결말을 보여줍니다.</p>
+            <div class="highlight-box">
+                <strong>핵심:</strong> 여기서는 사건의 '원인'과 '심리적 동기'를 파악해야 합니다.
+            </div>
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">2교시: 핵심 위치(Key Position) 분석법</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                10장을 다 읽으려 하지 말고, <strong>'핵심 축'</strong>을 먼저 읽으면 스토리가 나옵니다.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h3>2번 위치 (방해물/장애): "무엇이 문제인가?"</h3>
+            <p>이 카드는 무조건 부정적으로 해석하거나 걸림돌로 봅니다.</p>
+            <div class="example-box">
+                <p>좋은 카드(태양)가 나와도 여기서는 "너무 낙관적이어서 문제"라고 읽습니다.</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3>4번(무의식/과거의 뿌리) vs 9번(희망/두려움)</h3>
+            <p><strong>4번:</strong> 내담자도 모르는 깊은 무의식. 어릴 적 트라우마나 사건의 근본 원인.</p>
+            <p><strong>9번:</strong> 내담자가 스스로 알고 있는 생각. "이렇게 됐으면 좋겠다" 혹은 "이렇게 될까 봐 무서워" 하는 의식적인 마음.</p>
+        </div>
+
+        <div class="content-block">
+            <h3>10번 (최종 결과)</h3>
+            <p>결론입니다. 단, 이 결론은 <strong>"지금 행동을 바꾸지 않았을 때"</strong>의 미래입니다.</p>
+            <p>즉, 상담을 통해 바꿀 수 있습니다.</p>
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">3교시: 실전 사례 분석 (Case Study)</div>
+        </div>
+
+        <div class="case-study">
+            <h4>질문: "지금 다니는 회사를 그만두고 창업을 해도 될까요?"</h4>
+            
+            <h4 style="margin-top: 20px;">배열 예시:</h4>
+            <ul style="margin: 15px 0;">
+                <li><strong>현재(1):</strong> 검 8 (갇혀 있음, 답답함)</li>
+                <li><strong>방해물(2):</strong> 펜타클 4 (돈을 놓지 못함, 월급에 대한 미련)</li>
+                <li><strong>미래(6):</strong> 바보 (결국 저지른다, 퇴사함)</li>
+                <li><strong>결과(10):</strong> 펜타클 10 (성공, 가문의 영광)</li>
+            </ul>
+
+            <h4 style="margin-top: 25px; color: var(--accent-brown);">OZ의 리딩:</h4>
+            <p style="font-style: italic; line-height: 2; margin-top: 15px;">
+                "지금 너무 답답해서 갇힌 기분이시군요(검8). 하지만 월급이 끊기는 게 두려워 망설이고 계십니다(펜타클4).
+                <br><br>
+                하지만 가까운 미래에 결국 사표를 던지게 됩니다(바보). 두려워하지 마세요.
+                <br><br>
+                결과적으로 창업은 대성공을 거두고, 오히려 직장 다닐 때보다 훨씬 큰 부를 얻게 됩니다(펜타클10). 
+                지금은 '안정'을 포기할 용기가 필요한 때입니다."
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div class="day-section">
+    <div class="day-header">
+        <div class="day-number">DAY 5</div>
+        <div class="day-title">주제별 실전 상담 (연애/금전/진로)</div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">1교시: Love Tarot (속마음, 재회, 썸)</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                가장 돈이 되는 분야입니다. <strong>'상대방의 마음'</strong>을 읽는 게 핵심입니다.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h3>미러링(Mirroring) 기법</h3>
+            <ul>
+                <li>내 카드와 상대방 카드가 비슷한 성향(예: 둘 다 컵 카드)이면 서로 통하는 중</li>
+                <li>정반대(하나는 불, 하나는 물)면 오해하고 있는 중</li>
+            </ul>
+        </div>
+
+        <div class="content-block">
+            <h3>재회운 판단 기준</h3>
+            <p><strong>가능성 90% 이상:</strong></p>
+            <p>심판(Judgement), 세계(World), 컵 2, 운명의 수레바퀴</p>
+            
+            <p style="margin-top: 15px;"><strong>"이제 그만 놓아주라" 조언:</strong></p>
+            <p>탑(Tower), 죽음(Death), 검 10, 검 3</p>
+        </div>
+
+        <div class="content-block">
+            <h3>속마음 디테일</h3>
+            <ul>
+                <li><strong>검의 왕:</strong> 좋아하지만 티 내기 싫음. 자존심이 셈</li>
+                <li><strong>컵의 시종:</strong> 좋아 죽겠는데 고백할 용기가 없음. 귀여운 짝사랑</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">2교시: Business Tarot (사업, 이직, 재물)</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                감정을 배제하고 현실적 이득을 따져야 합니다.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h3>문서운/합격운</h3>
+            <p>정의(Justice), 교황(Hierophant), 에이스 소드/완즈, 페이지 소드</p>
+            <p>이 카드들이 나오면 계약서에 도장 찍거나 합격 통지서를 받습니다.</p>
+        </div>
+
+        <div class="content-block">
+            <h3>매매운(부동산)</h3>
+            <ul>
+                <li><strong>펜타클 4:</strong> 안 팔림. (내가 움켜쥐고 있거나 살 사람이 돈을 안 씀)</li>
+                <li><strong>전차, 8 완즈:</strong> 급매로 빨리 팔림</li>
+            </ul>
+        </div>
+
+        <div class="content-block">
+            <h3>직장 내 인간관계</h3>
+            <ul>
+                <li><strong>5 완즈/소드:</strong> 사내 정치질, 구설수</li>
+                <li><strong>9 완즈:</strong> 업무 과다로 인한 방어적 태도. "건드리지 마."</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">3교시: 건강 & 1년 운세(Yearly Spread)</div>
+        </div>
+
+        <div class="warning-box">
+            건강운은 반드시 <strong>"병원 진단이 우선입니다"</strong>라는 멘트를 먼저 하세요.
+        </div>
+
+        <div class="content-block">
+            <h3>원소별 건강 체크</h3>
+            <ul>
+                <li><strong>불(Wands):</strong> 심장, 혈압, 염증, 열병</li>
+                <li><strong>물(Cups):</strong> 신장, 방광, 혈액순환, 우울증</li>
+                <li><strong>공기(Swords):</strong> 신경계, 두통, 호흡기, 스트레스</li>
+                <li><strong>흙(Pentacles):</strong> 뼈, 피부, 소화기, 만성 피로</li>
+            </ul>
+        </div>
+
+        <div class="content-block">
+            <h3>1년 운세 (12개월 배열법)</h3>
+            <p>1월부터 12월까지 카드를 한 장씩 뽑습니다.</p>
+            <p>그리고 중앙에 <strong>'올해의 테마 카드'</strong>를 한 장 더 뽑아 전체적인 1년의 분위기를 읽어줍니다.</p>
+        </div>
+    </div>
+</div>
+
+<div class="day-section">
+    <div class="day-header">
+        <div class="day-number">DAY 6</div>
+        <div class="day-title">프로 상담가의 길 (Mastery)</div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">1교시: 내담자를 치유하는 화법 (Reframing)</div>
+        </div>
+
+        <div class="content-block">
+            <p style="font-size: 1.1rem; color: var(--accent-brown); margin-bottom: 20px;">
+                "안 좋아요"를 "조심하면 피할 수 있어요"로 바꾸는 것이 프로입니다.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h3>죽음(Death) 카드가 나왔을 때</h3>
+            
+            <div style="background-color: #FFE6E6; padding: 15px; margin: 15px 0; border-radius: 5px;">
+                <p><strong>❌ 하수:</strong> "어우, 이거 큰일 났네. 끝났어요."</p>
+            </div>
+            
+            <div style="background-color: #E6FFE6; padding: 15px; margin: 15px 0; border-radius: 5px;">
+                <p><strong>⭕ 고수:</strong></p>
+                <p style="margin-top: 10px; font-style: italic;">
+                    "지금 상황은 더 이상 끌고 가는 게 의미가 없네요. 차라리 확실하게 정리해야 더 좋은 새 기운이 들어옵니다. 
+                    이별은 아프지만, 님을 위한 선물일 수 있어요."
+                </p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3>탑(Tower) 카드가 나왔을 때</h3>
+            
+            <div style="background-color: #E6FFE6; padding: 15px; margin: 15px 0; border-radius: 5px;">
+                <p><strong>⭕ 고수:</strong></p>
+                <p style="margin-top: 10px; font-style: italic;">
+                    "리모델링한다고 생각하세요. 기초가 부실했던 건 무너지고, 튼튼하게 다시 지을 기회입니다."
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">2교시: 온/오프라인 창업 가이드</div>
+        </div>
+
+        <div class="content-block">
+            <h3>플랫폼별 특징</h3>
+        </div>
+
+        <div class="content-block">
+            <h4>크몽/엑스퍼트 (채팅/전화)</h4>
+            <ul>
+                <li>속도가 생명. 타자 빨라야 함</li>
+                <li>결론부터 말하는 두괄식 화법 선호</li>
+            </ul>
+        </div>
+
+        <div class="content-block">
+            <h4>오프라인/대면 상담</h4>
+            <ul>
+                <li>분위기(인테리어, BGM)와 라포(공감대) 형성이 중요</li>
+                <li>들어주는 것만으로도 만족도 상승</li>
+            </ul>
+        </div>
+
+        <div class="tip-box">
+            <strong>상담료 책정:</strong> 초보 때는 저가로 후기를 쌓고, "예약이 밀리면" 가격을 올리는 계단식 전략
+        </div>
+    </div>
+
+    <div class="session">
+        <div class="session-header">
+            <div class="session-title">3교시: 과정 마무리 & 마스터 인증</div>
+        </div>
+
+        <div class="content-block">
+            <h3>상담가의 윤리</h3>
+            <ul>
+                <li>내담자의 인생을 함부로 재단하지 말 것</li>
+                <li>비밀 보장</li>
+                <li>건강, 법률 문제는 전문가 상담 권유</li>
+                <li>의존성을 만들지 말고 내담자가 스스로 결정하도록 돕기</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box" style="background: linear-gradient(135deg, var(--secondary-beige) 0%, var(--primary-beige) 100%); padding: 30px; text-align: center; margin-top: 40px;">
+            <h3 style="color: var(--accent-brown); margin-bottom: 20px; font-size: 1.5rem;">수료식</h3>
+            <p style="font-size: 1.2rem; line-height: 2;">
+                이제 여러분은 <strong>오즈 타로 & 점성학 연구소</strong>의<br>
+                인증을 받은 <strong>중급 리더</strong>입니다.
+            </p>
+            <p style="margin-top: 30px; color: var(--accent-brown); font-size: 1.3rem;">
+                축하합니다! 🎉
+            </p>
+        </div>
+
+        <div class="content-block" style="background-color: var(--secondary-beige); margin-top: 30px; padding: 30px; text-align: center;">
+            <h3 style="color: var(--dark-brown); margin-bottom: 15px;">당신의 타로 여정</h3>
+            <p style="font-size: 1.05rem; line-height: 1.9;">
+                초급 과정에서 78장의 단어를 배웠고,<br>
+                중급 과정에서 그것들을 문장으로 엮는 법을 익혔습니다.<br><br>
+                이제 당신만의 이야기를 만들어갈 시간입니다.<br>
+                타로는 끝이 없는 배움의 여정입니다.<br><br>
+                계속해서 카드와 대화하고, 사람들의 마음을 읽으며,<br>
+                진정한 마스터로 성장하시길 바랍니다.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="appendix">
+    <h2 class="appendix-title">부록</h2>
+    <h3 style="text-align: center; color: var(--accent-brown); font-size: 1.8rem; margin-bottom: 10px;">
+        오즈(OZ)의 시크릿 노트
+    </h3>
+    <p class="appendix-subtitle">타로 & 점성학 통합 가이드북</p>
+    <p style="text-align: center; color: var(--dark-brown); font-style: italic; margin-bottom: 15px; font-size: 1.1rem;">
+        "타로의 그림(Image)에 점성학의 시간(Time)을 입히다."
+    </p>
+    <p style="text-align: center; color: var(--dark-brown); margin-bottom: 50px; font-size: 0.9rem;">
+        국제오즈타로점성사주 연구소장 OZ
+    </p>
+
+    <div class="content-block" style="background-color: var(--secondary-beige); padding: 30px;">
+        <h3 style="color: var(--accent-brown); text-align: center; margin-bottom: 20px;">프롤로그: 왜 점성학을 알아야 할까요?</h3>
+        <p>
+            타로 카드 78장에는 수천 년간 내려온 점성학의 비밀 코드가 숨겨져 있습니다.
+        </p>
+        <p>
+            단순히 그림만 보고 "좋아요/나빠요"를 말하는 것은 <strong>2D(평면) 리딩</strong>입니다.
+            카드의 별자리와 행성 기호를 읽어낼 때, 비로소 <strong>3D(입체) 리딩</strong>이 가능해집니다.
+        </p>
+        <p>
+            이 가이드북은 복잡한 점성학 이론을 타로 리딩에 꼭 필요한 핵심만 뽑아 정리한 
+            <strong>'실전용 커닝 페이퍼'</strong>입니다. 상담 도중 막힐 때마다 꺼내 보세요.
+        </p>
+    </div>
+
+    <h3 style="color: var(--accent-brown); margin: 50px 0 20px 0; font-size: 1.5rem;">Chapter 1. 4원소와 성격 (Elements)</h3>
+    <p style="margin-bottom: 20px;">내담자의 성향이나 사건의 속도를 파악할 때 가장 기초가 되는 공식입니다.</p>
+
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0;">
+    <table style="width: 100%; min-width: 700px; border-collapse: collapse; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <thead>
+            <tr style="background: linear-gradient(135deg, #A67C52 0%, #6B5744 100%);">
+                <th style="padding: 14px 12px; text-align: center; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 15%;">원소</th>
+                <th style="padding: 14px 12px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 18%;">타로 수트</th>
+                <th style="padding: 14px 12px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 20%;">별자리 (Zodiac)</th>
+                <th style="padding: 14px 12px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 20%;">속도/성격</th>
+                <th style="padding: 14px 12px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 27%;">키워드</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #FFF5F5;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">🔥</span>
+                    <strong style="color: #DC143C;">불 (Fire)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">지팡이 (Wands)</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">양, 사자, 사수</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">가장 빠름<br><span style="font-size: 0.9rem; color: #888;">(성격 급함, 다혈질)</span></td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">열정, 행동, 직관, 시작</td>
+            </tr>
+            <tr style="background-color: #F0F8FF;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">💧</span>
+                    <strong style="color: #1E90FF;">물 (Water)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">컵 (Cups)</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">게, 전갈, 물고기</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">흐름에 따름<br><span style="font-size: 0.9rem; color: #888;">(감성적, 우유부단)</span></td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">감정, 사랑, 관계, 무의식</td>
+            </tr>
+            <tr style="background-color: #F5F5F5;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">💨</span>
+                    <strong style="color: #708090;">공기 (Air)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">검 (Swords)</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">쌍둥이, 천칭, 물병</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">빠르지만 변수 많음<br><span style="font-size: 0.9rem; color: #888;">(이성적, 예민함)</span></td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">사고, 논리, 소식, 갈등</td>
+            </tr>
+            <tr style="background-color: #FFF8E7;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">🌍</span>
+                    <strong style="color: #8B4513;">흙 (Earth)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">펜타클 (Pentacles)</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">황소, 처녀, 염소</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">가장 느림<br><span style="font-size: 0.9rem; color: #888;">(신중함, 현실적)</span></td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">돈, 물질, 결과, 안정</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="tip-box">
+        "언제 될까요?"라고 물었을 때 <strong>지팡이(불)</strong>가 많이 나오면 <strong>"곧 됩니다(1주일~1달)"</strong>라고 하시고, 
+        <strong>펜타클(흙)</strong>이 나오면 <strong>"시간을 두고 지켜보세요(최소 3개월~1년)"</strong>라고 답하세요.
+    </div>
+
+    <h3 style="color: var(--accent-brown); margin: 50px 0 20px 0; font-size: 1.5rem;">Chapter 2. 메이저 카드 & 12별자리 매칭</h3>
+    <p style="margin-bottom: 20px;">메이저 카드가 나왔을 때, 해당 별자리의 성격을 대입하면 리딩이 훨씬 구체적으로 변합니다.</p>
+
+    <div class="content-block">
+        <h3>1. 활동적인 리더형 (Cardinals)</h3>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">황제 (The Emperor) = 양자리 (Aries)</div>
+        <p><strong>성격:</strong> "내가 대장이야." 추진력 1등, 그러나 독단적이고 욱하는 기질.</p>
+        <p><strong>연애:</strong> 리드하는 상남자/걸크러쉬 스타일. 잡은 물고기엔 흥미를 잃을 수도?</p>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">전차 (The Chariot) = 게자리 (Cancer)</div>
+        <p><strong>성격:</strong> 겉은 딱딱한 갑옷, 속은 여린 순두부. 내 사람(가족) 건드리면 폭발함.</p>
+        <p><strong>연애:</strong> 방어적이지만 한번 마음 열면 끝까지 지키는 모성애적 사랑.</p>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">정의 (Justice) = 천칭자리 (Libra)</div>
+        <p><strong>성격:</strong> 우아하고 예의 바름. 그러나 손해 보는 건 절대 싫어하는 계산기.</p>
+        <p><strong>연애:</strong> 외모 많이 봄. 감정적인 호소보다 논리적인 대화가 통함.</p>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">악마 (The Devil) = 염소자리 (Capricorn)</div>
+        <p><strong>성격:</strong> 야망의 화신. 목표(돈/성공)를 위해선 수단 방법 가리지 않는 끈기.</p>
+        <p><strong>연애:</strong> 조건 보는 연애, 혹은 육체적인 매력에 강하게 끌리는 관계.</p>
+    </div>
+
+    <div class="content-block">
+        <h3>2. 꾸준한 안정형 (Fixed)</h3>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">교황 (The Hierophant) = 황소자리 (Taurus)</div>
+        <p><strong>성격:</strong> 느릿느릿하지만 황소고집. 변화 싫어함. 맛집/명품 좋아함.</p>
+        <p><strong>연애:</strong> 신뢰가 중요. 쉽게 시작 안 하지만 한번 사귀면 결혼까지 생각함.</p>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">힘 (Strength) = 사자자리 (Leo)</div>
+        <p><strong>성격:</strong> 무대의 주인공. 칭찬에 약하고 자존심에 죽고 사는 스타일.</p>
+        <p><strong>연애:</strong> 화려한 데이트 선호. 나를 왕비/왕처럼 대접해주길 바람.</p>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">죽음 (Death) = 전갈자리 (Scorpio)</div>
+        <p><strong>성격:</strong> 속을 알 수 없음. 한 번 배신당하면 지구 끝까지 복수하거나 손절함.</p>
+        <p><strong>연애:</strong> 목숨 거는 사랑. 집착과 질투의 끝판왕. 하지만 가장 섹시함.</p>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">별 (The Star) = 물병자리 (Aquarius)</div>
+        <p><strong>성격:</strong> 4차원 천재. 남들과 다른 생각. 쿨내 진동해서 가끔 차가워 보임.</p>
+        <p><strong>연애:</strong> 친구 같은 연애 선호. 구속하면 바로 도망감.</p>
+    </div>
+
+    <div class="content-block">
+        <h3>3. 유연한 적응형 (Mutable)</h3>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">연인 (The Lovers) = 쌍둥이자리 (Gemini)</div>
+        <p><strong>성격:</strong> 호기심 천국. 말 잘하고 재치 만점. 그러나 싫증을 빨리 느낌.</p>
+        <p><strong>연애:</strong> 대화가 잘 통해야 함. 동시에 두 가지 마음(양다리) 주의.</p>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">은둔자 (The Hermit) = 처녀자리 (Virgo)</div>
+        <p><strong>성격:</strong> 완벽주의자. 분석하고 비판함. 자기만의 기준이 매우 까다로움.</p>
+        <p><strong>연애:</strong> 눈이 높음(조건보다는 정신적 눈높이). 짝사랑 전문.</p>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">절제 (Temperance) = 사수자리 (Sagittarius)</div>
+        <p><strong>성격:</strong> 자유로운 영혼. 여행과 철학을 사랑함. 낙천적이지만 무책임할 수도.</p>
+        <p><strong>연애:</strong> 구속 절대 불가. 같이 여행 다니는 파트너를 원함.</p>
+    </div>
+
+    <div class="symbol-box">
+        <div class="symbol-name">달 (The Moon) = 물고기자리 (Pisces)</div>
+        <p><strong>성격:</strong> 감수성 풍부, 눈물 많음. 현실 감각 부족하고 상상 속에 삼.</p>
+        <p><strong>연애:</strong> 헌신적인 사랑, 분위기에 약함. 나쁜 남자에게 잘 걸림.</p>
+    </div>
+
+    <h3 style="color: var(--accent-brown); margin: 50px 0 20px 0; font-size: 1.5rem;">Chapter 3. 7행성과 타로의 키워드</h3>
+    <p style="margin-bottom: 20px;">마이너 카드나 메이저 카드의 숨은 의미를 찾을 때 사용하세요.</p>
+
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0;">
+    <table style="width: 100%; min-width: 600px; border-collapse: collapse; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <thead>
+            <tr style="background: linear-gradient(135deg, #A67C52 0%, #6B5744 100%);">
+                <th style="padding: 14px 12px; text-align: center; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 25%;">행성</th>
+                <th style="padding: 14px 12px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 45%;">키워드</th>
+                <th style="padding: 14px 12px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 30%;">관련 카드</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #FFF9E7;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">☀️</span>
+                    <strong style="color: #FFA500;">태양 (Sun)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">자아, 성공, 아버지, 명예</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #6B5744; font-weight: 500;">태양</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">🌙</span>
+                    <strong style="color: #9370DB;">달 (Moon)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">무의식, 어머니, 감정, 변덕</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #6B5744; font-weight: 500;">고위여사제</td>
+            </tr>
+            <tr style="background-color: #FFF9E7;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">☿️</span>
+                    <strong style="color: #87CEEB;">수성 (Mercury)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">지성, 소통, 여행, 기술</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #6B5744; font-weight: 500;">마법사</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">♀️</span>
+                    <strong style="color: #FF69B4;">금성 (Venus)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">사랑, 예술, 돈, 쾌락</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #6B5744; font-weight: 500;">여황제</td>
+            </tr>
+            <tr style="background-color: #FFF9E7;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">♂️</span>
+                    <strong style="color: #DC143C;">화성 (Mars)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">전쟁, 다툼, 성적 에너지, 수술</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #6B5744; font-weight: 500;">탑</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">♃</span>
+                    <strong style="color: #FF8C00;">목성 (Jupiter)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">확장, 행운, 종교, 관용</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #6B5744; font-weight: 500;">운명의 수레바퀴</td>
+            </tr>
+            <tr style="background-color: #FFF9E7;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;">
+                    <span style="font-size: 1.5rem; margin-right: 5px;">♄</span>
+                    <strong style="color: #2F4F4F;">토성 (Saturn)</strong>
+                </td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">제한, 인내, 시련, 업보(Karma)</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #6B5744; font-weight: 500;">월드</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3 style="color: var(--accent-brown); margin: 50px 0 20px 0; font-size: 1.5rem;">Chapter 4. [실전] 오즈의 상담 활용 예시</h3>
+
+    <div class="case-study">
+        <h4>상황: 내담자가 "남자친구 속마음이 궁금해요"라고 물었고, [황제] 카드가 나왔습니다.</h4>
+        
+        <div style="background-color: #FFE6E6; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <p><strong>초급 리딩:</strong></p>
+            <p style="margin-top: 10px;">"남자친구분이 지금 권위적이고 고집이 좀 있으시네요. 자기 주장이 강해요."</p>
+        </div>
+
+        <div style="background-color: #E6FFE6; padding: 20px; margin: 20px 0; border-radius: 5px;">
+            <p><strong>오즈의 고급 리딩 (점성학 적용):</strong></p>
+            <p style="margin-top: 15px; font-style: italic; line-height: 2;">
+                "이분 혹시 양자리(Aries) 성향이 강하신가요? 지금 남자친구분은 단순히 고집을 부리는 게 아니라, 
+                <strong>'내가 이 관계를 리드해야 한다'</strong>는 책임감과 남성성을 인정받고 싶어 해요.
+                <br><br>
+                지금 님께서 하셔야 할 일은 논쟁을 벌이는 게 아니라, 
+                <strong>'역시 자기가 결정하는 게 맞아, 멋있어'</strong>라고 자존심을 세워주시는 겁니다. 
+                그러면 이분은 님을 위해 목숨도 걸 사람이에요."
+            </p>
+        </div>
+    </div>
+
+    <div class="content-block" style="background-color: var(--secondary-beige); padding: 30px; margin-top: 50px;">
+        <h3 style="color: var(--accent-brown); text-align: center; margin-bottom: 20px;">에필로그</h3>
+        <p style="text-align: center; line-height: 2;">
+            별들은 말없이 운명을 속삭이고,<br>
+            타로는 그 목소리를 그림으로 보여줍니다.
+        </p>
+        <p style="text-align: center; margin-top: 25px; line-height: 2;">
+            이 가이드북이 여러분의 타로 리딩을<br>
+            한 단계 더 높은 차원으로 이끌어 줄<br>
+            나침반이 되기를 바랍니다.
+        </p>
+        <p style="text-align: center; margin-top: 30px; font-weight: 600; color: var(--dark-brown);">
+            당신의 운명을 연구합니다.
+        </p>
+        <p style="text-align: center; margin-top: 10px; color: var(--accent-brown); font-size: 1.1rem;">
+            - OZ Tarot & Astrology Institute -
+        </p>
+    </div>
+
+    <div class="content-block" style="margin-top: 30px;">
+        <h3>상세표는 별도 파일로 제공됩니다</h3>
+        <p>추가적인 점성학 상세 대응표와 실전 리딩 가이드가 포함될 예정입니다.</p>
+    </div>
+</div>
+
+</div>
+
+
+<div class="container appendix" style="page-break-before: always; margin-top: 60px;">
+    <h2 style="font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--dark-brown); text-align: center; margin-bottom: 15px; font-weight: 400;">오즈(OZ)의 시크릿 노트</h2>
+    <p style="text-align: center; color: var(--dark-brown); margin-bottom: 10px; font-size: clamp(0.95rem, 2vw, 1.1rem); font-style: italic;">"타로의 그림(Image)에 점성학의 시간(Time)을 입히다."</p>
+    <p style="text-align: center; color: var(--accent-brown); margin-bottom: 40px; font-size: clamp(0.85rem, 1.8vw, 0.95rem); font-weight: 600;">OZ's Tarot & Astrology Master Table</p>
+
+    <h3 style="color: var(--accent-brown); margin: 40px 0 20px 0;">1. 메이저 아르카나 (Major Arcana) : 22장의 우주</h3>
+    <p style="margin-bottom: 20px;">메이저 카드는 12별자리와 7행성, 그리고 3원소로 완벽하게 나뉩니다.</p>
+
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0;">
+    <table class="keyword-table" style="width: 100%; min-width: 650px; border-collapse: collapse; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <thead>
+            <tr style="background: linear-gradient(135deg, #A67C52 0%, #6B5744 100%);">
+                <th style="padding: 14px 10px; text-align: center; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 8%;">번호</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 25%;">카드 이름</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 30%;">점성학 매칭</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 37%;">핵심 의미</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">0</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">바보 (Fool)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">천왕성 (Uranus) / 공기</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">자유, 돌발성, 얽매이지 않음</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">1</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">마법사 (Magician)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">수성 (Mercury)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">지성, 소통, 손재주, 정보</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">2</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">고위여사제 (High Priestess)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">달 (Moon)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">무의식, 직관, 여성성, 비밀</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">3</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">여황제 (Empress)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">금성 (Venus)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">풍요, 사랑, 미(美), 쾌락</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">4</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">황제 (Emperor)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">양자리 (Aries)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">지배, 권위, 개척, 남성성</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">5</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">교황 (Hierophant)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">황소자리 (Taurus)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">전통, 신뢰, 교육, 보수적</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">6</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">연인 (Lovers)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">쌍둥이자리 (Gemini)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">소통, 선택, 호기심, 관계</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">7</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">전차 (Chariot)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">게자리 (Cancer)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">방어본능, 추진력, 승리</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">8</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">힘 (Strength)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">사자자리 (Leo)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">자존심, 열정, 외유내강</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">9</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">은둔자 (Hermit)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">처녀자리 (Virgo)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">분석, 탐구, 완벽주의, 고독</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">10</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">운명의 수레바퀴 (Wheel)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">목성 (Jupiter)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">확장, 행운, 타이밍, 순환</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">11</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">정의 (Justice)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">천칭자리 (Libra)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">균형, 공정, 법, 판단</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">12</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">매달린 사람 (Hanged Man)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">해왕성 (Neptune) / 물</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">희생, 이상, 영성, 정지</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">13</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">죽음 (Death)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">전갈자리 (Scorpio)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">변형, 끝과 시작, 깊은 통찰</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">14</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">절제 (Temperance)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">사수자리 (Sagittarius)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">조율, 중용, 해외, 모험</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">15</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">악마 (Devil)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">염소자리 (Capricorn)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물질, 야망, 속박, 욕망</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">16</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">탑 (Tower)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">화성 (Mars)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">파괴, 충격, 급작스러운 변화</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">17</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">별 (Star)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물병자리 (Aquarius)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">희망, 영감, 독창성, 거리두기</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">18</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">달 (Moon)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물고기자리 (Pisces)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">불안, 환상, 예술, 모호함</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">19</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">태양 (Sun)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">태양 (Sun)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">성공, 활력, 명확함, 아이</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">20</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">심판 (Judgement)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">명왕성 (Pluto) / 불</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">부활, 보상, 깨달음, 재회</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; text-align: center; font-weight: 600; color: #A67C52;">21</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #6B5744;">세계 (World)</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">토성 (Saturn)</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">완성, 제한, 달성, 견고함</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+
+    <h4 style="color: var(--dark-brown); margin: 30px 0 15px 0; font-size: clamp(1.1rem, 2.5vw, 1.3rem);">🔥 불의 원소 (Wands) - 행동과 열정</h4>
+    
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0;">
+    <table style="width: 100%; min-width: 650px; border-collapse: collapse; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <thead>
+            <tr style="background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);">
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 15%;">카드</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 25%;">별자리 구간</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 15%;">행성 주인</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 45%;">해석 힌트</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #FFF5F5;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #DC143C;">Ace</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">불의 근원</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">-</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">불의 씨앗, 순수한 열정</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #DC143C;">2 Wands</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">양자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">화성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">정복욕, 주도권을 쥔 상태</td>
+            </tr>
+            <tr style="background-color: #FFF5F5;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #DC143C;">3 Wands</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">양자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">태양</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">성공을 향한 비전, 확장</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #DC143C;">4 Wands</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">양자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">금성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">정착, 환영, 평화로운 결실</td>
+            </tr>
+            <tr style="background-color: #FFF5F5;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #DC143C;">5 Wands</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">사자자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">토성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">고집끼리의 충돌, 경쟁</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #DC143C;">6 Wands</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">사자자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">목성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">승리, 자부심, 인정받음</td>
+            </tr>
+            <tr style="background-color: #FFF5F5;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #DC143C;">7 Wands</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">사자자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">화성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">지키려는 투쟁, 방어</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #DC143C;">8 Wands</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">사수자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">수성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">빠른 소식, 신속한 이동</td>
+            </tr>
+            <tr style="background-color: #FFF5F5;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #DC143C;">9 Wands</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">사수자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">달</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">불안하지만 버티는 끈기</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #DC143C;">10 Wands</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">사수자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">토성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">책임감의 무게, 압박</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h4 style="color: var(--dark-brown); margin: 30px 0 15px 0; font-size: clamp(1.1rem, 2.5vw, 1.3rem);">💧 물의 원소 (Cups) - 감정과 관계</h4>
+    
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0;">
+    <table style="width: 100%; min-width: 650px; border-collapse: collapse; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <thead>
+            <tr style="background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);">
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 15%;">카드</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 25%;">별자리 구간</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 15%;">행성 주인</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 45%;">해석 힌트</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #F0F8FF;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #1E90FF;">Ace</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물의 근원</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">-</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">감정의 씨앗, 사랑의 시작</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #1E90FF;">2 Cups</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">게자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">금성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">사랑의 결합, 파트너십</td>
+            </tr>
+            <tr style="background-color: #F0F8FF;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #1E90FF;">3 Cups</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">게자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">수성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">즐거운 교류, 수다, 축하</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #1E90FF;">4 Cups</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">게자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">달</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">감정의 정체, 권태, 익숙함</td>
+            </tr>
+            <tr style="background-color: #F0F8FF;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #1E90FF;">5 Cups</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">전갈자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">화성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">상실의 아픔, 실망</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #1E90FF;">6 Cups</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">전갈자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">태양</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">순수했던 과거, 추억, 회상</td>
+            </tr>
+            <tr style="background-color: #F0F8FF;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #1E90FF;">7 Cups</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">전갈자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">금성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">환상, 꿈, 현실 도피</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #1E90FF;">8 Cups</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물고기자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">토성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">더 깊은 것을 찾아 떠남</td>
+            </tr>
+            <tr style="background-color: #F0F8FF;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #1E90FF;">9 Cups</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물고기자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">목성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">감정적 만족, 행복</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #1E90FF;">10 Cups</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물고기자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">화성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">완성된 행복(단, 깨질까 두려움)</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h4 style="color: var(--dark-brown); margin: 30px 0 15px 0; font-size: clamp(1.1rem, 2.5vw, 1.3rem);">⚔️ 공기의 원소 (Swords) - 생각과 고뇌</h4>
+    
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0;">
+    <table style="width: 100%; min-width: 650px; border-collapse: collapse; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <thead>
+            <tr style="background: linear-gradient(135deg, #708090 0%, #2F4F4F 100%);">
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 15%;">카드</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 25%;">별자리 구간</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 15%;">행성 주인</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 45%;">해석 힌트</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #F5F5F5;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #708090;">Ace</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">공기의 근원</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">-</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">생각의 씨앗, 결단력</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #708090;">2 Swords</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">천칭자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">달</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">마음의 균형, 결정 유보</td>
+            </tr>
+            <tr style="background-color: #F5F5F5;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #708090;">3 Swords</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">천칭자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">토성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">관계의 단절, 슬픔</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #708090;">4 Swords</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">천칭자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">목성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">휴식, 회복, 물러남</td>
+            </tr>
+            <tr style="background-color: #F5F5F5;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #708090;">5 Swords</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물병자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">금성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">패배, 불명예, 이기심</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #708090;">6 Swords</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물병자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">수성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">합리적인 이동, 문제 해결</td>
+            </tr>
+            <tr style="background-color: #F5F5F5;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #708090;">7 Swords</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물병자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">달</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">요령, 불안정한 계획</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #708090;">8 Swords</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">쌍둥이자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">목성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">생각에 갇힘, 구속</td>
+            </tr>
+            <tr style="background-color: #F5F5F5;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #708090;">9 Swords</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">쌍둥이자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">화성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">신경쇠약, 악몽, 스트레스</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #708090;">10 Swords</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">쌍둥이자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">태양</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">생각의 끝, 완전한 종결</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h4 style="color: var(--dark-brown); margin: 30px 0 15px 0; font-size: clamp(1.1rem, 2.5vw, 1.3rem);">💰 흙의 원소 (Pentacles) - 물질과 현실</h4>
+    
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0;">
+    <table style="width: 100%; min-width: 650px; border-collapse: collapse; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <thead>
+            <tr style="background: linear-gradient(135deg, #8B4513 0%, #654321 100%);">
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 15%;">카드</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 25%;">별자리 구간</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 15%;">행성 주인</th>
+                <th style="padding: 14px 10px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 45%;">해석 힌트</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #FFF8E7;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #8B4513;">Ace</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">흙의 근원</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">-</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물질의 씨앗, 횡재수</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #8B4513;">2 Pentacles</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">염소자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">목성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">변화 속의 균형, 유연함</td>
+            </tr>
+            <tr style="background-color: #FFF8E7;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #8B4513;">3 Pentacles</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">염소자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">화성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">전문성, 협업, 초기 성과</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #8B4513;">4 Pentacles</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">염소자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">태양</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">소유욕, 안전 제일, 집착</td>
+            </tr>
+            <tr style="background-color: #FFF8E7;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #8B4513;">5 Pentacles</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">황소자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">수성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">물질적/정신적 빈곤</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #8B4513;">6 Pentacles</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">황소자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">달</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">베풂과 받음, 자선</td>
+            </tr>
+            <tr style="background-color: #FFF8E7;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #8B4513;">7 Pentacles</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">황소자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">토성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">결실을 기다림, 숙고</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #8B4513;">8 Pentacles</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">처녀자리 초반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">태양</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">장인정신, 꾸준한 노동</td>
+            </tr>
+            <tr style="background-color: #FFF8E7;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #8B4513;">9 Pentacles</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">처녀자리 중반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">금성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">풍요, 매력, 솔로의 행복</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8;"><strong style="color: #8B4513;">10 Pentacles</strong></td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">처녀자리 후반</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">수성</td>
+                <td style="padding: 12px 10px; border: 1px solid #E8DCC8; color: #5A5A5A;">부의 완성, 유산, 가문</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3 style="color: var(--accent-brown); margin: 50px 0 20px 0; font-size: clamp(1.3rem, 3vw, 1.5rem);">3. 코트 카드 (Court Cards) : 인물 매칭</h3>
+    <p style="margin-bottom: 20px; font-size: clamp(0.9rem, 2vw, 1rem); line-height: 1.7;">코트 카드는 <strong>'어떤 성향의 사람인가?'</strong>를 나타낼 때 점성학적 원소를 봅니다.</p>
+
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0;">
+    <table style="width: 100%; min-width: 650px; border-collapse: collapse; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <thead>
+            <tr style="background: linear-gradient(135deg, #A67C52 0%, #6B5744 100%);">
+                <th style="padding: 14px 12px; text-align: center; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 20%;">계급</th>
+                <th style="padding: 14px 12px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 30%;">점성학적 의미</th>
+                <th style="padding: 14px 12px; text-align: left; font-weight: 600; border: 1px solid #D4C5AE; color: white; width: 50%;">매칭 포인트</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;"><strong style="color: #6B5744;">Page (시종)</strong></td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">지구의 에너지 (Earth)</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">배우는 단계, 아직 현실적 기반을 다지는 중</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;"><strong style="color: #6B5744;">Knight (기사)</strong></td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">불의 에너지 (Fire)</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">움직이는 에너지, 속도전, 변화</td>
+            </tr>
+            <tr style="background-color: #FAFAF8;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;"><strong style="color: #6B5744;">Queen (여왕)</strong></td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">물의 에너지 (Water)</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">수용성, 내면 관리, 감성적 접근</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; text-align: center;"><strong style="color: #6B5744;">King (왕)</strong></td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">공기의 에너지 (Air)</td>
+                <td style="padding: 14px 12px; border: 1px solid #E8DCC8; color: #5A5A5A;">지배력, 논리적 판단, 사회적 권위</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div style="background-color: #FFF9F0; border: 2px dashed var(--accent-brown); padding: clamp(15px, 3vw, 25px); margin: 30px 0; border-radius: 8px;">
+        <div style="color: var(--accent-brown); font-weight: 600; margin-bottom: 15px; font-size: clamp(1rem, 2.2vw, 1.1rem);">📌 응용 공식</div>
+        <p style="margin-bottom: 10px; line-height: 1.7;"><strong>Wands King</strong> = 불(Wands) + 공기(King) = "불같은 추진력을 논리적으로 지휘하는 리더"</p>
+        <p style="line-height: 1.7;"><strong>Cups Page</strong> = 물(Cups) + 흙(Page) = "감수성이 풍부하지만 아직 현실 경험이 부족한 아이"</p>
+    </div>
+
+
+</div>
+
+</body>
+</html>

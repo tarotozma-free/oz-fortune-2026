@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { supabase } from '../config/supabase';
+import { supabase } from '../lib/supabase';
 import { PRODUCTS, getProductKeyById } from '../config/products';
 import SummaryView from '../components/SummaryView';
 import FullView from '../components/FullView';

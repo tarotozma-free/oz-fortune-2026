@@ -11,6 +11,8 @@ import MainRedirect from './pages/MainRedirect';
 import ProductPage from './pages/ProductPage';
 import ResultPage from './pages/ResultPage';
 import CalendarResultPage from './pages/CalendarResultPage';
+// import 추가 (상단):
+import AstroCalendarResultPage from './pages/AstroCalendarResultPage';
 
 // ========================================
 // 라우터
@@ -48,7 +50,11 @@ export default function App() {
         {/* 달력 */}
         <Route path="/calendar" element={<ProductPage productKey="calendar" />} />
         <Route path="/calendar/:orderId" element={<CalendarResultPage />} />
-      </Routes>
+        // Routes 안에 추가 (달력 섹션에):
+{/* 점성학 달력 */}
+<Route path="/astro-calendar" element={<ProductPage productKey="astro-calendar" />} />
+<Route path="/astro-calendar/:orderId" element={<AstroCalendarResultPage />} />
+     </Routes>
       </AuthProvider>
     </BrowserRouter>
   );

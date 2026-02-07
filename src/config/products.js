@@ -566,8 +566,49 @@ prescriptionLabels: {
       color: '행운 색상', number: '행운 숫자', direction: '좋은 방위',
       item: '행운 아이템', action: '운 높이는 행동', avoid: '피할 것'
     },
+  },
+  
+  'astro-calendar': {
+    product_id: 'astro_yearly_calendar',
+    icon: '🔭',
+    title: '2026년 점성학 운세 달력',
+    subtitle: '별의 움직임으로 보는 나만의 2026년',
+    buttonText: '내 점성학 달력 만들기',
+    isAstro: true,
+    theme: {
+      bg: 'from-indigo-950 via-purple-900 to-violet-950',
+      card: 'bg-black/40 border-indigo-500/30',
+      accent: 'indigo',
+      button: 'from-indigo-500 via-purple-500 to-violet-500 hover:from-indigo-400 hover:to-purple-400 text-white',
+      text: {
+        primary: 'text-white',
+        secondary: 'text-indigo-200',
+        muted: 'text-indigo-400/60',
+        accent: 'text-indigo-400',
+      },
+      input: 'bg-black/30 border-indigo-500/30 text-white placeholder-indigo-300/50 focus:ring-indigo-400',
+      select: 'bg-gray-900',
+      score: 'from-indigo-400 to-purple-500',
+    },
+    statusMessages: [
+      '🔭 네이탈 차트를 분석하고 있습니다...',
+      '🪐 2026년 행성 트랜짓을 계산하고 있습니다...',
+      '📊 월별 애스펙트를 분석하고 있습니다...',
+      '🔄 역행 기간을 확인하고 있습니다...',
+      '🏠 하우스 트랜짓을 계산하고 있습니다...',
+      '🔥💧💨🌍 원소 밸런스를 분석하고 있습니다...',
+      '✨ 맞춤형 점성학 달력을 제작하고 있습니다...'
+    ],
+    graphLabels: [],
+    prescriptionTitle: '🍀 2026 점성학 개운 처방전',
+    prescriptionFields: ['color', 'number', 'direction', 'stone', 'day', 'activity'],
+    prescriptionLabels: {
+      color: '행운 색상', number: '행운 숫자', direction: '좋은 방위',
+      stone: '파워스톤', day: '행운의 요일', activity: '개운 활동'
+    },
   }
 };
+
 
 // product_id로 productKey 찾기
 const getProductKeyById = (productId) => {

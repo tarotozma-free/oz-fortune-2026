@@ -2,54 +2,7 @@ import SajuPillarsChart from '../components/SajuPillarsChart';
 import AstroPlanetsChart from '../components/AstroPlanetsChart';
 import LifetimeFlowChart from '../components/LifetimeFlowChart';
 import GradeBadge from '../components/GradeBadge';
-
-// ========================================
-// 공신력 인장 배지 컴포넌트
-// ========================================
-const CertificationBadge = ({ isAstro }) => (
-  <div className="flex items-center justify-center gap-3 py-4 px-6 mb-6 rounded-xl bg-gradient-to-r from-stone-50 to-stone-100 border border-stone-200">
-    {/* 인장 도장 */}
-    <div className="relative flex-shrink-0">
-      <div className={`w-12 h-12 rounded-full border-2 ${isAstro ? 'border-purple-400' : 'border-[#B8860B]'} flex items-center justify-center`}>
-        <div className={`w-9 h-9 rounded-full border ${isAstro ? 'border-purple-300 bg-purple-50' : 'border-[#DAA520]/40 bg-amber-50'} flex items-center justify-center`}>
-          <span className="text-lg">{isAstro ? '⭐' : '印'}</span>
-        </div>
-      </div>
-      <div className={`absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full ${isAstro ? 'bg-purple-500' : 'bg-[#B8860B]'} flex items-center justify-center`}>
-        <span className="text-white text-[8px]">✓</span>
-      </div>
-    </div>
-    {/* 텍스트 */}
-    <div className="text-center">
-      <div className="text-[10px] text-stone-400 tracking-wider uppercase">Verified by</div>
-      <div className={`text-xs font-bold ${isAstro ? 'text-purple-700' : 'text-[#2C3E6B]'} tracking-wide`}>
-        OZ Fortune International Institute
-      </div>
-      <div className="text-[10px] text-stone-400">업무 제휴 검증 시스템</div>
-    </div>
-  </div>
-);
-
-// ========================================
-// 섹션 구분선 컴포넌트
-// ========================================
-const SectionDivider = ({ isAstro }) => (
-  <div className="flex items-center gap-4 my-8">
-    <div className={`flex-1 h-px ${isAstro ? 'bg-purple-200' : 'bg-stone-200'}`} />
-    <div className={`text-xs ${isAstro ? 'text-purple-300' : 'text-stone-300'}`}>✦</div>
-    <div className={`flex-1 h-px ${isAstro ? 'bg-purple-200' : 'bg-stone-200'}`} />
-  </div>
-);
-
-// ========================================
-// 푸터 컴포넌트
-// ========================================
-const Footer = () => (
-  <div className="text-center mt-10 pt-6 border-t border-stone-200">
-    <p className="text-stone-400 text-xs">© 2025 주식회사 오즈마. All rights reserved.</p>
-    <p className="text-stone-300 text-[10px] mt-1">본 분석 시스템의 저작권은 주식회사 오즈마에 있습니다.</p>
-  </div>
-);
+import { CertificationBadge, SectionDivider, Footer } from '../components/Branding';
 
 // ========================================
 // 점수 게이지 컴포넌트

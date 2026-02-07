@@ -9,6 +9,7 @@ import LifetimeFlowChart from '../components/LifetimeFlowChart';
 import GradeBadge from '../components/GradeBadge';
 import SummaryView from '../components/SummaryView';
 import FullView from '../components/FullView';
+import { CompactFooter } from '../components/Branding';
 
 const ProductPage = ({ productKey }) => {
   const config = PRODUCTS[productKey];
@@ -18,16 +19,15 @@ const ProductPage = ({ productKey }) => {
   const [step, setStep] = useState('form');
   const [formData, setFormData] = useState({
     name: '', dob: '', dob_year: '', dob_month: '', dob_day: '',
-    calendar_type: 'solar', // 'solar' = 양력, 'lunar' = 음력
+    calendar_type: 'solar',
     birth_time: '', birth_hour: '', birth_minute: '', birth_time_unknown: false, birth_city: '', gender: 'male', email: ''
   });
   const [orderId, setOrderId] = useState(null);
   const [result, setResult] = useState(null);
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState('');
-  const [displayName, setDisplayName] = useState(config.title); // DB에서 가져올 display_name
+  const [displayName, setDisplayName] = useState(config.title);
 
-  // 페이지 로드 시 DB에서 display_name 가져오기
   useEffect(() => {
     const fetchDisplayName = async () => {
       try {
@@ -66,6 +66,11 @@ const ProductPage = ({ productKey }) => {
           navigate(`/calendar/${orderId}`);
           return;
         }
+        // 점성학 달력 상품도 전용 결과 페이지로 이동
+        if (productKey === 'astro-calendar') {
+          navigate(`/astro-calendar/${orderId}`);
+          return;
+        }
         setResult({ pdfUrl: data.pdf_url, notionUrl: data.notion_url, aiResponse: data.ai_response });
         setProgress(100);
         setTimeout(() => setStep('result'), 500);
@@ -90,7 +95,6 @@ const ProductPage = ({ productKey }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // 점성학 상품인데 도시 입력 안했으면 서울로 기본값
     const submitData = {
       ...formData,
       birth_city: formData.birth_city || '서울'
@@ -122,11 +126,7 @@ const ProductPage = ({ productKey }) => {
     setProgress(0);
   };
 
-  const Copyright = () => (
-    <p className={`text-center ${theme.text.muted} text-xs mt-8`}>
-      © 2025 OZ Fortune. All rights reserved.
-    </p>
-  );
+  const Copyright = () => <CompactFooter />;
 
   // ========== 입력 폼 ==========
   if (step === 'form') {
@@ -189,8 +189,8 @@ const ProductPage = ({ productKey }) => {
                       onChange={(e) => setFormData({...formData, calendar_type: e.target.value})} className="sr-only" />
                     <div className={`py-2 rounded-lg text-center text-sm cursor-pointer transition-all ${
                       formData.calendar_type === cal 
-                        ? `bg-gradient-to-r ${theme.button} text-white` 
-                        : `${theme.input} border ${theme.text.muted}`
+                        ? `bg-gradient-to-r ${theme.button}` 
+                        : `${theme.input} border ${theme.text.secondary}`
                     }`}>
                       {cal === 'solar' ? '☀️ 양력' : '🌙 음력'}
                     </div>
@@ -200,102 +200,68 @@ const ProductPage = ({ productKey }) => {
             </div>
 
             <div>
-              <label className={`block ${theme.text.secondary} text-sm mb-2`}>
-                태어난 시간 {config.isAstro ? '(24시간 기준, 정확히 입력!)' : '(선택)'}
-              </label>
-              
-              {/* 점성학: 시/분 직접 입력 */}
-              {config.isAstro ? (
-                <div>
-                  {/* 모름 체크박스 */}
-                  <label className="flex items-center gap-2 mb-2 cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      checked={formData.birth_time_unknown || false}
-                      onChange={(e) => setFormData({
-                        ...formData, 
-                        birth_time_unknown: e.target.checked,
-                        birth_hour: e.target.checked ? '12' : '',
-                        birth_minute: e.target.checked ? '0' : ''
-                      })}
-                      className="w-4 h-4 rounded"
-                    />
-                    <span className={`text-sm ${theme.text.muted}`}>정확한 출생 시간을 모름 (정오 12시로 계산)</span>
-                  </label>
-                  
-                  {/* 시/분 선택 (모름 체크 안했을 때만 활성화) */}
-                  <div className={`flex gap-2 ${formData.birth_time_unknown ? 'opacity-50 pointer-events-none' : ''}`}>
-                    <select value={formData.birth_hour || ''}
-                      onChange={(e) => setFormData({...formData, birth_hour: e.target.value})}
-                      className={`flex-1 px-3 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
-                      disabled={formData.birth_time_unknown}
-                    >
-                      <option value="" className={theme.select}>시</option>
-                      {Array.from({length: 24}, (_, i) => (
-                        <option key={i} value={String(i)} className={theme.select}>
-                          {i < 10 ? `0${i}` : i}시
-                        </option>
-                      ))}
-                    </select>
-                    <select value={formData.birth_minute || ''}
-                      onChange={(e) => setFormData({...formData, birth_minute: e.target.value})}
-                      className={`flex-1 px-3 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
-                      disabled={formData.birth_time_unknown}
-                    >
-                      <option value="" className={theme.select}>분</option>
-                      {[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(m => (
-                        <option key={m} value={String(m)} className={theme.select}>
-                          {m < 10 ? `0${m}` : m}분
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {!formData.birth_time_unknown && (
-                    <p className={`text-xs ${theme.text.muted} mt-1`}>
-                      예: 오전 11시 30분 → 11시 30분 / 오후 3시 → 15시 00분
-                    </p>
-                  )}
-                </div>
-              ) : (
-                /* 사주: 기존 시지 선택 */
-                <select value={formData.birth_time}
-                  onChange={(e) => setFormData({...formData, birth_time: e.target.value})}
-                  className={`w-full px-4 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
+              <label className={`block ${theme.text.secondary} text-sm mb-2`}>태어난 시간</label>
+              <div className="flex gap-2 items-center">
+                <select value={formData.birth_hour || ''}
+                  onChange={(e) => {
+                    const h = e.target.value;
+                    const m = formData.birth_minute || '00';
+                    setFormData({...formData, birth_hour: h, birth_time: h ? `${h}:${m}` : ''});
+                  }}
+                  disabled={formData.birth_time_unknown}
+                  className={`flex-1 px-3 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
                 >
-                  <option value="" className={theme.select}>모름</option>
-                  {['자시(23:00-01:00)', '축시(01:00-03:00)', '인시(03:00-05:00)', '묘시(05:00-07:00)',
-                    '진시(07:00-09:00)', '사시(09:00-11:00)', '오시(11:00-13:00)', '미시(13:00-15:00)',
-                    '신시(15:00-17:00)', '유시(17:00-19:00)', '술시(19:00-21:00)', '해시(21:00-23:00)'
-                  ].map(time => (
-                    <option key={time} value={time} className={theme.select}>{time}</option>
+                  <option value="" className={theme.select}>시</option>
+                  {Array.from({length: 24}, (_, i) => String(i).padStart(2, '0')).map(h => (
+                    <option key={h} value={h} className={theme.select}>{h}시</option>
                   ))}
                 </select>
-              )}
+                <select value={formData.birth_minute || ''}
+                  onChange={(e) => {
+                    const m = e.target.value;
+                    const h = formData.birth_hour || '00';
+                    setFormData({...formData, birth_minute: m, birth_time: h ? `${h}:${m}` : ''});
+                  }}
+                  disabled={formData.birth_time_unknown}
+                  className={`flex-1 px-3 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
+                >
+                  <option value="" className={theme.select}>분</option>
+                  {['00', '10', '20', '30', '40', '50'].map(m => (
+                    <option key={m} value={m} className={theme.select}>{m}분</option>
+                  ))}
+                </select>
+              </div>
+              <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                <input type="checkbox" checked={formData.birth_time_unknown}
+                  onChange={(e) => setFormData({...formData, birth_time_unknown: e.target.checked, birth_time: e.target.checked ? '' : formData.birth_time})}
+                  className="rounded" />
+                <span className={`${theme.text.muted} text-sm`}>태어난 시간을 모르겠어요</span>
+              </label>
             </div>
 
-            {/* 점성학 상품일 때만 출생 도시 입력 */}
+            {/* 점성학: 태어난 도시 */}
             {config.isAstro && (
               <div>
-                <label className={`block ${theme.text.secondary} text-sm mb-2`}>태어난 도시 (선택)</label>
-                <input
-                  type="text" value={formData.birth_city}
+                <label className={`block ${theme.text.secondary} text-sm mb-2`}>태어난 도시</label>
+                <input type="text" value={formData.birth_city}
                   onChange={(e) => setFormData({...formData, birth_city: e.target.value})}
                   className={`w-full px-4 py-3 rounded-xl ${theme.input} border focus:outline-none focus:ring-2`}
-                  placeholder="미입력시 서울로 설정"
+                  placeholder="서울 (기본값)"
                 />
+                <p className={`${theme.text.muted} text-xs mt-1`}>정확한 출생지를 입력하면 더 정밀한 분석이 가능합니다</p>
               </div>
             )}
 
             <div>
               <label className={`block ${theme.text.secondary} text-sm mb-2`}>성별</label>
-              <div className="flex gap-4">
+              <div className="flex gap-2">
                 {['male', 'female'].map(g => (
                   <label key={g} className="flex-1">
                     <input type="radio" name="gender" value={g} checked={formData.gender === g}
                       onChange={(e) => setFormData({...formData, gender: e.target.value})} className="sr-only" />
                     <div className={`py-3 rounded-xl text-center cursor-pointer transition-all ${
                       formData.gender === g 
-                        ? `bg-gradient-to-r ${theme.button} text-white` 
+                        ? `bg-gradient-to-r ${theme.button}` 
                         : `${theme.input} border ${theme.text.secondary}`
                     }`}>
                       {g === 'male' ? '남성' : '여성'}
@@ -342,7 +308,7 @@ const ProductPage = ({ productKey }) => {
               ⏳ 여기서 기다리기 (약 2분)
             </button>
             <button onClick={() => setStep('form')}
-              className={`w-full py-4 rounded-xl ${theme.input} border font-bold transition-all`}
+              className={`w-full py-4 rounded-xl bg-white border border-stone-200 text-stone-600 font-bold transition-all hover:bg-stone-50`}
             >
               📧 이메일로 받을게요
             </button>
@@ -364,7 +330,7 @@ const ProductPage = ({ productKey }) => {
           <h2 className={`text-2xl font-bold ${theme.text.primary} mb-4`}>분석 중...</h2>
           
           <div className="mb-6">
-            <div className="h-3 bg-black/50 rounded-full overflow-hidden">
+            <div className="h-3 bg-stone-200 rounded-full overflow-hidden">
               <div className={`h-full bg-gradient-to-r ${theme.score} transition-all duration-500 rounded-full`}
                 style={{width: `${progress}%`}} />
             </div>
@@ -434,7 +400,7 @@ const ProductPage = ({ productKey }) => {
             {(isWealth || isLove || isCareer || isFull) && grade && (
               <div className="text-center">
                 <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br ${isLove ? 'from-pink-400 to-rose-500' : isCareer ? 'from-blue-400 to-indigo-500' : isFull ? 'from-violet-400 to-purple-500' : 'from-yellow-400 to-amber-500'} shadow-lg`}>
-                  <span className="text-2xl font-black text-gray-900">{grade}</span>
+                  <span className="text-2xl font-black text-white">{grade}</span>
                 </div>
                 <div className={`${theme.text.accent} text-sm mt-1`}>등급</div>
               </div>
@@ -457,13 +423,13 @@ const ProductPage = ({ productKey }) => {
             </button>
 
             <button onClick={() => setStep('fullview')}
-              className={`block w-full py-4 rounded-xl bg-gradient-to-r from-gray-700 to-gray-900 ${theme.text.primary} font-bold text-lg hover:from-gray-600 hover:to-gray-800 transition-all transform hover:scale-[1.02] shadow-lg`}
+              className={`block w-full py-4 rounded-xl bg-gradient-to-r ${config.isAstro ? 'from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700' : 'from-[#2C3E6B] to-[#1A2744] hover:from-[#3A4F80] hover:to-[#2C3E6B]'} text-white font-bold text-lg transition-all transform hover:scale-[1.02] shadow-lg`}
             >
               📜 풀버전 보기
             </button>
 
             <button onClick={resetForm}
-              className={`block w-full py-4 rounded-xl ${theme.input} border font-bold transition-all`}
+              className={`block w-full py-4 rounded-xl bg-white border border-stone-200 text-stone-600 font-bold transition-all hover:bg-stone-50`}
             >
               🔄 다른 사람 분석하기
             </button>

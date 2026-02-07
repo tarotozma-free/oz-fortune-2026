@@ -93,8 +93,9 @@ const CalendarResultPage = () => {
           @media print {
             body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .no-print { display: none !important; }
-            .print-break { page-break-before: always; }
-            .print-container { background: white !important; color: #1a1a1a !important; padding: 20px !important; }
+            .print-month-page { page-break-before: always; page-break-inside: avoid; min-height: 90vh; padding-top: 10px; }
+            .print-first-page { page-break-inside: avoid; }
+            .print-container { background: white !important; color: #1a1a1a !important; padding: 10px 20px !important; }
             .print-container * { color: #1a1a1a !important; border-color: #ddd !important; }
             .print-container .print-card { background: #f8f8f8 !important; border: 1px solid #ddd !important; }
             .print-container .print-score { color: #059669 !important; }
@@ -102,6 +103,8 @@ const CalendarResultPage = () => {
             .print-container .print-lucky { color: #059669 !important; }
             .print-container .print-turning { color: #d97706 !important; }
             .print-container .print-special { color: #7c3aed !important; }
+            .print-container .print-month-header { font-size: 18px !important; margin-bottom: 8px; }
+            .print-container .print-month-page h2 { margin-top: 0 !important; }
           }
         `}</style>
 
@@ -177,7 +180,7 @@ const CalendarResultPage = () => {
             const scoreColor = md?.month_score >= 70 ? 'from-emerald-400 to-teal-300' : md?.month_score >= 50 ? 'from-amber-400 to-yellow-300' : 'from-red-400 to-orange-300';
 
             return (
-              <div key={m} className={`mb-8 ${monthIdx > 0 && monthIdx % 3 === 0 ? 'print-break' : ''}`}>
+              <div key={m} className={`mb-8 ${monthIdx > 0 ? 'print-month-page' : 'print-first-page'}`}>
                 {/* 월 헤더 */}
                 <div className={`${theme.card} print-card rounded-2xl p-4 border mb-3`}>
                   <div className="flex items-center justify-between mb-2">
@@ -243,7 +246,7 @@ const CalendarResultPage = () => {
 
           {/* 개운 처방전 */}
           {data.lucky_prescription && (
-            <div className={`${theme.card} print-card rounded-2xl p-5 border mb-6 print-break`}>
+            <div className={`${theme.card} print-card rounded-2xl p-5 border mb-6 print-month-page`}>
               <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>🍀 2026년 개운 처방전</h3>
               <div className="grid grid-cols-3 gap-4">
                 {Object.entries(data.lucky_prescription).map(([key, value]) => {

@@ -1,5 +1,5 @@
-
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { PRODUCTS } from '../config/products';
@@ -13,6 +13,7 @@ import FullView from '../components/FullView';
 const ProductPage = ({ productKey }) => {
   const config = PRODUCTS[productKey];
   const theme = config.theme;
+  const navigate = useNavigate();
   
   const [step, setStep] = useState('form');
   const [formData, setFormData] = useState({
@@ -60,6 +61,11 @@ const ProductPage = ({ productKey }) => {
 
       if (data?.status === 'completed') {
         clearInterval(interval);
+        // 달력 상품은 전용 결과 페이지로 이동
+        if (productKey === 'calendar') {
+          navigate(`/calendar/${orderId}`);
+          return;
+        }
         setResult({ pdfUrl: data.pdf_url, notionUrl: data.notion_url, aiResponse: data.ai_response });
         setProgress(100);
         setTimeout(() => setStep('result'), 500);

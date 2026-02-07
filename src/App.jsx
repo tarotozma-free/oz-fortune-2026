@@ -50,7 +50,7 @@ export default function App() {
         {/* 달력 */}
         <Route path="/calendar" element={<ProductPage productKey="calendar" />} />
         <Route path="/calendar/:orderId" element={<CalendarResultPage />} />
-        // Routes 안에 추가 (달력 섹션에):
+        
 {/* 점성학 달력 */}
 <Route path="/astro-calendar" element={<ProductPage productKey="astro-calendar" />} />
 <Route path="/astro-calendar/:orderId" element={<AstroCalendarResultPage />} />

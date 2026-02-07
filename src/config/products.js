@@ -1,29 +1,96 @@
 // ========================================
-// products.js - 상품별 설정
+// products.js - 상품별 설정 (아이보리 테마 리뉴얼)
+// ========================================
+// 공통 베이스: 아이보리(#FDFBF7) / 베이지(#F5F0E8)
+// 사주 계열: 남색 + 금색 (동양적, 단아한)
+// 점성학 계열: 인디고 + 보라 (밝지만 화려한)
 // ========================================
 
+// ── 사주 공통 테마 ──
+const SAJU_THEME = {
+  bg: 'from-[#FDFBF7] via-[#F7F2EA] to-[#F0EBE0]',
+  card: 'bg-white border-stone-200 shadow-sm',
+  accent: 'stone',
+  button: 'from-[#2C3E6B] to-[#1A2744] hover:from-[#3A4F80] hover:to-[#2C3E6B] text-white',
+  text: {
+    primary: 'text-stone-800',
+    secondary: 'text-stone-600',
+    muted: 'text-stone-400',
+    accent: 'text-[#2C3E6B]',
+  },
+  input: 'bg-white border-stone-300 text-stone-800 placeholder-stone-400 focus:ring-[#2C3E6B] focus:border-[#2C3E6B]',
+  select: 'bg-white',
+  score: 'from-[#B8860B] to-[#DAA520]',
+};
+
+// ── 점성학 공통 테마 ──
+const ASTRO_THEME = {
+  bg: 'from-[#FDFBF7] via-[#F5F0F8] to-[#EDE8F5]',
+  card: 'bg-white border-purple-100 shadow-sm',
+  accent: 'purple',
+  button: 'from-[#5B21B6] to-[#7C3AED] hover:from-[#6D28D9] hover:to-[#8B5CF6] text-white',
+  text: {
+    primary: 'text-stone-800',
+    secondary: 'text-stone-600',
+    muted: 'text-stone-400',
+    accent: 'text-[#5B21B6]',
+  },
+  input: 'bg-white border-purple-200 text-stone-800 placeholder-stone-400 focus:ring-purple-500 focus:border-purple-500',
+  select: 'bg-white',
+  score: 'from-[#7C3AED] to-[#A855F7]',
+};
+
+// ── 달력 사주 테마 ──
+const CALENDAR_THEME = {
+  bg: 'from-[#FDFBF7] via-[#F0F7F4] to-[#E8F5EC]',
+  card: 'bg-white border-emerald-100 shadow-sm',
+  accent: 'emerald',
+  button: 'from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white',
+  text: {
+    primary: 'text-stone-800',
+    secondary: 'text-stone-600',
+    muted: 'text-stone-400',
+    accent: 'text-emerald-700',
+  },
+  input: 'bg-white border-emerald-200 text-stone-800 placeholder-stone-400 focus:ring-emerald-500 focus:border-emerald-500',
+  select: 'bg-white',
+  score: 'from-emerald-500 to-teal-500',
+};
+
+// ── 달력 점성학 테마 ──
+const ASTRO_CALENDAR_THEME = {
+  bg: 'from-[#FDFBF7] via-[#F0EDF8] to-[#E8E0F5]',
+  card: 'bg-white border-indigo-100 shadow-sm',
+  accent: 'indigo',
+  button: 'from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white',
+  text: {
+    primary: 'text-stone-800',
+    secondary: 'text-stone-600',
+    muted: 'text-stone-400',
+    accent: 'text-indigo-700',
+  },
+  input: 'bg-white border-indigo-200 text-stone-800 placeholder-stone-400 focus:ring-indigo-500 focus:border-indigo-500',
+  select: 'bg-white',
+  score: 'from-indigo-500 to-purple-500',
+};
+
+
+// ========================================
+// 상품 정의
+// ========================================
 const PRODUCTS = {
+
+  // ══════════════════════════════════════
+  // 사주 상품들 (동양적/단아한)
+  // ══════════════════════════════════════
+
   saju: {
     product_id: '2026_vip_saju',
     icon: '🔮',
     title: '2026년 VIP 신년운세',
     subtitle: '프리미엄 사주 분석 리포트',
     buttonText: '내 운세 분석받기',
-    theme: {
-      bg: 'from-purple-900 via-indigo-900 to-blue-900',
-      card: 'bg-white/10 border-white/20',
-      accent: 'purple',
-      button: 'from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-purple-200',
-        muted: 'text-purple-400/60',
-        accent: 'text-purple-400',
-      },
-      input: 'bg-white/10 border-white/20 text-white placeholder-purple-300 focus:ring-purple-400',
-      select: 'bg-gray-800',
-      score: 'from-yellow-400 to-orange-500',
-    },
+    theme: SAJU_THEME,
     statusMessages: [
       '🔮 사주 원국을 분석하고 있습니다...',
       '📊 2026년 운세를 계산하고 있습니다...',
@@ -50,19 +117,8 @@ const PRODUCTS = {
     subtitle: '돈의 흐름을 읽는 프리미엄 사주 분석',
     buttonText: '내 재물운 분석받기',
     theme: {
-      bg: 'from-gray-900 via-amber-950 to-gray-900',
-      card: 'bg-black/40 border-amber-500/30',
-      accent: 'amber',
-      button: 'from-yellow-500 via-amber-500 to-yellow-600 hover:from-yellow-400 hover:to-amber-400 text-gray-900',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-amber-200',
-        muted: 'text-amber-400/60',
-        accent: 'text-amber-400',
-      },
-      input: 'bg-black/30 border-amber-500/30 text-white placeholder-amber-300/50 focus:ring-amber-400',
-      select: 'bg-gray-900',
-      score: 'from-yellow-400 to-amber-500',
+      ...SAJU_THEME,
+      score: 'from-[#B8860B] to-[#DAA520]',
     },
     statusMessages: [
       '💰 재물 원국을 분석하고 있습니다...',
@@ -81,12 +137,8 @@ const PRODUCTS = {
     prescriptionTitle: '💎 재물 처방전',
     prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
     prescriptionLabels: { 
-      color: '지갑 색상', 
-      number: '행운의 숫자', 
-      direction: '돈이 오는 방향', 
-      item: '재물 아이템',
-      action: '투자 타이밍',
-      avoid: '피해야 할 것'
+      color: '지갑 색상', number: '행운의 숫자', direction: '돈이 오는 방향', 
+      item: '재물 아이템', action: '투자 타이밍', avoid: '피해야 할 것'
     },
     showWealthGrade: true,
     showMoneyType: true,
@@ -101,19 +153,10 @@ const PRODUCTS = {
     subtitle: '사랑의 흐름을 읽는 프리미엄 사주 분석',
     buttonText: '내 연애운 분석받기',
     theme: {
-      bg: 'from-pink-950 via-rose-900 to-red-950',
-      card: 'bg-black/40 border-pink-500/30',
-      accent: 'pink',
-      button: 'from-pink-500 via-rose-500 to-red-500 hover:from-pink-400 hover:to-rose-400 text-white',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-pink-200',
-        muted: 'text-pink-400/60',
-        accent: 'text-pink-400',
-      },
-      input: 'bg-black/30 border-pink-500/30 text-white placeholder-pink-300/50 focus:ring-pink-400',
-      select: 'bg-gray-900',
-      score: 'from-pink-400 to-rose-500',
+      ...SAJU_THEME,
+      accent: 'rose',
+      text: { ...SAJU_THEME.text, accent: 'text-rose-700' },
+      score: 'from-rose-500 to-pink-500',
     },
     statusMessages: [
       '💕 연애 원국을 분석하고 있습니다...',
@@ -132,12 +175,8 @@ const PRODUCTS = {
     prescriptionTitle: '💕 연애 처방전',
     prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
     prescriptionLabels: { 
-      color: '연애운 색상', 
-      number: '인연의 숫자', 
-      direction: '인연이 오는 방향', 
-      item: '연애 아이템',
-      action: '연애운 높이는 행동',
-      avoid: '연애할 때 피할 것'
+      color: '연애운 색상', number: '인연의 숫자', direction: '인연이 오는 방향', 
+      item: '연애 아이템', action: '연애운 높이는 행동', avoid: '연애할 때 피할 것'
     },
     showLoveGrade: true,
     showLoveStyle: true,
@@ -152,19 +191,10 @@ const PRODUCTS = {
     subtitle: '커리어의 흐름을 읽는 프리미엄 사주 분석',
     buttonText: '내 합격운 분석받기',
     theme: {
-      bg: 'from-slate-950 via-blue-950 to-indigo-950',
-      card: 'bg-black/40 border-blue-500/30',
+      ...SAJU_THEME,
       accent: 'blue',
-      button: 'from-blue-500 via-indigo-500 to-blue-600 hover:from-blue-400 hover:to-indigo-400 text-white',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-blue-200',
-        muted: 'text-blue-400/60',
-        accent: 'text-blue-400',
-      },
-      input: 'bg-black/30 border-blue-500/30 text-white placeholder-blue-300/50 focus:ring-blue-400',
-      select: 'bg-gray-900',
-      score: 'from-blue-400 to-indigo-500',
+      text: { ...SAJU_THEME.text, accent: 'text-blue-800' },
+      score: 'from-blue-500 to-indigo-500',
     },
     statusMessages: [
       '🎯 커리어 원국을 분석하고 있습니다...',
@@ -183,12 +213,8 @@ const PRODUCTS = {
     prescriptionTitle: '🎯 합격 처방전',
     prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
     prescriptionLabels: { 
-      color: '면접운 색상', 
-      number: '합격의 숫자', 
-      direction: '좋은 직장 방향', 
-      item: '합격 아이템',
-      action: '면접 전 행동',
-      avoid: '취업할 때 피할 것'
+      color: '면접운 색상', number: '합격의 숫자', direction: '좋은 직장 방향', 
+      item: '합격 아이템', action: '면접 전 행동', avoid: '취업할 때 피할 것'
     },
     showCareerGrade: true,
     showCareerType: true,
@@ -204,19 +230,8 @@ const PRODUCTS = {
     subtitle: '20가지 주제로 완전 분석하는 프리미엄 사주',
     buttonText: '내 사주 완전 분석받기',
     theme: {
-      bg: 'from-violet-950 via-purple-900 to-indigo-950',
-      card: 'bg-black/40 border-violet-500/30',
-      accent: 'violet',
-      button: 'from-violet-500 via-purple-500 to-indigo-500 hover:from-violet-400 hover:to-purple-400 text-white',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-violet-200',
-        muted: 'text-violet-400/60',
-        accent: 'text-violet-400',
-      },
-      input: 'bg-black/30 border-violet-500/30 text-white placeholder-violet-300/50 focus:ring-violet-400',
-      select: 'bg-gray-900',
-      score: 'from-violet-400 to-purple-500',
+      ...SAJU_THEME,
+      score: 'from-[#2C3E6B] to-[#B8860B]',
     },
     statusMessages: [
       '📜 사주 원국을 해석하고 있습니다...',
@@ -239,26 +254,23 @@ const PRODUCTS = {
     ],
     prescriptionTitle: '✨ 평생 개운 처방전',
     prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
-prescriptionLabels: { 
-  color: '행운 색상', 
-  number: '행운의 숫자', 
-  direction: '좋은 방향', 
-  item: '행운 아이템',
-  action: '운 높이는 행동',
-  avoid: '피해야 할 것'
-},
+    prescriptionLabels: { 
+      color: '행운 색상', number: '행운의 숫자', direction: '좋은 방향', 
+      item: '행운 아이템', action: '운 높이는 행동', avoid: '피해야 할 것'
+    },
     showFullGrade: true,
     showSajuSummary: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
     showTenYearFortune: true,
-    showVisualData: true,  // ⬅️ 이거 추가!
+    showVisualData: true,
     analysisCount: 20,
   },
 
-  // ========================================
-  // 점성학 상품들
-  // ========================================
+  // ══════════════════════════════════════
+  // 점성학 상품들 (밝고 화려한)
+  // ══════════════════════════════════════
+
   astro: {
     product_id: '2026_astro_fortune',
     icon: '⭐',
@@ -266,21 +278,7 @@ prescriptionLabels: {
     subtitle: '별자리로 보는 2026년 운세 분석',
     buttonText: '내 2026년 운세 보기',
     isAstro: true,
-    theme: {
-      bg: 'from-indigo-950 via-purple-900 to-blue-950',
-      card: 'bg-black/40 border-indigo-500/30',
-      accent: 'indigo',
-      button: 'from-indigo-500 via-purple-500 to-blue-500 hover:from-indigo-400 hover:to-purple-400 text-white',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-indigo-200',
-        muted: 'text-indigo-400/60',
-        accent: 'text-indigo-400',
-      },
-      input: 'bg-black/30 border-indigo-500/30 text-white placeholder-indigo-300/50 focus:ring-indigo-400',
-      select: 'bg-gray-900',
-      score: 'from-indigo-400 to-purple-500',
-    },
+    theme: ASTRO_THEME,
     statusMessages: [
       '⭐ 네이탈 차트를 분석하고 있습니다...',
       '🌞 태양 별자리를 확인하고 있습니다...',
@@ -298,12 +296,8 @@ prescriptionLabels: {
     prescriptionTitle: '⭐ 2026 행운 처방전',
     prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
     prescriptionLabels: { 
-      color: '행운의 색상', 
-      number: '행운의 숫자', 
-      direction: '좋은 방향', 
-      item: '행운 아이템',
-      action: '운 높이는 행동',
-      avoid: '피해야 할 것'
+      color: '행운의 색상', number: '행운의 숫자', direction: '좋은 방향', 
+      item: '행운 아이템', action: '운 높이는 행동', avoid: '피해야 할 것'
     },
     showYearGrade: true,
     showMonthlyFortune: true,
@@ -318,19 +312,8 @@ prescriptionLabels: {
     buttonText: '내 재물운 분석받기',
     isAstro: true,
     theme: {
-      bg: 'from-gray-900 via-amber-950 to-gray-900',
-      card: 'bg-black/40 border-amber-500/30',
-      accent: 'amber',
-      button: 'from-yellow-500 via-amber-500 to-yellow-600 hover:from-yellow-400 hover:to-amber-400 text-gray-900',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-amber-200',
-        muted: 'text-amber-400/60',
-        accent: 'text-amber-400',
-      },
-      input: 'bg-black/30 border-amber-500/30 text-white placeholder-amber-300/50 focus:ring-amber-400',
-      select: 'bg-gray-900',
-      score: 'from-yellow-400 to-amber-500',
+      ...ASTRO_THEME,
+      score: 'from-amber-500 to-yellow-500',
     },
     statusMessages: [
       '💰 네이탈 차트를 분석하고 있습니다...',
@@ -349,12 +332,8 @@ prescriptionLabels: {
     prescriptionTitle: '💎 재물 처방전',
     prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
     prescriptionLabels: { 
-      color: '지갑 색상', 
-      number: '재물 행운 숫자', 
-      direction: '돈이 오는 방향', 
-      item: '재물 아이템',
-      action: '돈 운 높이는 행동',
-      avoid: '재물운 막는 것'
+      color: '지갑 색상', number: '재물 행운 숫자', direction: '돈이 오는 방향', 
+      item: '재물 아이템', action: '돈 운 높이는 행동', avoid: '재물운 막는 것'
     },
     showWealthGrade: true,
     showMoneyType: true,
@@ -371,19 +350,9 @@ prescriptionLabels: {
     buttonText: '내 연애운 분석받기',
     isAstro: true,
     theme: {
-      bg: 'from-pink-950 via-rose-900 to-red-950',
-      card: 'bg-black/40 border-pink-500/30',
-      accent: 'pink',
-      button: 'from-pink-500 via-rose-500 to-red-500 hover:from-pink-400 hover:to-rose-400 text-white',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-pink-200',
-        muted: 'text-pink-400/60',
-        accent: 'text-pink-400',
-      },
-      input: 'bg-black/30 border-pink-500/30 text-white placeholder-pink-300/50 focus:ring-pink-400',
-      select: 'bg-gray-900',
-      score: 'from-pink-400 to-rose-500',
+      ...ASTRO_THEME,
+      text: { ...ASTRO_THEME.text, accent: 'text-pink-600' },
+      score: 'from-pink-500 to-rose-500',
     },
     statusMessages: [
       '💕 네이탈 차트를 분석하고 있습니다...',
@@ -402,12 +371,8 @@ prescriptionLabels: {
     prescriptionTitle: '💕 연애 처방전',
     prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
     prescriptionLabels: { 
-      color: '연애운 색상', 
-      number: '사랑의 숫자', 
-      direction: '인연 오는 방향', 
-      item: '사랑의 보석',
-      action: '사랑 부르는 행동',
-      avoid: '연애운 막는 것'
+      color: '연애운 색상', number: '사랑의 숫자', direction: '인연 오는 방향', 
+      item: '사랑의 보석', action: '사랑 부르는 행동', avoid: '연애운 막는 것'
     },
     showLoveGrade: true,
     showLoveStyle: true,
@@ -425,19 +390,9 @@ prescriptionLabels: {
     buttonText: '내 합격운 분석받기',
     isAstro: true,
     theme: {
-      bg: 'from-slate-950 via-blue-950 to-indigo-950',
-      card: 'bg-black/40 border-blue-500/30',
-      accent: 'blue',
-      button: 'from-blue-500 via-indigo-500 to-blue-600 hover:from-blue-400 hover:to-indigo-400 text-white',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-blue-200',
-        muted: 'text-blue-400/60',
-        accent: 'text-blue-400',
-      },
-      input: 'bg-black/30 border-blue-500/30 text-white placeholder-blue-300/50 focus:ring-blue-400',
-      select: 'bg-gray-900',
-      score: 'from-blue-400 to-indigo-500',
+      ...ASTRO_THEME,
+      text: { ...ASTRO_THEME.text, accent: 'text-blue-700' },
+      score: 'from-blue-500 to-indigo-500',
     },
     statusMessages: [
       '🎯 네이탈 차트를 분석하고 있습니다...',
@@ -456,12 +411,8 @@ prescriptionLabels: {
     prescriptionTitle: '🎯 합격 처방전',
     prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
     prescriptionLabels: { 
-      color: '면접 합격 색상', 
-      number: '합격의 숫자', 
-      direction: '좋은 직장 방향', 
-      item: '성공 아이템',
-      action: '합격 부르는 행동',
-      avoid: '커리어운 막는 것'
+      color: '면접 합격 색상', number: '합격의 숫자', direction: '좋은 직장 방향', 
+      item: '성공 아이템', action: '합격 부르는 행동', avoid: '커리어운 막는 것'
     },
     showCareerGrade: true,
     showCareerType: true,
@@ -478,21 +429,7 @@ prescriptionLabels: {
     subtitle: '15가지 주제로 완전 분석하는 점성학 운세',
     buttonText: '내 점성학 완전 분석받기',
     isAstro: true,
-    theme: {
-      bg: 'from-violet-950 via-purple-900 to-indigo-950',
-      card: 'bg-black/40 border-violet-500/30',
-      accent: 'violet',
-      button: 'from-violet-500 via-purple-500 to-indigo-500 hover:from-violet-400 hover:to-purple-400 text-white',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-violet-200',
-        muted: 'text-violet-400/60',
-        accent: 'text-violet-400',
-      },
-      input: 'bg-black/30 border-violet-500/30 text-white placeholder-violet-300/50 focus:ring-violet-400',
-      select: 'bg-gray-900',
-      score: 'from-violet-400 to-purple-500',
-    },
+    theme: ASTRO_THEME,
     statusMessages: [
       '🌟 네이탈 차트를 해석하고 있습니다...',
       '🌞 태양 별자리를 분석하고 있습니다...',
@@ -515,21 +452,21 @@ prescriptionLabels: {
     prescriptionTitle: '✨ 평생 개운 처방전',
     prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
     prescriptionLabels: { 
-      color: '평생 행운 색상', 
-      number: '인생 행운 숫자', 
-      direction: '행운의 방향', 
-      item: '수호 원석',
-      action: '운 높이는 행동',
-      avoid: '피해야 할 것'
+      color: '평생 행운 색상', number: '인생 행운 숫자', direction: '행운의 방향', 
+      item: '수호 원석', action: '운 높이는 행동', avoid: '피해야 할 것'
     },
     showFullGrade: true,
     showSajuSummary: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
     showSunSign: true,
-    showVisualData: true,  // ⬅️ 이거 추가!
+    showVisualData: true,
     analysisCount: 15,
   },
+
+  // ══════════════════════════════════════
+  // 달력 상품들
+  // ══════════════════════════════════════
 
   calendar: {
     product_id: '2026_yearly_calendar',
@@ -537,21 +474,7 @@ prescriptionLabels: {
     title: '2026년 나만의 운세 달력',
     subtitle: '사주 기반 맞춤형 1년 운세 달력',
     buttonText: '내 운세 달력 만들기',
-    theme: {
-      bg: 'from-emerald-950 via-teal-900 to-cyan-950',
-      card: 'bg-black/40 border-emerald-500/30',
-      accent: 'emerald',
-      button: 'from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-teal-400 text-white',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-emerald-200',
-        muted: 'text-emerald-400/60',
-        accent: 'text-emerald-400',
-      },
-      input: 'bg-black/30 border-emerald-500/30 text-white placeholder-emerald-300/50 focus:ring-emerald-400',
-      select: 'bg-gray-900',
-      score: 'from-emerald-400 to-teal-500',
-    },
+    theme: CALENDAR_THEME,
     statusMessages: [
       '🗓️ 2026년 달력을 분석하고 있습니다...',
       '📅 매월 중요 날짜를 선별하고 있습니다...',
@@ -575,21 +498,7 @@ prescriptionLabels: {
     subtitle: '별의 움직임으로 보는 나만의 2026년',
     buttonText: '내 점성학 달력 만들기',
     isAstro: true,
-    theme: {
-      bg: 'from-indigo-950 via-purple-900 to-violet-950',
-      card: 'bg-black/40 border-indigo-500/30',
-      accent: 'indigo',
-      button: 'from-indigo-500 via-purple-500 to-violet-500 hover:from-indigo-400 hover:to-purple-400 text-white',
-      text: {
-        primary: 'text-white',
-        secondary: 'text-indigo-200',
-        muted: 'text-indigo-400/60',
-        accent: 'text-indigo-400',
-      },
-      input: 'bg-black/30 border-indigo-500/30 text-white placeholder-indigo-300/50 focus:ring-indigo-400',
-      select: 'bg-gray-900',
-      score: 'from-indigo-400 to-purple-500',
-    },
+    theme: ASTRO_CALENDAR_THEME,
     statusMessages: [
       '🔭 네이탈 차트를 분석하고 있습니다...',
       '🪐 2026년 행성 트랜짓을 계산하고 있습니다...',
@@ -609,13 +518,12 @@ prescriptionLabels: {
   }
 };
 
-
 // product_id로 productKey 찾기
 const getProductKeyById = (productId) => {
   for (const [key, config] of Object.entries(PRODUCTS)) {
     if (config.product_id === productId) return key;
   }
-  return 'saju'; // 기본값
+  return 'saju';
 };
 
 export { PRODUCTS, getProductKeyById };

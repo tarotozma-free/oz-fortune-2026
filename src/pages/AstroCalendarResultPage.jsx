@@ -231,8 +231,32 @@ const AstroCalendarResultPage = () => {
             </div>
           )}
 
-          {/* TOP 날짜 */}
-          {data.top_dates?.length > 0 && (
+          {/* 카테고리별 추천일 */}
+          {data.category_dates && Object.keys(data.category_dates).length > 0 && (
+            <div className="mb-6">
+              <h2 className={`${theme.text.accent} font-bold mb-3`}>📋 이런 일엔 이 날!</h2>
+              <div className="space-y-3">
+                {Object.entries(data.category_dates).map(([key, cat]) => (
+                  <div key={key} className={`${theme.card} print-card rounded-xl p-3 border`}>
+                    <div className={`${theme.text.primary} font-bold mb-2`}>{cat.emoji} {cat.label}</div>
+                    <div className="flex flex-wrap gap-2">
+                      {(cat.dates || []).map((d, i) => (
+                        <div key={i} className="bg-indigo-500/20 rounded-lg px-3 py-1.5 text-sm">
+                          <span className={`${theme.text.accent} font-bold font-mono`}>{d.date?.split('-').slice(1).join('/')}</span>
+                        </div>
+                      ))}
+                      {(!cat.dates || cat.dates.length === 0) && (
+                        <span className={`${theme.text.muted} text-sm`}>해당 기간 추천일 없음</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 기존 top_dates 호환 (이전 주문) */}
+          {!data.category_dates && data.top_dates?.length > 0 && (
             <div className="mb-6">
               <h2 className={`${theme.text.accent} font-bold mb-3`}>🏆 올해의 행운 날짜 TOP</h2>
               <div className="space-y-2">
@@ -244,25 +268,6 @@ const AstroCalendarResultPage = () => {
                       <span className={`${theme.text.muted} text-sm ml-2`}>{item.reason}</span>
                     </div>
                     <div className={`${theme.text.accent} text-sm font-mono font-bold`}>{item.date}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 주의 날짜 */}
-          {data.caution_dates?.length > 0 && (
-            <div className="mb-6">
-              <h2 className="text-red-400 font-bold mb-3">⚠️ 주의할 날짜</h2>
-              <div className="space-y-2">
-                {data.caution_dates.slice(0, 3).map((item, i) => (
-                  <div key={i} className={`${theme.card} print-card rounded-xl p-3 border border-red-500/30 flex items-center gap-3`}>
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold bg-red-500/30 text-red-300">{i + 1}</div>
-                    <div className="flex-1">
-                      <span className={`${theme.text.primary} font-bold`}>{item.title}</span>
-                      <span className={`${theme.text.muted} text-sm ml-2`}>{item.reason}</span>
-                    </div>
-                    <div className="text-red-300 text-sm font-mono font-bold">{item.date}</div>
                   </div>
                 ))}
               </div>
@@ -449,8 +454,34 @@ const AstroCalendarResultPage = () => {
         </div>
       )}
 
-      {/* TOP 날짜 */}
-      {data.top_dates?.length > 0 && (
+      {/* 카테고리별 추천일 */}
+      {data.category_dates && Object.keys(data.category_dates).length > 0 && (
+        <div className="px-4 mb-4">
+          <div className="max-w-lg mx-auto">
+            <h2 className={`${theme.text.accent} font-bold mb-3 text-center`}>📋 이런 일엔 이 날!</h2>
+            <div className="space-y-3">
+              {Object.entries(data.category_dates).map(([key, cat]) => (
+                <div key={key} className={`${theme.card} rounded-xl p-4 border`}>
+                  <div className={`${theme.text.primary} font-bold mb-2`}>{cat.emoji} {cat.label}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {(cat.dates || []).map((d, i) => (
+                      <div key={i} className="bg-indigo-500/20 rounded-lg px-3 py-2 text-sm">
+                        <span className={`${theme.text.accent} font-bold font-mono`}>{d.date?.split('-').slice(1).join('/')}</span>
+                      </div>
+                    ))}
+                    {(!cat.dates || cat.dates.length === 0) && (
+                      <span className={`${theme.text.muted} text-sm`}>해당 기간 추천일 없음</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 기존 top_dates 호환 */}
+      {!data.category_dates && data.top_dates?.length > 0 && (
         <div className="px-4 mb-4">
           <div className="max-w-lg mx-auto">
             <h2 className={`${theme.text.accent} font-bold mb-3 text-center`}>🏆 올해의 행운 날짜 TOP</h2>

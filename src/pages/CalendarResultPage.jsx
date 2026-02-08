@@ -76,6 +76,62 @@ const CalendarResultPage = () => {
     lucky: C.lucky, caution: C.caution, turning_point: C.turning, special: C.turning,
   };
 
+  // 오행 컬러맵 (용신 색상 테두리용)
+  const ELEMENT_COLORS = {
+    '목': '#4A8C5C', '木': '#4A8C5C',
+    '화': '#C45C3E', '火': '#C45C3E',
+    '토': '#A08030', '土': '#A08030',
+    '금': '#8A8A8A', '金': '#8A8A8A',
+    '수': '#4A7A9A', '水': '#4A7A9A',
+  };
+
+  // 오행별 맞춤 미션 (month_element에서 주요 오행 추출)
+  const ELEMENT_MISSIONS = {
+    '목': '자연 속에서 30분 산책하기 — 성장의 기운 흡수',
+    '木': '자연 속에서 30분 산책하기 — 성장의 기운 흡수',
+    '화': '햇볕 쬐며 15분 걷기 — 열정의 에너지 보충',
+    '火': '햇볕 쬐며 15분 걷기 — 열정의 에너지 보충',
+    '토': '서랍 속 안 쓰는 물건 정리하기 — 안정의 에너지',
+    '土': '서랍 속 안 쓰는 물건 정리하기 — 안정의 에너지',
+    '금': '오래 미뤄둔 중요한 결단 내리기 — 단호한 에너지',
+    '金': '오래 미뤄둔 중요한 결단 내리기 — 단호한 에너지',
+    '수': '일기 쓰며 감정 정리하기 — 지혜의 에너지',
+    '水': '일기 쓰며 감정 정리하기 — 지혜의 에너지',
+  };
+
+  // 주의 날짜 안심 멘트
+  const COMFORT_MESSAGES = [
+    '이날은 가벼운 명상이나 일찍 잠자리에 드는 것만으로도 충분히 좋은 하루를 만들 수 있어요.',
+    '하루를 조용히 보내는 것만으로도 나쁜 기운을 충분히 피할 수 있습니다.',
+    '무리하지 않고 쉬어가는 것 자체가 가장 좋은 대처법이에요.',
+  ];
+
+  // month_element에서 주요 오행 추출
+  const extractElement = (elemStr) => {
+    if (!elemStr) return null;
+    for (const key of Object.keys(ELEMENT_MISSIONS)) {
+      if (elemStr.includes(key)) return key;
+    }
+    return null;
+  };
+
+  // 월별 오행 미션 생성
+  const getMonthMission = (md) => {
+    const el = extractElement(md?.month_element);
+    return el ? ELEMENT_MISSIONS[el] : md?.month_tip || '균형 잡힌 생활로 에너지를 충전하세요';
+  };
+
+  // 월 한자 추출 및 분리 (己丑월 → { hanja: '己丑', korean: '기축' })
+  const parseMonthElement = (elemStr) => {
+    if (!elemStr) return { hanja: '', rest: '' };
+    // 한자 패턴: 2~4글자 한자 + '월'
+    const hanjaMatch = elemStr.match(/([一-龥]{1,4})월/);
+    if (hanjaMatch) {
+      return { hanja: hanjaMatch[1] + '월', rest: elemStr.replace(hanjaMatch[0], '').trim() };
+    }
+    return { hanja: '', rest: elemStr };
+  };
+
   const globalCSS = `
     @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Pretendard:wght@300;400;500;600;700&display=swap');
     .font-serif-kr { font-family: 'Nanum Myeongjo', 'Batang', serif; }
@@ -155,6 +211,120 @@ const CalendarResultPage = () => {
               </div>
             </div>
           </div>
+
+          {/* ═══ 나의 사주팔자 원국 ═══ */}
+          {data.saju_pillars && (
+            <div className="rounded-2xl p-8 mb-10 print-avoid-break" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+              <h2 className="font-serif-kr text-xl font-bold text-center mb-1" style={{ color: C.ink }}>나의 사주팔자</h2>
+              <p className="text-xs text-center mb-6" style={{ color: C.muted }}>이 여덟 글자를 기반으로 당신만의 달력이 만들어졌습니다</p>
+
+              {/* 사주 4기둥 테이블 (십신 포함) */}
+              <div className="grid grid-cols-4 gap-3 mb-6">
+                {['hour', 'day', 'month', 'year'].map((pillar) => {
+                  const p = data.saju_pillars[pillar];
+                  const pillarLabel = pillar === 'year' ? '년주' : pillar === 'month' ? '월주' : pillar === 'day' ? '일주' : '시주';
+                  const pillarHanja = pillar === 'year' ? '年柱' : pillar === 'month' ? '月柱' : pillar === 'day' ? '日柱' : '時柱';
+                  const isDayMaster = pillar === 'day';
+
+                  if (!p) return (
+                    <div key={pillar} className="text-center opacity-30">
+                      <div className="text-[10px]" style={{ color: C.muted }}>{pillarLabel}</div>
+                      <div className="font-serif-kr text-3xl my-3" style={{ color: C.muted }}>?</div>
+                      <div className="font-serif-kr text-3xl mb-2" style={{ color: C.muted }}>?</div>
+                    </div>
+                  );
+
+                  const stemColor = ELEMENT_COLORS[p['천간_element']] || C.ink;
+                  const branchColor = ELEMENT_COLORS[p['지지_element']] || C.ink;
+
+                  // 십신 가져오기
+                  const stemShipsin = pillar === 'day' ? '' : data.shipsin?.[`${pillar}_cheongan`] || '';
+                  const branchShipsin = data.shipsin?.[`${pillar}_jiji`] || '';
+
+                  return (
+                    <div key={pillar} className="text-center rounded-xl p-2.5 relative" style={{ background: isDayMaster ? C.goldBg : C.bg, border: isDayMaster ? `2px solid ${C.gold}` : `1px solid ${C.border}` }}>
+                      {isDayMaster && <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[9px] px-2 py-0.5 rounded-full font-bold" style={{ background: C.gold, color: '#fff' }}>일간(나)</div>}
+                      <div className="text-[9px] mb-1.5" style={{ color: C.muted }}>{pillarLabel}<span className="ml-0.5 opacity-50">{pillarHanja}</span></div>
+
+                      {/* 천간 십신 */}
+                      {stemShipsin && <div className="text-[9px] font-bold mb-0.5 rounded-sm px-1 py-0.5 inline-block" style={{ background: `${stemColor}15`, color: stemColor }}>{stemShipsin}</div>}
+
+                      {/* 천간 */}
+                      <div className="rounded-lg p-1.5 mb-1" style={{ background: `${stemColor}10`, border: `1px solid ${stemColor}25` }}>
+                        <div className="font-serif-kr text-2xl font-extrabold leading-none" style={{ color: stemColor }}>{p['천간']}</div>
+                        <div className="text-[9px] mt-0.5" style={{ color: stemColor }}>{p['천간_kr']}</div>
+                      </div>
+
+                      {/* 지지 */}
+                      <div className="rounded-lg p-1.5" style={{ background: `${branchColor}10`, border: `1px solid ${branchColor}25` }}>
+                        <div className="font-serif-kr text-2xl font-extrabold leading-none" style={{ color: branchColor }}>{p['지지']}</div>
+                        <div className="text-[9px] mt-0.5" style={{ color: branchColor }}>{p['지지_kr']}</div>
+                      </div>
+
+                      {/* 지지 십신 */}
+                      {branchShipsin && <div className="text-[9px] font-bold mt-0.5 rounded-sm px-1 py-0.5 inline-block" style={{ background: `${branchColor}15`, color: branchColor }}>{branchShipsin}</div>}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* 오행 밸런스 바 */}
+              {data.ohaeng_balance && (
+                <div className="mb-5">
+                  <div className="text-xs font-bold mb-2 text-center" style={{ color: C.ink }}>오행 에너지 밸런스</div>
+                  <div className="flex gap-2 items-end justify-center h-16">
+                    {[
+                      { key: 'wood', label: '木', kr: '목', color: '#4A8C5C' },
+                      { key: 'fire', label: '火', kr: '화', color: '#C45C3E' },
+                      { key: 'earth', label: '土', kr: '토', color: '#A08030' },
+                      { key: 'metal', label: '金', kr: '금', color: '#8A8A8A' },
+                      { key: 'water', label: '水', kr: '수', color: '#4A7A9A' },
+                    ].map(({ key, label, kr, color }) => {
+                      const pct = data.ohaeng_balance[key]?.percent || 0;
+                      const status = data.ohaeng_balance[key]?.status || '';
+                      return (
+                        <div key={key} className="flex flex-col items-center gap-0.5 flex-1">
+                          <div className="text-[10px] font-bold" style={{ color }}>{pct}%</div>
+                          <div className="w-full rounded-t-md" style={{ height: `${Math.max(pct * 0.5, 4)}px`, background: color, opacity: 0.7 }} />
+                          <div className="font-serif-kr text-xs font-bold" style={{ color }}>{label}</div>
+                          <div className="text-[8px]" style={{ color: status === '부족' ? '#C45C3E' : status === '과다' ? '#A08030' : C.muted }}>{status || kr}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* 나의 기운 해석 — "이런 사람이라 이런 달력" */}
+              <div className="rounded-xl p-5" style={{ background: C.bg, border: `1px solid ${C.border}` }}>
+                {data.ilgan && (
+                  <div className="flex items-center gap-3 mb-3 pb-3" style={{ borderBottom: `1px solid ${C.border}` }}>
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center font-serif-kr text-xl font-extrabold" style={{ background: `${ELEMENT_COLORS[data.ilgan.element] || C.gold}15`, color: ELEMENT_COLORS[data.ilgan.element] || C.gold, border: `2px solid ${ELEMENT_COLORS[data.ilgan.element] || C.gold}30` }}>{data.ilgan.char}</div>
+                    <div>
+                      <div className="font-bold text-sm" style={{ color: C.ink }}>일간 {data.ilgan.name}</div>
+                      <div className="text-xs" style={{ color: C.sub }}>{data.ilgan.desc}</div>
+                    </div>
+                  </div>
+                )}
+
+                {data.yongshin && (
+                  <div className="flex items-center gap-3 mb-3 pb-3" style={{ borderBottom: `1px solid ${C.border}` }}>
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center font-serif-kr text-xl font-extrabold" style={{ background: `${ELEMENT_COLORS[data.yongshin.element] || C.gold}15`, color: ELEMENT_COLORS[data.yongshin.element] || C.gold, border: `2px solid ${ELEMENT_COLORS[data.yongshin.element] || C.gold}30` }}>🛡️</div>
+                    <div>
+                      <div className="font-bold text-sm" style={{ color: C.ink }}>나를 돕는 기운 <span className="font-serif-kr" style={{ color: ELEMENT_COLORS[data.yongshin.element] || C.gold }}>{data.yongshin.char}</span></div>
+                      <div className="text-xs" style={{ color: C.sub }}>{data.yongshin.desc}</div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="rounded-lg px-4 py-3" style={{ background: C.goldBg, borderLeft: `3px solid ${C.gold}` }}>
+                  <div className="text-sm leading-relaxed" style={{ color: C.ink }}>
+                    위 여덟 글자의 기운과 에너지 균형을 분석하여, <strong>당신에게 유리한 날</strong>과 <strong>조심해야 할 날</strong>을 계산했습니다. 이 달력은 당신의 사주에 맞춰 만들어진 <strong>세상에 하나뿐인 맞춤 달력</strong>입니다.
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* 달력 활용 가이드 */}
           <div className="rounded-2xl p-8 mb-10 print-avoid-break" style={{ background: C.card, border: `1px solid ${C.border}` }}>
@@ -239,11 +409,19 @@ const CalendarResultPage = () => {
 
             return (
               <div key={m} className={`mb-10 ${monthIdx > 0 ? 'print-break' : ''} print-avoid-break`}>
-                {/* 월 헤더 */}
+                {/* 월 헤더 — 한자 최소화 */}
                 <div className="flex items-end justify-between mb-3 pb-3" style={{ borderBottom: `2px solid ${C.ink}` }}>
                   <div>
                     <h2 className="font-serif-kr text-2xl font-extrabold" style={{ color: C.ink }}>{mNum}월</h2>
-                    {md?.month_element && <span className="text-xs" style={{ color: C.muted }}>{md.month_element}</span>}
+                    {md?.month_element && (() => {
+                      const { hanja, rest } = parseMonthElement(md.month_element);
+                      return (
+                        <div className="flex items-center gap-2 mt-0.5">
+                          {rest && <span className="text-xs" style={{ color: C.sub }}>{rest}</span>}
+                          {hanja && <span className="text-[10px]" style={{ color: C.muted }}>({hanja})</span>}
+                        </div>
+                      );
+                    })()}
                   </div>
                   <div className="text-right">
                     <div className="font-serif-kr text-2xl font-extrabold" style={{ color: gradeColor }}>{md?.month_score || 0}<span className="text-sm font-normal">점</span></div>
@@ -289,6 +467,7 @@ const CalendarResultPage = () => {
                 <div className="space-y-2 mb-4">
                   {mDates.map((item, i) => {
                     const sty = typeStyle[item.type] || typeStyle.lucky;
+                    const isYongshin = item.title?.includes('용신') || item.description?.includes('용신') || item.title?.includes('나를 돕는');
                     return (
                       <div key={i} className="rounded-xl p-3 flex items-start gap-3" style={{ background: sty.bg, borderLeft: `3px solid ${sty.border}` }}>
                         <div className="text-center min-w-[36px]">
@@ -299,10 +478,16 @@ const CalendarResultPage = () => {
                           <div className="flex items-center gap-1.5 mb-0.5">
                             {item.type === 'lucky' && <span style={{ color: C.gold }}>★</span>}
                             {item.type === 'caution' && <span style={{ color: C.caution.text }}>△</span>}
+                            {isYongshin && <span title="나를 돕는 기운">🛡️</span>}
                             <span className="font-bold text-sm" style={{ color: C.ink }}>{item.title}</span>
                           </div>
                           <p className="text-xs leading-relaxed" style={{ color: C.sub }}>{item.description}</p>
                           <div className="text-xs mt-1" style={{ color: sty.text }}>→ {item.action_tip}</div>
+                          {item.type === 'caution' && (
+                            <div className="text-[11px] mt-1.5 italic" style={{ color: C.muted }}>
+                              ☽ {COMFORT_MESSAGES[i % COMFORT_MESSAGES.length]}
+                            </div>
+                          )}
                         </div>
                       </div>
                     );
@@ -312,9 +497,9 @@ const CalendarResultPage = () => {
                 {/* Tip + 메모 */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="rounded-xl p-3" style={{ background: C.goldBg, border: `1px solid ${C.border}` }}>
-                    <div className="font-serif-kr text-xs font-bold mb-1" style={{ color: C.gold }}>✦ 이 달의 Tip</div>
+                    <div className="font-serif-kr text-xs font-bold mb-1" style={{ color: C.gold }}>✦ 이 달의 미션</div>
                     <div className="text-xs leading-relaxed" style={{ color: C.sub }}>
-                      {md?.month_tip || '균형 잡힌 생활을 추천합니다'}
+                      {getMonthMission(md)}
                     </div>
                   </div>
                   <div className="rounded-xl p-3" style={{ background: '#FAFAFA', border: `1px dashed ${C.border}` }}>
@@ -418,6 +603,59 @@ const CalendarResultPage = () => {
         </div>
       </div>
 
+      {/* ═══ 나의 사주팔자 (간략) ═══ */}
+      {data.saju_pillars && (
+        <div className="px-4 mb-6">
+          <div className="max-w-lg mx-auto">
+            <div className="rounded-2xl p-5" style={{ background: C.card, border: `1px solid ${C.border}` }}>
+              <h2 className="font-serif-kr text-sm font-bold text-center mb-3" style={{ color: C.ink }}>나의 사주팔자</h2>
+              <div className="grid grid-cols-4 gap-2 mb-3">
+                {['hour', 'day', 'month', 'year'].map((pillar) => {
+                  const p = data.saju_pillars[pillar];
+                  if (!p) return <div key={pillar} className="text-center opacity-30"><div className="font-serif-kr text-2xl" style={{ color: C.muted }}>?</div><div className="font-serif-kr text-2xl" style={{ color: C.muted }}>?</div></div>;
+                  const stemColor = ELEMENT_COLORS[p['천간_element']] || C.ink;
+                  const branchColor = ELEMENT_COLORS[p['지지_element']] || C.ink;
+                  const isDayMaster = pillar === 'day';
+                  const label = pillar === 'year' ? '년' : pillar === 'month' ? '월' : pillar === 'day' ? '일' : '시';
+                  const stemShipsin = pillar === 'day' ? '' : data.shipsin?.[`${pillar}_cheongan`] || '';
+                  const branchShipsin = data.shipsin?.[`${pillar}_jiji`] || '';
+
+                  return (
+                    <div key={pillar} className="text-center rounded-lg p-2 relative" style={{ background: isDayMaster ? C.goldBg : 'transparent', border: isDayMaster ? `1.5px solid ${C.gold}` : `1px solid ${C.border}` }}>
+                      {isDayMaster && <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[8px] px-1.5 rounded-full font-bold" style={{ background: C.gold, color: '#fff' }}>나</div>}
+                      <div className="text-[9px] mb-1" style={{ color: C.muted }}>{label}주</div>
+                      {stemShipsin && <div className="text-[8px] font-bold mb-0.5" style={{ color: stemColor }}>{stemShipsin}</div>}
+                      <div className="rounded px-1 py-0.5 mb-0.5" style={{ background: `${stemColor}10` }}>
+                        <div className="font-serif-kr text-xl font-extrabold" style={{ color: stemColor }}>{p['천간']}</div>
+                      </div>
+                      <div className="rounded px-1 py-0.5" style={{ background: `${branchColor}10` }}>
+                        <div className="font-serif-kr text-xl font-extrabold" style={{ color: branchColor }}>{p['지지']}</div>
+                      </div>
+                      {branchShipsin && <div className="text-[8px] font-bold mt-0.5" style={{ color: branchColor }}>{branchShipsin}</div>}
+                    </div>
+                  );
+                })}
+              </div>
+              {/* 일간 + 용신 한 줄 */}
+              <div className="flex items-center justify-center gap-4 text-xs">
+                {data.ilgan && (
+                  <span style={{ color: C.sub }}>
+                    <span className="font-serif-kr font-bold" style={{ color: ELEMENT_COLORS[data.ilgan.element] || C.gold }}>{data.ilgan.char}</span>
+                    <span className="ml-1">{data.ilgan.name}</span>
+                  </span>
+                )}
+                {data.yongshin && (
+                  <span style={{ color: C.sub }}>
+                    🛡️ <span className="font-bold" style={{ color: ELEMENT_COLORS[data.yongshin.element] || C.gold }}>{data.yongshin.char}</span>
+                    <span className="ml-0.5">가 나를 도와요</span>
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* TOP 3 */}
       {data.top_dates?.length > 0 && (
         <div className="px-4 mb-6">
@@ -515,7 +753,15 @@ const CalendarResultPage = () => {
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <span className="font-serif-kr font-bold" style={{ color: C.ink }}>{monthNum}월 운세</span>
-                  {currentMonthData.month_element && <span className="text-xs ml-2" style={{ color: C.muted }}>{currentMonthData.month_element}</span>}
+                  {currentMonthData.month_element && (() => {
+                    const { hanja, rest } = parseMonthElement(currentMonthData.month_element);
+                    return (
+                      <>
+                        {rest && <span className="text-xs ml-2" style={{ color: C.sub }}>{rest}</span>}
+                        {hanja && <span className="text-[10px] ml-1" style={{ color: C.muted }}>({hanja})</span>}
+                      </>
+                    );
+                  })()}
                 </div>
                 <div className="font-serif-kr text-xl font-extrabold" style={{ color: currentMonthData.month_score >= 65 ? C.gold : currentMonthData.month_score < 35 ? C.caution.text : C.sub }}>{currentMonthData.month_score}<span className="text-sm font-normal">점</span></div>
               </div>
@@ -553,7 +799,7 @@ const CalendarResultPage = () => {
                     style={hasEvents ? { background: sty.bg, border: `1.5px solid ${sty.border}`, cursor: 'pointer' } : {}}
                     title={hasEvents ? events.map(e => `${e.emoji} ${e.title}`).join('\n') : ''}>
                     <div className="text-sm font-bold" style={{ color: dayOfWeek === 0 ? '#C4735E' : dayOfWeek === 6 ? '#5A7A9A' : C.text }}>{day}</div>
-                    {hasEvents && evType === 'lucky' && <span className="text-[9px] absolute -top-0.5 -right-0.5" style={{ color: C.gold }}>★</span>}
+                    {hasEvents && evType === 'lucky' && <span className="text-[9px] absolute -top-0.5 -right-0.5" style={{ color: C.gold }}>{events[0]?.title?.includes('용신') || events[0]?.description?.includes('용신') ? '🛡️' : '★'}</span>}
                     {hasEvents && evType === 'caution' && <span className="text-[8px] absolute -top-0.5 -right-0.5 font-bold" style={{ color: C.caution.text }}>!</span>}
                     {hasEvents && evType === 'turning_point' && <span className="text-[8px] absolute -top-0.5 -right-0.5" style={{ color: C.turning.text }}>◇</span>}
                   </div>
@@ -585,11 +831,17 @@ const CalendarResultPage = () => {
                         {item.type === 'lucky' && <span style={{ color: C.gold }}>★</span>}
                         {item.type === 'caution' && <span className="font-bold" style={{ color: C.caution.text }}>!</span>}
                         {item.type === 'turning_point' && <span style={{ color: C.turning.text }}>◇</span>}
+                        {(item.title?.includes('용신') || item.description?.includes('용신') || item.title?.includes('나를 돕는')) && <span title="나를 돕는 기운">🛡️</span>}
                         <span className="font-bold" style={{ color: C.ink }}>{item.title}</span>
                         {item.importance === 'high' && <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold" style={{ background: C.lucky.bg, color: C.lucky.text }}>중요</span>}
                       </div>
                       <p className="text-sm leading-relaxed mb-1.5" style={{ color: C.sub }}>{item.description}</p>
                       <div className="text-xs" style={{ color: sty.text }}>→ {item.action_tip}</div>
+                      {item.type === 'caution' && (
+                        <div className="text-[11px] mt-2 italic" style={{ color: C.muted }}>
+                          ☽ {COMFORT_MESSAGES[i % COMFORT_MESSAGES.length]}
+                        </div>
+                      )}
                       <a href={getGoogleCalendarUrl(item)} target="_blank" rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 mt-2 text-[10px] px-2.5 py-1 rounded-full border transition-colors hover:opacity-70"
                         style={{ borderColor: C.border, color: C.muted }}>

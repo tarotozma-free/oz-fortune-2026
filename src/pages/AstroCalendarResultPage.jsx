@@ -641,6 +641,24 @@ const AstroCalendarResultPage = () => {
       <div className="px-4 mb-4">
         <div className="max-w-lg mx-auto">
           <div className={`${theme.card} rounded-2xl p-4 border`}>
+            {/* 역행 바 — 이달 역행 중인 행성 */}
+            {(() => {
+              const monthLabel = `${monthNum}월`;
+              const activeRetros = (data.retrograde_periods || []).filter(r => r.months?.includes(monthLabel));
+              if (activeRetros.length === 0) return null;
+              const retroColors = { Mercury: '#93C5FD', Venus: '#F9A8D4', Mars: '#FCA5A5', Jupiter: '#86EFAC', Saturn: '#D8B4FE', Uranus: '#67E8F9', Neptune: '#C4B5FD' };
+              return (
+                <div className="mb-3 space-y-1">
+                  {activeRetros.map((r, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <div className="flex-1 h-2 rounded-full opacity-40" style={{ background: retroColors[r.planet] || '#A78BFA' }} />
+                      <span className={`${theme.text.muted} text-[10px] whitespace-nowrap`}>🔄 {r.planet_kr} 역행 중</span>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+
             <div className="grid grid-cols-7 gap-1 mb-2">
               {['일','월','화','수','목','금','토'].map((d, i) => (
                 <div key={d} className={`text-center text-xs font-bold py-1 ${i === 0 ? 'text-red-400' : i === 6 ? 'text-blue-400' : theme.text.muted}`}>{d}</div>
@@ -703,13 +721,13 @@ const AstroCalendarResultPage = () => {
         </div>
       </div>
 
-      {/* 개운 처방전 */}
+      {/* 개운 처방전 (체크리스트형) */}
       {data.lucky_prescription && (
         <div className="px-4 mb-4">
           <div className="max-w-lg mx-auto">
             <div className={`${theme.card} rounded-2xl p-5 border`}>
               <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>🍀 2026년 점성학 개운 처방전</h3>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-3 mb-4">
                 {Object.entries(data.lucky_prescription).filter(([k]) => !['dominant_element','lacking_element','balance_tip'].includes(k)).map(([key, value]) => {
                   const labels = { color: { l: '행운 색상', e: '🎨' }, number: { l: '행운 숫자', e: '🔢' }, direction: { l: '좋은 방위', e: '🧭' }, stone: { l: '파워스톤', e: '💎' }, day: { l: '행운의 요일', e: '📅' }, activity: { l: '개운 활동', e: '🏃' } };
                   const info = labels[key] || { l: key, e: '📌' };
@@ -723,8 +741,37 @@ const AstroCalendarResultPage = () => {
                 })}
               </div>
               {data.lucky_prescription.balance_tip && (
-                <p className={`${theme.text.secondary} text-sm text-center mt-3`}>{data.lucky_prescription.balance_tip}</p>
+                <p className={`${theme.text.secondary} text-sm text-center mb-4`}>{data.lucky_prescription.balance_tip}</p>
               )}
+
+              {/* 실천 체크리스트 */}
+              <div className="pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                <div className={`${theme.text.accent} text-sm font-bold mb-3`}>✓ 개운 실천 체크리스트</div>
+                <div className="grid grid-cols-1 gap-2">
+                  {[
+                    data.lucky_prescription.color ? `${data.lucky_prescription.color} 계열 옷이나 소품 활용하기` : null,
+                    data.lucky_prescription.stone ? `부족한 원소를 채워주는 ${data.lucky_prescription.stone} 원석 착용하기` : null,
+                    data.lucky_prescription.direction ? `책상이나 침대 방향을 ${data.lucky_prescription.direction}쪽으로 옮겨보기` : null,
+                    data.lucky_prescription.activity || null,
+                    data.lucky_prescription.number ? `중요한 결정에 숫자 ${data.lucky_prescription.number} 활용하기` : null,
+                    data.lucky_prescription.day ? `${data.lucky_prescription.day}에 중요한 일정 잡기` : null,
+                  ].filter(Boolean).map((txt, i) => (
+                    <div key={i} className="flex items-center gap-2 p-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                      <div className="w-4 h-4 rounded border flex-shrink-0" style={{ borderColor: 'rgba(129,140,248,0.5)' }} />
+                      <span className={`${theme.text.secondary} text-xs`}>{txt}</span>
+                    </div>
+                  ))}
+                  {/* 나만의 빈칸 */}
+                  <div className="flex items-center gap-2 p-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.1)' }}>
+                    <div className="w-4 h-4 rounded border flex-shrink-0" style={{ borderColor: 'rgba(129,140,248,0.5)' }} />
+                    <span className={`${theme.text.muted} text-xs italic`}>나만의 긍정 확언 적어보기 ___</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.1)' }}>
+                    <div className="w-4 h-4 rounded border flex-shrink-0" style={{ borderColor: 'rgba(129,140,248,0.5)' }} />
+                    <span className={`${theme.text.muted} text-xs italic`}>올해 꼭 이루고 싶은 한 가지 ___</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

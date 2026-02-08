@@ -245,8 +245,8 @@ const FullView = ({ config, theme, formData, result, onBack, displayName }) => {
         )}
 
         {/* LifetimeFlowChart (기존 컴포넌트) */}
-        {ai.lifetime_flow && (
-          <div className="mb-8"><LifetimeFlowChart data={ai.lifetime_flow} theme={theme} /></div>
+        {(ai.lifetime_love_flow || ai.lifetime_wealth_flow || ai.lifetime_flow) && (
+          <div className="mb-8"><LifetimeFlowChart data={ai.lifetime_love_flow || ai.lifetime_wealth_flow || ai.lifetime_flow} theme={theme} /></div>
         )}
 
         {/* ═══ ⑤ 상세 분석 ═══ */}

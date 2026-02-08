@@ -162,6 +162,29 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
           </div>
         )}
 
+        {/* 🗺️ 인생 로드맵 (전성기/주의시기 있으면) */}
+        {(ai.peak_period || ai.danger_period) && (
+          <div className={`${theme.card} rounded-xl p-4 mb-6 border`}>
+            <div className="relative">
+              <div className="h-1.5 rounded-full bg-gray-700 relative overflow-hidden">
+                <div className="absolute left-0 h-full rounded-full bg-gradient-to-r from-amber-400 via-green-400 to-blue-400" style={{ width: '100%', opacity: 0.5 }}></div>
+              </div>
+              <div className="flex justify-between mt-2 text-center">
+                {[
+                  ai.danger_period ? { label: '⚠️', value: ai.danger_period?.age || ai.danger_period, color: 'text-red-400' } : null,
+                  { label: '📍 현재', value: `${new Date().getFullYear()}년`, color: theme.text.accent },
+                  ai.peak_period ? { label: '🌟', value: ai.peak_period?.age || ai.peak_period, color: 'text-green-400' } : null,
+                ].filter(Boolean).map((m, i) => (
+                  <div key={i} className="flex-1">
+                    <div className={`${m.color} font-bold text-xs`}>{m.label}</div>
+                    <div className={`${theme.text.primary} text-xs`}>{m.value}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* 결혼 타이밍 (연애운 전용) */}
         {isLove && ai.marriage_timing && (
           <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 rounded-xl p-4 mb-6 border border-purple-500/30">
@@ -323,18 +346,41 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
           ))}
         </div>
 
-        {/* 처방전 */}
+        {/* 처방전 (프리미엄) */}
+        {Object.keys(prescription).length > 0 && (
         <div className={`bg-gradient-to-r from-${theme.accent}-500/20 to-${theme.accent}-500/20 rounded-2xl p-5 mb-6 border border-${theme.accent}-500/30`}>
-          <h2 className={`text-lg font-bold ${theme.text.primary} mb-3`}>{config.prescriptionTitle}</h2>
+          <h2 className={`text-lg font-bold ${theme.text.primary} mb-1 text-center`}>{config.prescriptionTitle}</h2>
+          {rawPrescription.detail_reason && (
+            <p className={`${theme.text.muted} text-xs text-center mb-3`}>📋 {rawPrescription.detail_reason}</p>
+          )}
           <div className="grid grid-cols-2 gap-2 text-sm">
             {config.prescriptionFields.map(field => prescription[field] && (
               <div key={field} className={`${theme.card} rounded-lg p-3`}>
-                <span className={theme.text.accent}>{config.prescriptionLabels[field]}</span>
-                <span className={`${theme.text.primary} ml-2`}>{prescription[field]}</span>
+                <div className={`${theme.text.accent} text-xs font-semibold mb-1`}>{config.prescriptionLabels[field]}</div>
+                <div className={`${theme.text.primary} text-sm leading-relaxed`}>{prescription[field]}</div>
               </div>
             ))}
           </div>
+          {/* 실천 체크리스트 */}
+          <div className="mt-3 pt-3 border-t border-white/10">
+            <p className={`${theme.text.muted} text-xs mb-2`}>✅ 실천 체크리스트</p>
+            <div className="grid grid-cols-1 gap-1">
+              {config.prescriptionFields?.slice(0, 3).map(field => (
+                prescription[field] && (
+                  <label key={`chk-${field}`} className="flex items-start gap-2">
+                    <span className={`${theme.text.secondary} text-xs`}>
+                      □ {config.prescriptionLabels?.[field]}: {typeof prescription[field] === 'string' ? prescription[field].split(',')[0].split('(')[0].trim() : prescription[field]}
+                    </span>
+                  </label>
+                )
+              ))}
+              <label className="flex items-start gap-2">
+                <span className={`${theme.text.muted} text-xs italic`}>□ 나만의 긍정 확언: _______________</span>
+              </label>
+            </div>
+          </div>
         </div>
+        )}
 
         {/* 인쇄 버튼 */}
         <button onClick={() => window.print()}

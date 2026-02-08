@@ -108,6 +108,7 @@ const PRODUCTS = {
     prescriptionTitle: '🍀 개운 처방전',
     prescriptionFields: ['color', 'item', 'action', 'routine', 'season_tip', 'avoid'],
     prescriptionLabels: { color: '행운 색상·소재', item: '개운 아이템', action: '운 높이는 행동', routine: '매일 실천 루틴', season_tip: '올해 특별 처방', avoid: '주의할 것' },
+    showVisualData: true,
   },
   
   wealth: {
@@ -141,6 +142,7 @@ const PRODUCTS = {
       saving_method: '맞춤 저축 전략', side_income: '부업·부수입 적성', money_avoid: '돈 잃기 쉬운 상황'
     },
     showWealthGrade: true,
+    showVisualData: true,
     showMoneyType: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
@@ -179,6 +181,7 @@ const PRODUCTS = {
       love_action: '연애운 높이는 행동', confession_timing: '고백·프로포즈 적기', love_avoid: '연애 시 주의 패턴'
     },
     showLoveGrade: true,
+    showVisualData: true,
     showLoveStyle: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
@@ -217,6 +220,7 @@ const PRODUCTS = {
       exam_routine: '시험 전 루틴', career_fit: '적성에 맞는 직종', career_avoid: '합격 방해 패턴'
     },
     showCareerGrade: true,
+    showVisualData: true,
     showCareerType: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
@@ -259,6 +263,7 @@ const PRODUCTS = {
       yearly_ritual: '매년 반복할 의식', relationship_tip: '대인관계 처방', life_avoid: '평생 주의할 패턴'
     },
     showFullGrade: true,
+    showVisualData: true,
     showSajuSummary: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
@@ -300,6 +305,7 @@ const PRODUCTS = {
       ritual: '매일 실천 의식', element_boost: '부족 원소 보충법', planet_avoid: '행성 주의사항'
     },
     showYearGrade: true,
+    showVisualData: true,
     showMonthlyFortune: true,
     showSunSign: true,
   },
@@ -336,6 +342,7 @@ const PRODUCTS = {
       money_ritual: '재물 끌어당기는 루틴', abundance_action: '풍요 에너지 활동', wealth_block: '재물운 차단 요소'
     },
     showWealthGrade: true,
+    showVisualData: true,
     showMoneyType: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
@@ -375,6 +382,7 @@ const PRODUCTS = {
       venus_ritual: '금성 에너지 루틴', attract_action: '인연 끌어당기는 행동', love_block: '연애운 차단 요소'
     },
     showLoveGrade: true,
+    showVisualData: true,
     showLoveStyle: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
@@ -415,6 +423,7 @@ const PRODUCTS = {
       saturn_ritual: '토성 에너지 루틴', career_action: '합격 끌어당기는 행동', career_block: '합격운 차단 요소'
     },
     showCareerGrade: true,
+    showVisualData: true,
     showCareerType: true,
     showPeakDanger: true,
     showLifetimeFlow: true,
@@ -456,6 +465,7 @@ const PRODUCTS = {
       star_ritual: '별의 에너지 루틴', soul_mission: '영혼의 미션', karma_avoid: '카르마 주의 패턴'
     },
     showFullGrade: true,
+    showVisualData: true,
     showSajuSummary: true,
     showPeakDanger: true,
     showLifetimeFlow: true,

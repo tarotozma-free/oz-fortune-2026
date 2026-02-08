@@ -55,6 +55,18 @@ const CalendarResultPage = () => {
     return (data?.months?.[yearMonth]?.dates || []).filter(d => d.date === dateStr);
   };
 
+  // ── 사주 데이터 헬퍼 (기존 주문: saju_data / 새 주문: 직접 키) ──
+  const sd = data?.saju_data || {};
+  const sajuPillars = data?.saju_pillars || sd.spilar || null;
+  const sajuOhaeng = data?.ohaeng_balance || sd.ohaeng_balance || null;
+  const sajuIlgan = data?.ilgan || (sd.ilgan_hanja ? { char: sd.ilgan_hanja, name: (sd.ilgan || '') + (sd.ilgan_element || ''), element: sd.ilgan_element } : null);
+  const sajuShipsin = data?.shipsin || null;
+  const sajuYongshin = data?.yongshin || (data?.algorithm_meta?.yongshin ? {
+    element: data.algorithm_meta.yongshin,
+    char: { '목':'木','화':'火','토':'土','금':'金','수':'水' }[data.algorithm_meta.yongshin],
+    desc: { '목':'성장과 창의력','화':'열정과 표현력','토':'안정과 신뢰','금':'결단력과 실행력','수':'지혜와 유연성' }[data.algorithm_meta.yongshin] + '의 기운이 당신을 돕습니다',
+  } : null);
+
   // 프리미엄 컬러 (사주 = 앤틱 골드 + 먹색)
   const C = {
     bg: '#F9F7F2',
@@ -213,17 +225,16 @@ const CalendarResultPage = () => {
           </div>
 
           {/* ═══ 나의 사주팔자 원국 ═══ */}
-          {data.saju_pillars && (
+          {sajuPillars && (
             <div className="rounded-2xl p-8 mb-10 print-avoid-break" style={{ background: C.card, border: `1px solid ${C.border}` }}>
               <h2 className="font-serif-kr text-xl font-bold text-center mb-1" style={{ color: C.ink }}>나의 사주팔자</h2>
               <p className="text-xs text-center mb-6" style={{ color: C.muted }}>이 여덟 글자를 기반으로 당신만의 달력이 만들어졌습니다</p>
 
-              {/* 사주 4기둥 테이블 (십신 포함) */}
+              {/* 사주 4기둥 테이블 — 한자 대형, 십신 작게 */}
               <div className="grid grid-cols-4 gap-3 mb-6">
                 {['hour', 'day', 'month', 'year'].map((pillar) => {
-                  const p = data.saju_pillars[pillar];
+                  const p = sajuPillars[pillar];
                   const pillarLabel = pillar === 'year' ? '년주' : pillar === 'month' ? '월주' : pillar === 'day' ? '일주' : '시주';
-                  const pillarHanja = pillar === 'year' ? '年柱' : pillar === 'month' ? '月柱' : pillar === 'day' ? '日柱' : '時柱';
                   const isDayMaster = pillar === 'day';
 
                   if (!p) return (
@@ -234,60 +245,49 @@ const CalendarResultPage = () => {
                     </div>
                   );
 
-                  const stemColor = ELEMENT_COLORS[p['천간_element']] || C.ink;
-                  const branchColor = ELEMENT_COLORS[p['지지_element']] || C.ink;
-
-                  // 십신 가져오기
-                  const stemShipsin = pillar === 'day' ? '' : data.shipsin?.[`${pillar}_cheongan`] || '';
-                  const branchShipsin = data.shipsin?.[`${pillar}_jiji`] || '';
+                  const stemColor = ELEMENT_COLORS[p.cheongan_element] || C.ink;
+                  const branchColor = ELEMENT_COLORS[p.jiji_element] || C.ink;
+                  const stemShipsin = pillar === 'day' ? '' : sajuShipsin?.[`${pillar}_cheongan`] || '';
+                  const branchShipsin = sajuShipsin?.[`${pillar}_jiji`] || '';
 
                   return (
                     <div key={pillar} className="text-center rounded-xl p-2.5 relative" style={{ background: isDayMaster ? C.goldBg : C.bg, border: isDayMaster ? `2px solid ${C.gold}` : `1px solid ${C.border}` }}>
-                      {isDayMaster && <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[9px] px-2 py-0.5 rounded-full font-bold" style={{ background: C.gold, color: '#fff' }}>일간(나)</div>}
-                      <div className="text-[9px] mb-1.5" style={{ color: C.muted }}>{pillarLabel}<span className="ml-0.5 opacity-50">{pillarHanja}</span></div>
+                      {isDayMaster && <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[9px] px-2 py-0.5 rounded-full font-bold" style={{ background: C.gold, color: '#fff' }}>나</div>}
+                      <div className="text-[9px] mb-1" style={{ color: C.muted }}>{pillarLabel}</div>
 
-                      {/* 천간 십신 */}
-                      {stemShipsin && <div className="text-[9px] font-bold mb-0.5 rounded-sm px-1 py-0.5 inline-block" style={{ background: `${stemColor}15`, color: stemColor }}>{stemShipsin}</div>}
-
-                      {/* 천간 */}
-                      <div className="rounded-lg p-1.5 mb-1" style={{ background: `${stemColor}10`, border: `1px solid ${stemColor}25` }}>
-                        <div className="font-serif-kr text-2xl font-extrabold leading-none" style={{ color: stemColor }}>{p['천간']}</div>
-                        <div className="text-[9px] mt-0.5" style={{ color: stemColor }}>{p['천간_kr']}</div>
+                      {/* 천간: 한자 크게 + 십신 작게 */}
+                      <div className="rounded-lg p-1.5 mb-1" style={{ background: `${stemColor}10` }}>
+                        <div className="font-serif-kr text-3xl font-extrabold leading-none" style={{ color: stemColor }}>{p.cheongan_hanja}</div>
+                        {stemShipsin && <div className="text-[9px] mt-1" style={{ color: stemColor, opacity: 0.7 }}>{stemShipsin}</div>}
                       </div>
 
-                      {/* 지지 */}
-                      <div className="rounded-lg p-1.5" style={{ background: `${branchColor}10`, border: `1px solid ${branchColor}25` }}>
-                        <div className="font-serif-kr text-2xl font-extrabold leading-none" style={{ color: branchColor }}>{p['지지']}</div>
-                        <div className="text-[9px] mt-0.5" style={{ color: branchColor }}>{p['지지_kr']}</div>
+                      {/* 지지: 한자 크게 + 십신 작게 */}
+                      <div className="rounded-lg p-1.5" style={{ background: `${branchColor}10` }}>
+                        <div className="font-serif-kr text-3xl font-extrabold leading-none" style={{ color: branchColor }}>{p.jiji_hanja}</div>
+                        {branchShipsin && <div className="text-[9px] mt-1" style={{ color: branchColor, opacity: 0.7 }}>{branchShipsin}</div>}
                       </div>
-
-                      {/* 지지 십신 */}
-                      {branchShipsin && <div className="text-[9px] font-bold mt-0.5 rounded-sm px-1 py-0.5 inline-block" style={{ background: `${branchColor}15`, color: branchColor }}>{branchShipsin}</div>}
                     </div>
                   );
                 })}
               </div>
 
               {/* 오행 밸런스 바 */}
-              {data.ohaeng_balance && (
+              {sajuOhaeng && (
                 <div className="mb-5">
-                  <div className="text-xs font-bold mb-2 text-center" style={{ color: C.ink }}>오행 에너지 밸런스</div>
-                  <div className="flex gap-2 items-end justify-center h-16">
+                  <div className="flex gap-2 items-end justify-center h-14">
                     {[
-                      { key: 'wood', label: '木', kr: '목', color: '#4A8C5C' },
-                      { key: 'fire', label: '火', kr: '화', color: '#C45C3E' },
-                      { key: 'earth', label: '土', kr: '토', color: '#A08030' },
-                      { key: 'metal', label: '金', kr: '금', color: '#8A8A8A' },
-                      { key: 'water', label: '水', kr: '수', color: '#4A7A9A' },
-                    ].map(({ key, label, kr, color }) => {
-                      const pct = data.ohaeng_balance[key]?.percent || 0;
-                      const status = data.ohaeng_balance[key]?.status || '';
+                      { key: 'wood', label: '木', color: '#4A8C5C' },
+                      { key: 'fire', label: '火', color: '#C45C3E' },
+                      { key: 'earth', label: '土', color: '#A08030' },
+                      { key: 'metal', label: '金', color: '#8A8A8A' },
+                      { key: 'water', label: '水', color: '#4A7A9A' },
+                    ].map(({ key, label, color }) => {
+                      const pct = sajuOhaeng[key]?.percent || 0;
                       return (
                         <div key={key} className="flex flex-col items-center gap-0.5 flex-1">
                           <div className="text-[10px] font-bold" style={{ color }}>{pct}%</div>
                           <div className="w-full rounded-t-md" style={{ height: `${Math.max(pct * 0.5, 4)}px`, background: color, opacity: 0.7 }} />
                           <div className="font-serif-kr text-xs font-bold" style={{ color }}>{label}</div>
-                          <div className="text-[8px]" style={{ color: status === '부족' ? '#C45C3E' : status === '과다' ? '#A08030' : C.muted }}>{status || kr}</div>
                         </div>
                       );
                     })}
@@ -295,32 +295,28 @@ const CalendarResultPage = () => {
                 </div>
               )}
 
-              {/* 나의 기운 해석 — "이런 사람이라 이런 달력" */}
-              <div className="rounded-xl p-5" style={{ background: C.bg, border: `1px solid ${C.border}` }}>
-                {data.ilgan && (
-                  <div className="flex items-center gap-3 mb-3 pb-3" style={{ borderBottom: `1px solid ${C.border}` }}>
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center font-serif-kr text-xl font-extrabold" style={{ background: `${ELEMENT_COLORS[data.ilgan.element] || C.gold}15`, color: ELEMENT_COLORS[data.ilgan.element] || C.gold, border: `2px solid ${ELEMENT_COLORS[data.ilgan.element] || C.gold}30` }}>{data.ilgan.char}</div>
-                    <div>
-                      <div className="font-bold text-sm" style={{ color: C.ink }}>일간 {data.ilgan.name}</div>
-                      <div className="text-xs" style={{ color: C.sub }}>{data.ilgan.desc}</div>
+              {/* 나의 기운 해석 */}
+              <div className="rounded-xl p-4" style={{ background: C.bg, border: `1px solid ${C.border}` }}>
+                <div className="flex items-center justify-center gap-6 mb-3">
+                  {sajuIlgan && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center font-serif-kr text-lg font-extrabold" style={{ background: `${ELEMENT_COLORS[sajuIlgan.element] || C.gold}15`, color: ELEMENT_COLORS[sajuIlgan.element] || C.gold }}>{sajuIlgan.char}</div>
+                      <div>
+                        <div className="text-xs font-bold" style={{ color: C.ink }}>일간 {sajuIlgan.name}</div>
+                      </div>
                     </div>
-                  </div>
-                )}
-
-                {data.yongshin && (
-                  <div className="flex items-center gap-3 mb-3 pb-3" style={{ borderBottom: `1px solid ${C.border}` }}>
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center font-serif-kr text-xl font-extrabold" style={{ background: `${ELEMENT_COLORS[data.yongshin.element] || C.gold}15`, color: ELEMENT_COLORS[data.yongshin.element] || C.gold, border: `2px solid ${ELEMENT_COLORS[data.yongshin.element] || C.gold}30` }}>🛡️</div>
-                    <div>
-                      <div className="font-bold text-sm" style={{ color: C.ink }}>나를 돕는 기운 <span className="font-serif-kr" style={{ color: ELEMENT_COLORS[data.yongshin.element] || C.gold }}>{data.yongshin.char}</span></div>
-                      <div className="text-xs" style={{ color: C.sub }}>{data.yongshin.desc}</div>
+                  )}
+                  {sajuYongshin && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg" style={{ background: `${ELEMENT_COLORS[sajuYongshin.element] || C.gold}15`, color: ELEMENT_COLORS[sajuYongshin.element] || C.gold }}>🛡️</div>
+                      <div>
+                        <div className="text-xs font-bold" style={{ color: C.ink }}>{sajuYongshin.char} <span style={{ color: C.sub, fontWeight: 'normal' }}>가 나를 도와요</span></div>
+                      </div>
                     </div>
-                  </div>
-                )}
-
-                <div className="rounded-lg px-4 py-3" style={{ background: C.goldBg, borderLeft: `3px solid ${C.gold}` }}>
-                  <div className="text-sm leading-relaxed" style={{ color: C.ink }}>
-                    위 여덟 글자의 기운과 에너지 균형을 분석하여, <strong>당신에게 유리한 날</strong>과 <strong>조심해야 할 날</strong>을 계산했습니다. 이 달력은 당신의 사주에 맞춰 만들어진 <strong>세상에 하나뿐인 맞춤 달력</strong>입니다.
-                  </div>
+                  )}
+                </div>
+                <div className="text-xs text-center leading-relaxed" style={{ color: C.sub }}>
+                  위 여덟 글자의 기운을 분석하여 <strong style={{ color: C.ink }}>당신만을 위한 맞춤 달력</strong>을 만들었습니다
                 </div>
               </div>
             </div>
@@ -604,49 +600,49 @@ const CalendarResultPage = () => {
       </div>
 
       {/* ═══ 나의 사주팔자 (간략) ═══ */}
-      {data.saju_pillars && (
+      {sajuPillars && (
         <div className="px-4 mb-6">
           <div className="max-w-lg mx-auto">
             <div className="rounded-2xl p-5" style={{ background: C.card, border: `1px solid ${C.border}` }}>
               <h2 className="font-serif-kr text-sm font-bold text-center mb-3" style={{ color: C.ink }}>나의 사주팔자</h2>
               <div className="grid grid-cols-4 gap-2 mb-3">
                 {['hour', 'day', 'month', 'year'].map((pillar) => {
-                  const p = data.saju_pillars[pillar];
+                  const p = sajuPillars[pillar];
                   if (!p) return <div key={pillar} className="text-center opacity-30"><div className="font-serif-kr text-2xl" style={{ color: C.muted }}>?</div><div className="font-serif-kr text-2xl" style={{ color: C.muted }}>?</div></div>;
-                  const stemColor = ELEMENT_COLORS[p['천간_element']] || C.ink;
-                  const branchColor = ELEMENT_COLORS[p['지지_element']] || C.ink;
+                  const stemColor = ELEMENT_COLORS[p.cheongan_element] || C.ink;
+                  const branchColor = ELEMENT_COLORS[p.jiji_element] || C.ink;
                   const isDayMaster = pillar === 'day';
                   const label = pillar === 'year' ? '년' : pillar === 'month' ? '월' : pillar === 'day' ? '일' : '시';
-                  const stemShipsin = pillar === 'day' ? '' : data.shipsin?.[`${pillar}_cheongan`] || '';
-                  const branchShipsin = data.shipsin?.[`${pillar}_jiji`] || '';
+                  const stemShipsin = pillar === 'day' ? '' : sajuShipsin?.[`${pillar}_cheongan`] || '';
+                  const branchShipsin = sajuShipsin?.[`${pillar}_jiji`] || '';
 
                   return (
                     <div key={pillar} className="text-center rounded-lg p-2 relative" style={{ background: isDayMaster ? C.goldBg : 'transparent', border: isDayMaster ? `1.5px solid ${C.gold}` : `1px solid ${C.border}` }}>
                       {isDayMaster && <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[8px] px-1.5 rounded-full font-bold" style={{ background: C.gold, color: '#fff' }}>나</div>}
                       <div className="text-[9px] mb-1" style={{ color: C.muted }}>{label}주</div>
-                      {stemShipsin && <div className="text-[8px] font-bold mb-0.5" style={{ color: stemColor }}>{stemShipsin}</div>}
                       <div className="rounded px-1 py-0.5 mb-0.5" style={{ background: `${stemColor}10` }}>
-                        <div className="font-serif-kr text-xl font-extrabold" style={{ color: stemColor }}>{p['천간']}</div>
+                        <div className="font-serif-kr text-xl font-extrabold" style={{ color: stemColor }}>{p.cheongan_hanja}</div>
+                        {stemShipsin && <div className="text-[8px]" style={{ color: stemColor, opacity: 0.6 }}>{stemShipsin}</div>}
                       </div>
                       <div className="rounded px-1 py-0.5" style={{ background: `${branchColor}10` }}>
-                        <div className="font-serif-kr text-xl font-extrabold" style={{ color: branchColor }}>{p['지지']}</div>
+                        <div className="font-serif-kr text-xl font-extrabold" style={{ color: branchColor }}>{p.jiji_hanja}</div>
+                        {branchShipsin && <div className="text-[8px]" style={{ color: branchColor, opacity: 0.6 }}>{branchShipsin}</div>}
                       </div>
-                      {branchShipsin && <div className="text-[8px] font-bold mt-0.5" style={{ color: branchColor }}>{branchShipsin}</div>}
                     </div>
                   );
                 })}
               </div>
               {/* 일간 + 용신 한 줄 */}
               <div className="flex items-center justify-center gap-4 text-xs">
-                {data.ilgan && (
+                {sajuIlgan && (
                   <span style={{ color: C.sub }}>
-                    <span className="font-serif-kr font-bold" style={{ color: ELEMENT_COLORS[data.ilgan.element] || C.gold }}>{data.ilgan.char}</span>
-                    <span className="ml-1">{data.ilgan.name}</span>
+                    <span className="font-serif-kr font-bold" style={{ color: ELEMENT_COLORS[sajuIlgan.element] || C.gold }}>{sajuIlgan.char}</span>
+                    <span className="ml-1">{sajuIlgan.name}</span>
                   </span>
                 )}
-                {data.yongshin && (
+                {sajuYongshin && (
                   <span style={{ color: C.sub }}>
-                    🛡️ <span className="font-bold" style={{ color: ELEMENT_COLORS[data.yongshin.element] || C.gold }}>{data.yongshin.char}</span>
+                    🛡️ <span className="font-bold" style={{ color: ELEMENT_COLORS[sajuYongshin.element] || C.gold }}>{sajuYongshin.char}</span>
                     <span className="ml-0.5">가 나를 도와요</span>
                   </span>
                 )}

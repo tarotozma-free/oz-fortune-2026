@@ -97,19 +97,38 @@ const CalendarResultPage = () => {
     '수': '#4A7A9A', '水': '#4A7A9A',
   };
 
-  // 오행별 맞춤 미션 (month_element에서 주요 오행 추출)
-  const ELEMENT_MISSIONS = {
-    '목': '자연 속에서 30분 산책하기 — 성장의 기운 흡수',
-    '木': '자연 속에서 30분 산책하기 — 성장의 기운 흡수',
-    '화': '햇볕 쬐며 15분 걷기 — 열정의 에너지 보충',
-    '火': '햇볕 쬐며 15분 걷기 — 열정의 에너지 보충',
-    '토': '서랍 속 안 쓰는 물건 정리하기 — 안정의 에너지',
-    '土': '서랍 속 안 쓰는 물건 정리하기 — 안정의 에너지',
-    '금': '오래 미뤄둔 중요한 결단 내리기 — 단호한 에너지',
-    '金': '오래 미뤄둔 중요한 결단 내리기 — 단호한 에너지',
-    '수': '일기 쓰며 감정 정리하기 — 지혜의 에너지',
-    '水': '일기 쓰며 감정 정리하기 — 지혜의 에너지',
+  // 오행별 맞춤 미션 (같은 오행이라도 월마다 다른 미션)
+  const ELEMENT_MISSIONS_POOL = {
+    '목': [
+      '자연 속에서 30분 산책하기 — 성장의 기운 흡수',
+      '새로운 식물을 키워보기 — 생명력 충전',
+      '아침 스트레칭으로 몸 펴기 — 뻗어가는 기운',
+    ],
+    '화': [
+      '햇볕 쬐며 15분 걷기 — 열정의 에너지 보충',
+      '친한 사람에게 따뜻한 말 한마디 건네기 — 밝은 기운',
+      '촛불 켜고 하루 마무리하기 — 마음의 온기',
+    ],
+    '토': [
+      '서랍 속 안 쓰는 물건 정리하기 — 안정의 에너지',
+      '화분 분갈이하기 — 땅의 기운 흡수',
+      '맨발로 잔디 위 걸어보기 — 흙의 에너지 충전',
+    ],
+    '금': [
+      '오래 미뤄둔 중요한 결단 내리기 — 단호한 에너지',
+      '오래된 물건 깨끗이 닦기 — 정돈의 기운',
+      '감사한 사람에게 짧은 편지 쓰기 — 맑은 에너지',
+    ],
+    '수': [
+      '일기 쓰며 감정 정리하기 — 지혜의 에너지',
+      '반신욕이나 족욕으로 몸 풀기 — 물의 치유력',
+      '따뜻한 차 한 잔 마시며 명상하기 — 고요한 에너지',
+    ],
   };
+  // 한자 키도 동일 매핑
+  ['木','火','土','金','水'].forEach((h, i) => {
+    ELEMENT_MISSIONS_POOL[h] = ELEMENT_MISSIONS_POOL[['목','화','토','금','수'][i]];
+  });
 
   // 주의 날짜 안심 멘트
   const COMFORT_MESSAGES = [
@@ -127,10 +146,14 @@ const CalendarResultPage = () => {
     return null;
   };
 
-  // 월별 오행 미션 생성
-  const getMonthMission = (md) => {
+  // 월별 오행 미션 생성 (같은 오행이라도 월마다 다르게)
+  const getMonthMission = (md, monthIdx = 0) => {
     const el = extractElement(md?.month_element);
-    return el ? ELEMENT_MISSIONS[el] : md?.month_tip || '균형 잡힌 생활로 에너지를 충전하세요';
+    if (el && ELEMENT_MISSIONS_POOL[el]) {
+      const pool = ELEMENT_MISSIONS_POOL[el];
+      return pool[monthIdx % pool.length];
+    }
+    return md?.month_tip || '균형 잡힌 생활로 에너지를 충전하세요';
   };
 
   // 월 한자 추출 및 분리 (己丑월 → { hanja: '己丑', korean: '기축' })
@@ -146,8 +169,8 @@ const CalendarResultPage = () => {
 
   const globalCSS = `
     @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Pretendard:wght@300;400;500;600;700&display=swap');
-    .font-serif-kr { font-family: 'Nanum Myeongjo', 'Batang', serif; }
-    .font-sans-kr { font-family: 'Pretendard', -apple-system, sans-serif; }
+    .font-serif-kr { font-family: 'Nanum Myeongjo', 'Batang', serif; letter-spacing: 0.02em; }
+    .font-sans-kr { font-family: 'Pretendard', -apple-system, sans-serif; letter-spacing: 0.01em; line-height: 1.7; }
     @media print {
       body { background: #F9F7F2 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .no-print { display: none !important; }
@@ -495,7 +518,7 @@ const CalendarResultPage = () => {
                   <div className="rounded-xl p-3" style={{ background: C.goldBg, border: `1px solid ${C.border}` }}>
                     <div className="font-serif-kr text-xs font-bold mb-1" style={{ color: C.gold }}>✦ 이 달의 미션</div>
                     <div className="text-xs leading-relaxed" style={{ color: C.sub }}>
-                      {getMonthMission(md)}
+                      {getMonthMission(md, monthIdx)}
                     </div>
                   </div>
                   <div className="rounded-xl p-3" style={{ background: '#FAFAFA', border: `1px dashed ${C.border}` }}>
@@ -543,6 +566,15 @@ const CalendarResultPage = () => {
                       <span className="text-xs" style={{ color: C.ink }}>{txt}</span>
                     </div>
                   ))}
+                  {/* 나만의 실천 빈칸 */}
+                  <div className="flex items-center gap-2 p-2 rounded-lg" style={{ background: C.bg, border: `1px dashed ${C.border}` }}>
+                    <div className="w-4 h-4 rounded border flex-shrink-0" style={{ borderColor: C.gold }} />
+                    <span className="text-xs italic" style={{ color: C.muted }}>나만의 긍정 확언 적어보기 ___</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-2 rounded-lg" style={{ background: C.bg, border: `1px dashed ${C.border}` }}>
+                    <div className="w-4 h-4 rounded border flex-shrink-0" style={{ borderColor: C.gold }} />
+                    <span className="text-xs italic" style={{ color: C.muted }}>올해 꼭 이루고 싶은 한 가지 ___</span>
+                  </div>
                 </div>
               </div>
             </div>

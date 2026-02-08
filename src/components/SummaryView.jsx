@@ -360,7 +360,7 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
 
         {/* 인쇄 버튼 */}
         <button onClick={() => window.print()}
-          className={`block w-full py-4 rounded-xl bg-gradient-to-r ${theme.button} font-bold text-center transition-all mb-4`}
+          className={`block w-full py-4 rounded-xl border-2 border-current ${theme.text.accent} font-bold text-center transition-all mb-4 hover:opacity-80`}
         >
           🖨️ 인쇄 / PDF 저장
         </button>

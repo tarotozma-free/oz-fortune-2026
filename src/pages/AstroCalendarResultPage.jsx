@@ -212,64 +212,6 @@ const AstroCalendarResultPage = () => {
             </div>
           </div>
 
-          {/* ═══ 나의 출생 차트 — 빅쓰리 ═══ */}
-          {data.astro_data && (
-            <div className={`${theme.card} print-card rounded-2xl p-6 border mb-6`}>
-              <h2 className={`${theme.text.accent} font-bold text-center mb-1`}>✦ 나의 출생 차트</h2>
-              <p className={`${theme.text.muted} text-xs text-center mb-5`}>이 세 별자리를 기반으로 당신만의 달력이 만들어졌습니다</p>
-
-              <div className="grid grid-cols-3 gap-3 mb-5">
-                {/* 태양 */}
-                <div className="text-center rounded-xl p-4" style={{ background: 'rgba(251,191,36,0.08)', border: '1.5px solid rgba(251,191,36,0.25)' }}>
-                  <div className="text-3xl mb-1">{data.astro_data.sun_sign_symbol || '☀️'}</div>
-                  <div className={`${theme.text.accent} font-bold text-sm`}>{data.astro_data.sun_sign}</div>
-                  <div className={`${theme.text.muted} text-[10px] mt-1`}>태양 — 나의 본질</div>
-                  <div className={`${theme.text.secondary} text-xs mt-2 leading-relaxed`}>외부에 보여지는 성격과 자아의 핵심 에너지</div>
-                </div>
-
-                {/* 달 */}
-                <div className="text-center rounded-xl p-4" style={{ background: 'rgba(147,197,253,0.08)', border: '1.5px solid rgba(147,197,253,0.25)' }}>
-                  <div className="text-3xl mb-1">🌙</div>
-                  <div className={`${theme.text.accent} font-bold text-sm`}>{data.astro_data.moon_sign}</div>
-                  <div className={`${theme.text.muted} text-[10px] mt-1`}>달 — 나의 감정</div>
-                  <div className={`${theme.text.secondary} text-xs mt-2 leading-relaxed`}>내면의 감정과 무의식적 반응 패턴</div>
-                </div>
-
-                {/* 어센던트 */}
-                <div className="text-center rounded-xl p-4" style={{ background: 'rgba(192,132,252,0.08)', border: '1.5px solid rgba(192,132,252,0.25)' }}>
-                  <div className="text-3xl mb-1">⬆️</div>
-                  <div className={`${theme.text.accent} font-bold text-sm`}>{data.astro_data.rising_sign}</div>
-                  <div className={`${theme.text.muted} text-[10px] mt-1`}>상승궁 — 첫인상</div>
-                  <div className={`${theme.text.secondary} text-xs mt-2 leading-relaxed`}>타인이 처음 느끼는 나의 분위기와 이미지</div>
-                </div>
-              </div>
-
-              <div className="rounded-lg px-4 py-3" style={{ background: 'rgba(99,102,241,0.06)', borderLeft: '3px solid rgba(99,102,241,0.4)' }}>
-                <div className={`${theme.text.secondary} text-xs leading-relaxed text-center`}>
-                  태양·달·상승궁의 에너지 조합과 2026년 행성 트랜짓을 분석하여 <strong className={theme.text.primary}>당신만을 위한 맞춤 달력</strong>을 만들었습니다
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 역행 캘린더 */}
-          {data.retrograde_periods?.length > 0 && (
-            <div className={`${theme.card} print-card rounded-2xl p-5 border mb-6`}>
-              <h3 className={`${theme.text.accent} font-bold mb-3`}>🔄 역행 주의 기간</h3>
-              <div className="space-y-2">
-                {data.retrograde_periods.map((r, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <span className="text-lg">{'📱💕⚡🍀⏰💡🌊'[i % 7] || '🔄'}</span>
-                    <div className="flex-1">
-                      <span className={`${theme.text.primary} font-bold text-sm`}>{r.planet_kr || r.planet} 역행</span>
-                      <span className={`${theme.text.muted} text-xs ml-2`}>{r.period}</span>
-                    </div>
-                    <span className={`${theme.text.secondary} text-xs`}>{r.impact}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* TOP 날짜 */}
           {data.top_dates?.length > 0 && (
@@ -466,57 +408,6 @@ const AstroCalendarResultPage = () => {
         </div>
       </div>
 
-      {/* 🔄 역행 주의 기간 */}
-      {data.retrograde_periods?.length > 0 && (
-        <div className="px-4 mb-4">
-          <div className="max-w-lg mx-auto">
-            <h2 className={`${theme.text.accent} font-bold mb-3 text-center`}>🔄 역행 주의 기간</h2>
-            <div className={`${theme.card} rounded-2xl p-4 border`}>
-              <div className="space-y-3">
-                {data.retrograde_periods.map((r, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <span className="text-xl mt-0.5">{'📱💕⚡🍀⏰💡🌊'.split('')[i % 7] || '🔄'}</span>
-                    <div className="flex-1">
-                      <div className={`${theme.text.primary} font-bold text-sm`}>{r.planet_kr || r.planet} 역행 <span className={`${theme.text.muted} font-normal`}>({r.period})</span></div>
-                      <div className={`${theme.text.secondary} text-xs mt-0.5`}>{r.impact}</div>
-                      {r.advice && <div className={`${theme.text.muted} text-xs mt-0.5`}>💡 {r.advice}</div>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ═══ 나의 빅쓰리 (간략) ═══ */}
-      {data.astro_data && (
-        <div className="px-4 mb-4">
-          <div className="max-w-lg mx-auto">
-            <div className={`${theme.card} rounded-2xl p-4 border`}>
-              <h2 className={`${theme.text.accent} font-bold text-sm text-center mb-3`}>✦ 나의 출생 차트</h2>
-              <div className="grid grid-cols-3 gap-2 mb-2">
-                <div className="text-center rounded-lg p-2" style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)' }}>
-                  <div className="text-xl mb-0.5">{data.astro_data.sun_sign_symbol || '☀️'}</div>
-                  <div className={`${theme.text.accent} font-bold text-xs`}>{data.astro_data.sun_sign}</div>
-                  <div className={`${theme.text.muted} text-[9px]`}>태양</div>
-                </div>
-                <div className="text-center rounded-lg p-2" style={{ background: 'rgba(147,197,253,0.08)', border: '1px solid rgba(147,197,253,0.2)' }}>
-                  <div className="text-xl mb-0.5">🌙</div>
-                  <div className={`${theme.text.accent} font-bold text-xs`}>{data.astro_data.moon_sign}</div>
-                  <div className={`${theme.text.muted} text-[9px]`}>달</div>
-                </div>
-                <div className="text-center rounded-lg p-2" style={{ background: 'rgba(192,132,252,0.08)', border: '1px solid rgba(192,132,252,0.2)' }}>
-                  <div className="text-xl mb-0.5">⬆️</div>
-                  <div className={`${theme.text.accent} font-bold text-xs`}>{data.astro_data.rising_sign}</div>
-                  <div className={`${theme.text.muted} text-[9px]`}>상승궁</div>
-                </div>
-              </div>
-              <div className={`${theme.text.muted} text-[10px] text-center`}>이 에너지 조합으로 당신만의 달력이 만들어졌습니다</div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* TOP 날짜 */}
       {data.top_dates?.length > 0 && (
@@ -641,24 +532,6 @@ const AstroCalendarResultPage = () => {
       <div className="px-4 mb-4">
         <div className="max-w-lg mx-auto">
           <div className={`${theme.card} rounded-2xl p-4 border`}>
-            {/* 역행 바 — 이달 역행 중인 행성 */}
-            {(() => {
-              const monthLabel = `${monthNum}월`;
-              const activeRetros = (data.retrograde_periods || []).filter(r => r.months?.includes(monthLabel));
-              if (activeRetros.length === 0) return null;
-              const retroColors = { Mercury: '#93C5FD', Venus: '#F9A8D4', Mars: '#FCA5A5', Jupiter: '#86EFAC', Saturn: '#D8B4FE', Uranus: '#67E8F9', Neptune: '#C4B5FD' };
-              return (
-                <div className="mb-3 space-y-1">
-                  {activeRetros.map((r, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <div className="flex-1 h-2 rounded-full opacity-40" style={{ background: retroColors[r.planet] || '#A78BFA' }} />
-                      <span className={`${theme.text.muted} text-[10px] whitespace-nowrap`}>🔄 {r.planet_kr} 역행 중</span>
-                    </div>
-                  ))}
-                </div>
-              );
-            })()}
-
             <div className="grid grid-cols-7 gap-1 mb-2">
               {['일','월','화','수','목','금','토'].map((d, i) => (
                 <div key={d} className={`text-center text-xs font-bold py-1 ${i === 0 ? 'text-red-400' : i === 6 ? 'text-blue-400' : theme.text.muted}`}>{d}</div>
@@ -721,13 +594,13 @@ const AstroCalendarResultPage = () => {
         </div>
       </div>
 
-      {/* 개운 처방전 (체크리스트형) */}
+      {/* 개운 처방전 */}
       {data.lucky_prescription && (
         <div className="px-4 mb-4">
           <div className="max-w-lg mx-auto">
             <div className={`${theme.card} rounded-2xl p-5 border`}>
               <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>🍀 2026년 점성학 개운 처방전</h3>
-              <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="grid grid-cols-3 gap-3">
                 {Object.entries(data.lucky_prescription).filter(([k]) => !['dominant_element','lacking_element','balance_tip'].includes(k)).map(([key, value]) => {
                   const labels = { color: { l: '행운 색상', e: '🎨' }, number: { l: '행운 숫자', e: '🔢' }, direction: { l: '좋은 방위', e: '🧭' }, stone: { l: '파워스톤', e: '💎' }, day: { l: '행운의 요일', e: '📅' }, activity: { l: '개운 활동', e: '🏃' } };
                   const info = labels[key] || { l: key, e: '📌' };
@@ -741,37 +614,8 @@ const AstroCalendarResultPage = () => {
                 })}
               </div>
               {data.lucky_prescription.balance_tip && (
-                <p className={`${theme.text.secondary} text-sm text-center mb-4`}>{data.lucky_prescription.balance_tip}</p>
+                <p className={`${theme.text.secondary} text-sm text-center mt-3`}>{data.lucky_prescription.balance_tip}</p>
               )}
-
-              {/* 실천 체크리스트 */}
-              <div className="pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                <div className={`${theme.text.accent} text-sm font-bold mb-3`}>✓ 개운 실천 체크리스트</div>
-                <div className="grid grid-cols-1 gap-2">
-                  {[
-                    data.lucky_prescription.color ? `${data.lucky_prescription.color} 계열 옷이나 소품 활용하기` : null,
-                    data.lucky_prescription.stone ? `부족한 원소를 채워주는 ${data.lucky_prescription.stone} 원석 착용하기` : null,
-                    data.lucky_prescription.direction ? `책상이나 침대 방향을 ${data.lucky_prescription.direction}쪽으로 옮겨보기` : null,
-                    data.lucky_prescription.activity || null,
-                    data.lucky_prescription.number ? `중요한 결정에 숫자 ${data.lucky_prescription.number} 활용하기` : null,
-                    data.lucky_prescription.day ? `${data.lucky_prescription.day}에 중요한 일정 잡기` : null,
-                  ].filter(Boolean).map((txt, i) => (
-                    <div key={i} className="flex items-center gap-2 p-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                      <div className="w-4 h-4 rounded border flex-shrink-0" style={{ borderColor: 'rgba(129,140,248,0.5)' }} />
-                      <span className={`${theme.text.secondary} text-xs`}>{txt}</span>
-                    </div>
-                  ))}
-                  {/* 나만의 빈칸 */}
-                  <div className="flex items-center gap-2 p-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.1)' }}>
-                    <div className="w-4 h-4 rounded border flex-shrink-0" style={{ borderColor: 'rgba(129,140,248,0.5)' }} />
-                    <span className={`${theme.text.muted} text-xs italic`}>나만의 긍정 확언 적어보기 ___</span>
-                  </div>
-                  <div className="flex items-center gap-2 p-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.1)' }}>
-                    <div className="w-4 h-4 rounded border flex-shrink-0" style={{ borderColor: 'rgba(129,140,248,0.5)' }} />
-                    <span className={`${theme.text.muted} text-xs italic`}>올해 꼭 이루고 싶은 한 가지 ___</span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

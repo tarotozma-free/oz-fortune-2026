@@ -61,6 +61,24 @@ const AstroCalendarResultPage = () => {
     return (data?.months?.[yearMonth]?.dates || []).filter(d => d.date === dateStr);
   };
 
+  // 역행 일상 라벨 (백엔드에서 안 올 때 대비)
+  const RETRO_LABELS = {
+    Mercury: '소통·디지털 주의보', Venus: '인연 재회·감정 복구기',
+    Mars: '에너지 재충전 구간', Jupiter: '내실 다지기 구간',
+    Saturn: '책임 재점검 시기', Uranus: '내면 변화 탐색기', Neptune: '현실 점검 시기',
+  };
+
+  // 역행 행성별 색상
+  const RETRO_COLORS = {
+    Mercury: { bg: '#F3EFF9', text: '#7B5EA7', border: '#D4C8E8' },
+    Venus: { bg: '#FFF0F3', text: '#C27085', border: '#E8C0C8' },
+    Mars: { bg: '#FFF0EB', text: '#B8704A', border: '#E8C0A8' },
+    Jupiter: { bg: '#F0F5EB', text: '#5A8040', border: '#C0D8A8' },
+    Saturn: { bg: '#F0F2F5', text: '#5A6A7A', border: '#C0C8D4' },
+    Uranus: { bg: '#EBF5F8', text: '#3A8090', border: '#A8D0D8' },
+    Neptune: { bg: '#F0F0F8', text: '#6060A0', border: '#C0C0E0' },
+  };
+
   // 역행 기간에 해당하는지 체크
   const getRetroForMonth = (monthNum) => {
     return (data?.retrograde_periods || []).filter(r => {
@@ -185,6 +203,43 @@ const AstroCalendarResultPage = () => {
             </div>
           </div>
 
+          {/* 📖 달력 200% 활용 가이드 */}
+          <div className="rounded-2xl p-8 mb-10 print-avoid-break" style={{ background: colors.card, border: `1px solid ${colors.cardBorder}` }}>
+            <h2 className="font-serif-kr text-xl font-bold text-center mb-5" style={{ color: colors.navy }}>달력 200% 활용법</h2>
+            <p className="text-sm text-center leading-relaxed mb-6" style={{ color: colors.textSecondary }}>
+              이 달력은 전문 점성학 지식을 <strong>'오늘의 날씨'</strong>처럼 쉽게 풀이했습니다.
+            </p>
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="rounded-xl p-4" style={{ background: colors.lucky.bg }}>
+                <div className="text-lg mb-1">★</div>
+                <div className="text-sm font-bold mb-1" style={{ color: colors.navy }}>행운의 날</div>
+                <div className="text-xs" style={{ color: colors.textSecondary }}>자신감 있게 전진하세요! 새로운 시작, 중요한 결정에 최적입니다.</div>
+              </div>
+              <div className="rounded-xl p-4" style={{ background: colors.caution.bg }}>
+                <div className="text-lg mb-1">△</div>
+                <div className="text-sm font-bold mb-1" style={{ color: colors.navy }}>주의할 날</div>
+                <div className="text-xs" style={{ color: colors.textSecondary }}>한 번 더 확인하세요. 중요한 결정은 미루고, 신중하게 행동하세요.</div>
+              </div>
+              <div className="rounded-xl p-4" style={{ background: colors.turning.bg }}>
+                <div className="text-lg mb-1">◇</div>
+                <div className="text-sm font-bold mb-1" style={{ color: colors.navy }}>전환점</div>
+                <div className="text-xs" style={{ color: colors.textSecondary }}>변화의 기운이 있는 날. 유연한 마음으로 새로운 흐름을 받아들이세요.</div>
+              </div>
+              <div className="rounded-xl p-4" style={{ background: '#F3EFF9' }}>
+                <div className="text-lg mb-1">↺</div>
+                <div className="text-sm font-bold mb-1" style={{ color: colors.navy }}>재점검 구간</div>
+                <div className="text-xs" style={{ color: colors.textSecondary }}>서두르지 않아도 됩니다. 잠시 멈춰서 점검하고 다음 스텝을 준비하는 소중한 휴식기예요.</div>
+              </div>
+            </div>
+            <div className="rounded-xl p-4" style={{ background: colors.goldBg, borderLeft: `3px solid ${colors.gold}` }}>
+              <div className="text-sm" style={{ color: colors.navy }}>
+                <strong>Tip:</strong> 달력의 <span style={{ color: '#7B5EA7' }}>보라색 바</span>가 보이면 '재점검 구간'이에요.
+                이 기간에는 일이 더디게 풀릴 수 있지만, 되돌아보며 정리하기에 딱 좋은 시간입니다.
+                일기 쓰기, 계획 재정비, 오래된 인연에 안부를 묻는 것을 추천합니다.
+              </div>
+            </div>
+          </div>
+
           {/* 카테고리별 추천일 */}
           {data.category_dates && Object.keys(data.category_dates).length > 0 && (
             <div className="rounded-2xl p-8 mb-10 print-avoid-break" style={{ background: colors.card, border: `1px solid ${colors.cardBorder}` }}>
@@ -220,21 +275,25 @@ const AstroCalendarResultPage = () => {
             </div>
           )}
 
-          {/* 역행 캘린더 */}
+          {/* 재점검 및 정체 구간 */}
           {data.retrograde_periods?.length > 0 && (
             <div className="rounded-2xl p-8 mb-10 print-avoid-break" style={{ background: colors.card, border: `1px solid ${colors.cardBorder}` }}>
-              <h2 className="font-serif-kr text-xl font-bold text-center mb-6" style={{ color: colors.navy }}>역행 주의 기간</h2>
+              <h2 className="font-serif-kr text-xl font-bold text-center mb-2" style={{ color: colors.navy }}>재점검 및 정체 구간</h2>
+              <p className="text-xs text-center mb-5" style={{ color: colors.textMuted }}>서두르지 말고 확인하는 것이 유리한 시기입니다</p>
               <div className="space-y-3">
-                {data.retrograde_periods.map((r, i) => (
-                  <div key={i} className="flex items-center gap-4 p-3 rounded-xl border" style={{ borderColor: colors.cardBorder }}>
-                    <span className="font-serif-kr text-lg" style={{ color: colors.navy }}>{PLANET_SYMBOLS[r.planet] || '☍'}</span>
-                    <div className="flex-1">
-                      <span className="font-bold text-sm" style={{ color: colors.navy }}>{r.planet_kr || r.planet} 역행</span>
-                      <span className="text-xs ml-2" style={{ color: colors.textMuted }}>{r.period}</span>
+                {data.retrograde_periods.map((r, i) => {
+                  const rc = RETRO_COLORS[r.planet] || RETRO_COLORS.Mercury;
+                  return (
+                    <div key={i} className="flex items-start gap-4 p-3 rounded-xl" style={{ background: rc.bg, border: `1px solid ${rc.border}` }}>
+                      <span className="text-lg mt-0.5">↺</span>
+                      <div className="flex-1">
+                        <div className="font-bold text-sm" style={{ color: rc.text }}>{r.friendly_label || RETRO_LABELS[r.planet] || `${r.planet_kr} 정체기`}</div>
+                        <div className="text-xs mt-0.5" style={{ color: colors.textMuted }}>{r.period}</div>
+                        <div className="text-xs mt-1" style={{ color: colors.textSecondary }}>{r.impact}</div>
+                      </div>
                     </div>
-                    <span className="text-xs" style={{ color: colors.textSecondary }}>{r.impact}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -276,14 +335,20 @@ const AstroCalendarResultPage = () => {
                   </div>
                 )}
 
-                {/* 역행 바 */}
+                {/* 역행 바 — 검토가 필요한 시기 */}
                 {mRetros.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {mRetros.map((r, ri) => (
-                      <span key={ri} className="text-xs px-3 py-1 rounded-full" style={{ background: '#F0EBF8', color: '#7B68AE', border: '1px solid #D4CCE8' }}>
-                        {PLANET_SYMBOLS[r.planet] || '☍'} {r.planet_kr} 역행 중
-                      </span>
-                    ))}
+                  <div className="mb-3">
+                    <div className="text-[10px] font-bold mb-1" style={{ color: '#7B5EA7' }}>↺ 검토가 필요한 시기</div>
+                    <div className="flex flex-wrap gap-2">
+                      {mRetros.map((r, ri) => {
+                        const rc = RETRO_COLORS[r.planet] || RETRO_COLORS.Mercury;
+                        return (
+                          <span key={ri} className="text-xs px-3 py-1 rounded-full" style={{ background: rc.bg, color: rc.text, border: `1px solid ${rc.border}` }}>
+                            ↺ {r.friendly_label || RETRO_LABELS[r.planet] || `${r.planet_kr} 정체기`}
+                          </span>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
 
@@ -338,16 +403,21 @@ const AstroCalendarResultPage = () => {
                   })}
                 </div>
 
-                {/* 월별 행운 아이템 + 메모 */}
+                {/* 월별 Tip + 메모 */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="rounded-xl p-3" style={{ background: colors.goldBg, border: `1px solid ${colors.cardBorder}` }}>
-                    <div className="font-serif-kr text-xs font-bold mb-1" style={{ color: colors.gold }}>✦ 이 달의 행운 부스터</div>
-                    <div className="text-xs" style={{ color: colors.textSecondary }}>
-                      {mPlanet?.advice || '에너지 충전 활동을 추천합니다'}
+                    <div className="font-serif-kr text-xs font-bold mb-1" style={{ color: colors.gold }}>✦ 이 달의 Tip</div>
+                    <div className="text-xs leading-relaxed" style={{ color: colors.textSecondary }}>
+                      {md?.month_tip || mPlanet?.advice || '에너지 충전 활동을 추천합니다'}
                     </div>
+                    {mRetros.length > 0 && (
+                      <div className="text-xs mt-1.5" style={{ color: '#7B5EA7' }}>
+                        ↺ 정체 구간에는 일기 쓰기, 계획 점검이 좋아요
+                      </div>
+                    )}
                     {mElement?.lacking && (
                       <div className="text-xs mt-1" style={{ color: colors.gold }}>
-                        {mElement.lacking.emoji} {mElement.lacking.name} 원소 보충: {mElement.lacking.advice?.split(',')[0]}
+                        {mElement.lacking.emoji} {mElement.lacking.name} 보충: {mElement.lacking.advice?.split(',')[0]}
                       </div>
                     )}
                   </div>
@@ -443,22 +513,27 @@ const AstroCalendarResultPage = () => {
         </div>
       </div>
 
-      {/* 역행 주의 기간 */}
+      {/* 재점검 및 정체 구간 */}
       {data.retrograde_periods?.length > 0 && (
         <div className="px-4 mb-6">
           <div className="max-w-lg mx-auto">
-            <h2 className="font-serif-kr text-base font-bold text-center mb-3" style={{ color: colors.navy }}>역행 주의 기간</h2>
+            <h2 className="font-serif-kr text-base font-bold text-center mb-1" style={{ color: colors.navy }}>재점검 및 정체 구간</h2>
+            <p className="text-xs text-center mb-3" style={{ color: colors.textMuted }}>서두르지 말고 확인하는 것이 유리한 시기</p>
             <div className="rounded-2xl p-4" style={{ background: colors.card, border: `1px solid ${colors.cardBorder}` }}>
               <div className="space-y-2">
-                {data.retrograde_periods.map((r, i) => (
-                  <div key={i} className="flex items-center gap-3 p-2 rounded-lg" style={{ background: '#F8F5FF' }}>
-                    <span className="font-serif-kr text-base" style={{ color: '#7B68AE' }}>{PLANET_SYMBOLS[r.planet] || '☍'}</span>
-                    <div className="flex-1">
-                      <span className="font-bold text-sm" style={{ color: colors.navy }}>{r.planet_kr || r.planet} 역행</span>
-                      <span className="text-xs ml-2" style={{ color: colors.textMuted }}>{r.period}</span>
+                {data.retrograde_periods.map((r, i) => {
+                  const rc = RETRO_COLORS[r.planet] || RETRO_COLORS.Mercury;
+                  return (
+                    <div key={i} className="flex items-start gap-3 p-2.5 rounded-lg" style={{ background: rc.bg }}>
+                      <span className="text-base mt-0.5" style={{ color: rc.text }}>↺</span>
+                      <div className="flex-1">
+                        <span className="font-bold text-sm" style={{ color: rc.text }}>{r.friendly_label || RETRO_LABELS[r.planet] || `${r.planet_kr} 정체기`}</span>
+                        <span className="text-xs ml-2" style={{ color: colors.textMuted }}>{r.period}</span>
+                        <div className="text-xs mt-0.5" style={{ color: colors.textSecondary }}>{r.impact}</div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -582,14 +657,20 @@ const AstroCalendarResultPage = () => {
                 </div>
               )}
 
-              {/* 역행 바 (이번 달) */}
+              {/* 역행 바 (이번 달) — 검토가 필요한 시기 */}
               {getRetroForMonth(monthNum).length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {getRetroForMonth(monthNum).map((r, ri) => (
-                    <span key={ri} className="text-xs px-2.5 py-1 rounded-full" style={{ background: '#F0EBF8', color: '#7B68AE', border: '1px solid #D4CCE8' }}>
-                      {PLANET_SYMBOLS[r.planet] || '☍'} {r.planet_kr} 역행 중
-                    </span>
-                  ))}
+                <div className="mb-3">
+                  <div className="text-[10px] font-bold mb-1" style={{ color: '#7B5EA7' }}>↺ 검토가 필요한 시기</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {getRetroForMonth(monthNum).map((r, ri) => {
+                      const rc = RETRO_COLORS[r.planet] || RETRO_COLORS.Mercury;
+                      return (
+                        <span key={ri} className="text-xs px-2.5 py-1 rounded-full" style={{ background: rc.bg, color: rc.text, border: `1px solid ${rc.border}` }}>
+                          ↺ {r.friendly_label || RETRO_LABELS[r.planet] || `${r.planet_kr} 정체기`}
+                        </span>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
 

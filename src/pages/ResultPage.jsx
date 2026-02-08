@@ -55,20 +55,20 @@ const ResultPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center">
-        <div className="text-white text-xl">불러오는 중...</div>
+      <div className="min-h-screen bg-gradient-to-br from-[#FAF6F0] via-[#F5EFE6] to-[#EDE5D8] flex items-center justify-center">
+        <div className="text-[#6B5B4E] text-xl">불러오는 중...</div>
       </div>
     );
   }
 
   if (error || !orderData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center p-4">
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 w-full max-w-md border border-white/20 text-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#FAF6F0] via-[#F5EFE6] to-[#EDE5D8] flex items-center justify-center p-4">
+        <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 w-full max-w-md border border-[#E0D5C3] text-center shadow-sm">
           <div className="text-6xl mb-4">😢</div>
-          <h2 className="text-2xl font-bold text-white mb-2">결과를 찾을 수 없습니다</h2>
-          <p className="text-purple-200 mb-6">{error || '잘못된 링크이거나 결과가 아직 준비되지 않았습니다.'}</p>
-          <a href="/" className="inline-block py-3 px-6 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold">
+          <h2 className="text-2xl font-bold text-[#3D3225] mb-2">결과를 찾을 수 없습니다</h2>
+          <p className="text-[#6B5B4E] mb-6">{error || '잘못된 링크이거나 결과가 아직 준비되지 않았습니다.'}</p>
+          <a href="/" className="inline-block py-3 px-6 rounded-xl bg-gradient-to-r from-[#8B7355] to-[#6B5640] text-white font-bold">
             홈으로 돌아가기
           </a>
         </div>
@@ -78,12 +78,12 @@ const ResultPage = () => {
 
   if (orderData.status !== 'completed') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center p-4">
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 w-full max-w-md border border-white/20 text-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#FAF6F0] via-[#F5EFE6] to-[#EDE5D8] flex items-center justify-center p-4">
+        <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 w-full max-w-md border border-[#E0D5C3] text-center shadow-sm">
           <div className="text-6xl mb-4 animate-bounce">⏳</div>
-          <h2 className="text-2xl font-bold text-white mb-2">분석 진행 중입니다</h2>
-          <p className="text-purple-200 mb-6">잠시 후 다시 확인해 주세요. 완료되면 이메일로도 안내드립니다.</p>
-          <button onClick={() => window.location.reload()} className="py-3 px-6 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold">
+          <h2 className="text-2xl font-bold text-[#3D3225] mb-2">분석 진행 중입니다</h2>
+          <p className="text-[#6B5B4E] mb-6">잠시 후 다시 확인해 주세요. 완료되면 이메일로도 안내드립니다.</p>
+          <button onClick={() => window.location.reload()} className="py-3 px-6 rounded-xl bg-gradient-to-r from-[#8B7355] to-[#6B5640] text-white font-bold">
             새로고침
           </button>
         </div>

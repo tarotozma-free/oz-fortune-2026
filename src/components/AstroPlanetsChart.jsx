@@ -6,8 +6,8 @@ const AstroPlanetsChart = ({ visualData, theme }) => {
   const { big_three, planets, element_balance, dominant_planet, chart_pattern } = visualData;
   
   const elementColors = {
-    'fire': 'from-red-500 to-orange-600', 'earth': 'from-yellow-600 to-amber-700',
-    'air': 'from-cyan-400 to-blue-500', 'water': 'from-blue-500 to-indigo-600',
+    'fire': 'from-red-300 to-orange-300', 'earth': 'from-yellow-400 to-amber-400',
+    'air': 'from-cyan-300 to-blue-300', 'water': 'from-blue-300 to-indigo-300',
   };
   const elementKorean = { 'fire': '🔥 불', 'earth': '🌍 흙', 'air': '💨 공기', 'water': '💧 물' };
   const planetEmoji = {
@@ -37,7 +37,7 @@ const AstroPlanetsChart = ({ visualData, theme }) => {
                 <div className={`${theme.text.muted} text-sm`}>{data.degree}</div>
                 <div className={`${theme.text.muted} text-sm w-12`}>{data.house}H</div>
                 {data.retrograde && (
-                  <div className="text-xs px-2 py-1 rounded bg-red-500/30 text-red-300">Ⓡ</div>
+                  <div className="text-xs px-2 py-1 rounded bg-orange-100 text-orange-700">Ⓡ</div>
                 )}
               </div>
             ))}

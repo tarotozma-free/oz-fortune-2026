@@ -5,83 +5,134 @@ const SajuPillarsChart = ({ visualData, theme }) => {
   
   const { saju_pillars, ohaeng_balance, ilgan, yongshin, gyeokguk } = visualData;
   
-  const elementColors = {
-    '목': 'from-green-500 to-emerald-600', '화': 'from-red-500 to-orange-600',
-    '토': 'from-yellow-600 to-amber-700', '금': 'from-gray-300 to-slate-400',
-    '수': 'from-blue-500 to-indigo-600',
-    'wood': 'from-green-500 to-emerald-600', 'fire': 'from-red-500 to-orange-600',
-    'earth': 'from-yellow-600 to-amber-700', 'metal': 'from-gray-300 to-slate-400',
-    'water': 'from-blue-500 to-indigo-600',
+  // 달력과 동일한 은은한 오행 색상 (베이지 톤 기반)
+  const elementTextColors = {
+    '목': '#2D7D46', '화': '#C4473A', '토': '#8B7355', '금': '#6B6B6B', '수': '#2B5EA7',
+    'wood': '#2D7D46', 'fire': '#C4473A', 'earth': '#8B7355', 'metal': '#6B6B6B', 'water': '#2B5EA7',
+  };
+  
+  const elementBgColors = {
+    '목': 'bg-[#E8F5E9]', '화': 'bg-[#FFEBEE]', '토': 'bg-[#FFF8E1]', '금': 'bg-[#F5F5F5]', '수': 'bg-[#E3F2FD]',
+    'wood': 'bg-[#E8F5E9]', 'fire': 'bg-[#FFEBEE]', 'earth': 'bg-[#FFF8E1]', 'metal': 'bg-[#F5F5F5]', 'water': 'bg-[#E3F2FD]',
+  };
+
+  const elementBarColors = {
+    'wood': 'bg-[#4CAF50]', 'fire': 'bg-[#EF5350]', 'earth': 'bg-[#FFB74D]', 'metal': 'bg-[#9E9E9E]', 'water': 'bg-[#42A5F5]',
   };
   
   const ohaengKorean = { 'wood': '목', 'fire': '화', 'earth': '토', 'metal': '금', 'water': '수' };
-  const ohaengEmoji = { 'wood': '🌳', 'fire': '🔥', 'earth': '🏔️', 'metal': '⚙️', 'water': '💧' };
+  const ohaengHanja = { 'wood': '木', 'fire': '火', 'earth': '土', 'metal': '金', 'water': '水' };
+  const ohaengEmoji = { 'wood': '🌳', 'fire': '🔥', 'earth': '⛰️', 'metal': '⚙️', 'water': '💧' };
+
+  // 십신 관계 매핑
+  const sipsinMap = {
+    '비견': '비겁', '겁재': '비겁', '비겁': '비겁',
+    '식신': '식신', '상관': '상관',
+    '편재': '편재', '정재': '정재',
+    '편관': '편관', '정관': '정관',
+    '편인': '편인', '정인': '정인',
+  };
+
+  const pillarLabels = ['시주', '일주', '월주', '년주'];
+  const pillarKeys = ['hour', 'day', 'month', 'year'];
 
   return (
     <div className="space-y-6">
+      {/* 나의 사주팔자 */}
       <div className={`${theme.card} rounded-2xl p-6 border`}>
-        <h3 className={`${theme.text.accent} font-bold mb-4 text-center text-lg`}>📜 당신의 사주 팔자</h3>
+        <h3 className={`${theme.text.primary} font-bold mb-5 text-center text-lg`}>나의 사주팔자</h3>
         
-        <div className="grid grid-cols-4 gap-2 mb-6">
-          {['시주', '일주', '월주', '년주'].map((label, i) => (
-            <div key={i} className={`text-center ${theme.text.muted} text-sm py-2`}>{label}</div>
-          ))}
-          
-          {['hour', 'day', 'month', 'year'].map((pillar, i) => {
+        {/* 팔자 4주 - 달력과 동일한 스타일 */}
+        <div className="grid grid-cols-4 gap-3 mb-5">
+          {pillarKeys.map((pillar, i) => {
             const data = saju_pillars[pillar];
-            if (!data) return <div key={`c${i}`} className="text-center">-</div>;
-            const element = data.천간_element || data.천간_kr?.slice(-1);
+            const isDay = pillar === 'day';
+            const cheonganEl = data?.천간_element || data?.천간_kr?.slice(-1);
+            const jijiEl = data?.지지_element || data?.지지_kr?.slice(-1);
+            
             return (
-              <div key={`c${i}`} className={`text-center p-3 rounded-xl bg-gradient-to-br ${elementColors[element] || 'from-gray-500 to-gray-600'}`}>
-                <div className="text-2xl font-bold text-white">{data.천간}</div>
-                <div className="text-xs text-white/80">{data.천간_kr}</div>
-              </div>
-            );
-          })}
-          
-          {['hour', 'day', 'month', 'year'].map((pillar, i) => {
-            const data = saju_pillars[pillar];
-            if (!data) return <div key={`j${i}`} className="text-center">-</div>;
-            const element = data.지지_element || data.지지_kr?.slice(-1);
-            return (
-              <div key={`j${i}`} className={`text-center p-3 rounded-xl bg-gradient-to-br ${elementColors[element] || 'from-gray-500 to-gray-600'}`}>
-                <div className="text-2xl font-bold text-white">{data.지지}</div>
-                <div className="text-xs text-white/80">{data.지지_kr}</div>
+              <div key={i} className="text-center relative">
+                {/* 라벨 */}
+                <div className={`${theme.text.muted} text-xs mb-2`}>{pillarLabels[i]}</div>
+                
+                {/* 일주 뱃지 */}
+                {isDay && (
+                  <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#8B7355] text-white text-[10px] font-bold flex items-center justify-center z-10">日</div>
+                )}
+                
+                {data ? (
+                  <div className="space-y-1.5">
+                    {/* 천간 십신 */}
+                    {data.천간_sipsin && (
+                      <div className={`text-[10px] ${theme.text.muted}`}>{data.천간_sipsin}</div>
+                    )}
+                    {/* 천간 */}
+                    <div className={`${elementBgColors[cheonganEl] || 'bg-gray-100'} rounded-lg py-3 border border-black/5`}>
+                      <div className="text-2xl font-bold" style={{ color: elementTextColors[cheonganEl] || '#3D3225' }}>
+                        {data.천간}
+                      </div>
+                      {data.천간_kr && (
+                        <div className={`text-[10px] ${theme.text.muted} mt-0.5`}>{data.천간_kr}</div>
+                      )}
+                    </div>
+                    {/* 지지 */}
+                    <div className={`${elementBgColors[jijiEl] || 'bg-gray-100'} rounded-lg py-3 border border-black/5`}>
+                      <div className="text-2xl font-bold" style={{ color: elementTextColors[jijiEl] || '#3D3225' }}>
+                        {data.지지}
+                      </div>
+                      {data.지지_kr && (
+                        <div className={`text-[10px] ${theme.text.muted} mt-0.5`}>{data.지지_kr}</div>
+                      )}
+                    </div>
+                    {/* 지지 십신 */}
+                    {data.지지_sipsin && (
+                      <div className={`text-[10px] ${theme.text.muted}`}>{data.지지_sipsin}</div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-1.5">
+                    <div className="bg-gray-50 rounded-lg py-3 border border-black/5">
+                      <div className={`text-2xl ${theme.text.muted}`}>-</div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg py-3 border border-black/5">
+                      <div className={`text-2xl ${theme.text.muted}`}>-</div>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
         
-        <div className="grid grid-cols-3 gap-3">
+        {/* 일간·용신·격국 - 달력 스타일 인라인 */}
+        <div className="flex items-center justify-center gap-4 flex-wrap">
           {ilgan && (
-            <div className={`${theme.card} rounded-xl p-3 border text-center`}>
-              <div className="text-2xl mb-1">{ilgan.char}</div>
-              <div className={`${theme.text.accent} font-bold text-sm`}>일간</div>
-              <div className={`${theme.text.primary} text-sm`}>{ilgan.name}</div>
-              <div className={`${theme.text.muted} text-xs mt-1`}>{ilgan.desc}</div>
+            <div className="flex items-center gap-1.5">
+              <span className={`${theme.text.accent} font-bold text-sm`}>{ilgan.char}</span>
+              <span className={`${theme.text.secondary} text-sm`}>{ilgan.name}</span>
             </div>
           )}
           {yongshin && (
-            <div className={`${theme.card} rounded-xl p-3 border text-center`}>
-              <div className="text-2xl mb-1">{yongshin.char}</div>
-              <div className={`${theme.text.accent} font-bold text-sm`}>용신</div>
-              <div className={`${theme.text.primary} text-sm`}>{yongshin.name}</div>
-              <div className={`${theme.text.muted} text-xs mt-1`}>{yongshin.desc}</div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm">💧</span>
+              <span className={`${theme.text.secondary} text-sm`}>
+                {ohaengHanja[yongshin.element] || ''}{ohaengKorean[yongshin.element] || ''} 가 나를 도와요
+              </span>
             </div>
           )}
           {gyeokguk && (
-            <div className={`${theme.card} rounded-xl p-3 border text-center`}>
-              <div className="text-2xl mb-1">⚖️</div>
-              <div className={`${theme.text.accent} font-bold text-sm`}>격국</div>
-              <div className={`${theme.text.primary} text-sm`}>{gyeokguk.name || gyeokguk}</div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm">⚖️</span>
+              <span className={`${theme.text.secondary} text-sm`}>{gyeokguk.name || gyeokguk}</span>
             </div>
           )}
         </div>
       </div>
       
+      {/* 오행 밸런스 - 달력 스타일 */}
       {ohaeng_balance && (
         <div className={`${theme.card} rounded-2xl p-6 border`}>
-          <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>⚖️ 오행 밸런스</h3>
+          <h3 className={`${theme.text.primary} font-bold mb-4 text-center`}>⚖️ 오행 밸런스</h3>
           <div className="space-y-3">
             {Object.entries(ohaeng_balance).map(([element, data]) => {
               const percent = data.percent || 0;
@@ -96,14 +147,14 @@ const SajuPillarsChart = ({ visualData, theme }) => {
                     <div className={`${theme.text.primary} text-xs`}>{korean}</div>
                   </div>
                   <div className="flex-1">
-                    <div className="h-4 bg-black/30 rounded-full overflow-hidden">
-                      <div className={`h-full bg-gradient-to-r ${elementColors[element]} transition-all duration-500 rounded-full`}
-                        style={{ width: `${percent}%` }} />
+                    <div className="h-3 bg-black/5 rounded-full overflow-hidden">
+                      <div className={`h-full ${elementBarColors[element] || 'bg-gray-400'} transition-all duration-500 rounded-full`}
+                        style={{ width: `${Math.max(percent, 3)}%`, opacity: 0.7 }} />
                     </div>
                   </div>
-                  <div className={`w-16 text-right ${theme.text.primary} text-sm font-bold`}>{percent}%</div>
+                  <div className={`w-12 text-right ${theme.text.primary} text-sm font-bold`}>{percent}%</div>
                   {status && status !== '적정' && (
-                    <div className={`text-xs px-2 py-1 rounded ${status === '부족' ? 'bg-red-500/30 text-red-300' : 'bg-yellow-500/30 text-yellow-300'}`}>
+                    <div className={`text-[10px] px-2 py-0.5 rounded-full ${status === '부족' ? 'bg-[#FFF3E0] text-[#E65100]' : 'bg-[#FFF8E1] text-[#F57F17]'}`}>
                       {status}
                     </div>
                   )}

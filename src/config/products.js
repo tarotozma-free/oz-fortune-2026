@@ -7,72 +7,53 @@
 // ========================================
 
 // ── 사주 공통 테마 ──
-const SAJU_THEME = {
-  bg: 'from-[#FDFBF7] via-[#F7F2EA] to-[#F0EBE0]',
-  card: 'bg-white border-stone-200 shadow-sm',
-  accent: 'stone',
-  button: 'from-[#2C3E6B] to-[#1A2744] hover:from-[#3A4F80] hover:to-[#2C3E6B] text-white',
-  text: {
-    primary: 'text-stone-800',
-    secondary: 'text-stone-600',
-    muted: 'text-stone-400',
-    accent: 'text-[#2C3E6B]',
-  },
-  input: 'bg-white border-stone-300 text-stone-800 placeholder-stone-400 focus:ring-[#2C3E6B] focus:border-[#2C3E6B]',
-  select: 'bg-white',
-  score: 'from-[#B8860B] to-[#DAA520]',
-};
+// ══════════════════════════════════════
+// 달력 테마 (기준 - 절대 수정 금지!)
+// ══════════════════════════════════════
 
-// ── 점성학 공통 테마 ──
-const ASTRO_THEME = {
-  bg: 'from-[#FDFBF7] via-[#F5F0F8] to-[#EDE8F5]',
-  card: 'bg-white border-purple-100 shadow-sm',
-  accent: 'purple',
-  button: 'from-[#5B21B6] to-[#7C3AED] hover:from-[#6D28D9] hover:to-[#8B5CF6] text-white',
-  text: {
-    primary: 'text-stone-800',
-    secondary: 'text-stone-600',
-    muted: 'text-stone-400',
-    accent: 'text-[#5B21B6]',
-  },
-  input: 'bg-white border-purple-200 text-stone-800 placeholder-stone-400 focus:ring-purple-500 focus:border-purple-500',
-  select: 'bg-white',
-  score: 'from-[#7C3AED] to-[#A855F7]',
-};
-
-// ── 달력 사주 테마 ──
+// ── 사주 달력 테마 (기준) ──
 const CALENDAR_THEME = {
-  bg: 'from-[#FDFBF7] via-[#F0F7F4] to-[#E8F5EC]',
-  card: 'bg-white border-emerald-100 shadow-sm',
-  accent: 'emerald',
-  button: 'from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white',
+  bg: 'from-[#FAF6F0] via-[#F5EFE6] to-[#EDE5D8]',
+  card: 'bg-white/80 border-[#E0D5C3] shadow-sm',
+  accent: 'amber',
+  button: 'from-[#8B7355] to-[#6B5640] hover:from-[#9B8365] hover:to-[#7B6650] text-white',
   text: {
-    primary: 'text-stone-800',
-    secondary: 'text-stone-600',
-    muted: 'text-stone-400',
-    accent: 'text-emerald-700',
+    primary: 'text-[#3D3225]',
+    secondary: 'text-[#6B5B4E]',
+    muted: 'text-[#9B8B7E]',
+    accent: 'text-[#8B7355]',
   },
-  input: 'bg-white border-emerald-200 text-stone-800 placeholder-stone-400 focus:ring-emerald-500 focus:border-emerald-500',
-  select: 'bg-white',
-  score: 'from-emerald-500 to-teal-500',
+  input: 'bg-white/80 border-[#D5C9B8] text-[#3D3225] placeholder-[#9B8B7E] focus:ring-[#8B7355] focus:border-[#8B7355]',
+  select: 'bg-white/80',
+  score: 'from-[#8B7355] to-[#B8963E]',
 };
 
-// ── 달력 점성학 테마 ──
+// ── 점성학 달력 테마 (기준) ──
 const ASTRO_CALENDAR_THEME = {
-  bg: 'from-[#FDFBF7] via-[#F0EDF8] to-[#E8E0F5]',
-  card: 'bg-white border-indigo-100 shadow-sm',
-  accent: 'indigo',
-  button: 'from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white',
+  bg: 'from-[#F8F5FA] via-[#F0ECF5] to-[#E8E0F0]',
+  card: 'bg-white/80 border-[#D5CCE0] shadow-sm',
+  accent: 'purple',
+  button: 'from-[#6B5B8A] to-[#524470] hover:from-[#7B6B9A] hover:to-[#625480] text-white',
   text: {
-    primary: 'text-stone-800',
-    secondary: 'text-stone-600',
-    muted: 'text-stone-400',
-    accent: 'text-indigo-700',
+    primary: 'text-[#2D2540]',
+    secondary: 'text-[#5B4E6B]',
+    muted: 'text-[#8B7E9B]',
+    accent: 'text-[#6B5B8A]',
   },
-  input: 'bg-white border-indigo-200 text-stone-800 placeholder-stone-400 focus:ring-indigo-500 focus:border-indigo-500',
-  select: 'bg-white',
-  score: 'from-indigo-500 to-purple-500',
+  input: 'bg-white/80 border-[#D5CCE0] text-[#2D2540] placeholder-[#8B7E9B] focus:ring-[#6B5B8A] focus:border-[#6B5B8A]',
+  select: 'bg-white/80',
+  score: 'from-[#6B5B8A] to-[#8B6BAA]',
 };
+
+// ══════════════════════════════════════
+// 상품 테마 (달력 기준으로 통일)
+// ══════════════════════════════════════
+
+// ── 사주 공통 테마 (= 사주 달력과 동일) ──
+const SAJU_THEME = { ...CALENDAR_THEME };
+
+// ── 점성학 공통 테마 (= 점성학 달력과 동일) ──
+const ASTRO_THEME = { ...ASTRO_CALENDAR_THEME };
 
 
 // ========================================
@@ -117,10 +98,7 @@ const PRODUCTS = {
     title: '평생 재물운 대분석',
     subtitle: '돈의 흐름을 읽는 프리미엄 사주 분석',
     buttonText: '내 재물운 분석받기',
-    theme: {
-      ...SAJU_THEME,
-      score: 'from-[#B8860B] to-[#DAA520]',
-    },
+    theme: SAJU_THEME,
     statusMessages: [
       '💰 재물 원국을 분석하고 있습니다...',
       '📊 평생 재물 흐름을 계산하고 있습니다...',
@@ -154,12 +132,7 @@ const PRODUCTS = {
     title: '평생 연애·결혼운 대분석',
     subtitle: '사랑의 흐름을 읽는 프리미엄 사주 분석',
     buttonText: '내 연애운 분석받기',
-    theme: {
-      ...SAJU_THEME,
-      accent: 'rose',
-      text: { ...SAJU_THEME.text, accent: 'text-rose-700' },
-      score: 'from-rose-500 to-pink-500',
-    },
+    theme: SAJU_THEME,
     statusMessages: [
       '💕 연애 원국을 분석하고 있습니다...',
       '💑 평생 인연 흐름을 계산하고 있습니다...',
@@ -193,12 +166,7 @@ const PRODUCTS = {
     title: '평생 취업·합격운 대분석',
     subtitle: '커리어의 흐름을 읽는 프리미엄 사주 분석',
     buttonText: '내 합격운 분석받기',
-    theme: {
-      ...SAJU_THEME,
-      accent: 'blue',
-      text: { ...SAJU_THEME.text, accent: 'text-blue-800' },
-      score: 'from-blue-500 to-indigo-500',
-    },
+    theme: SAJU_THEME,
     statusMessages: [
       '🎯 커리어 원국을 분석하고 있습니다...',
       '📊 평생 직업 흐름을 계산하고 있습니다...',
@@ -233,10 +201,7 @@ const PRODUCTS = {
     title: '나의 평생 사주 대풀이',
     subtitle: '20가지 주제로 완전 분석하는 프리미엄 사주',
     buttonText: '내 사주 완전 분석받기',
-    theme: {
-      ...SAJU_THEME,
-      score: 'from-[#2C3E6B] to-[#B8860B]',
-    },
+    theme: SAJU_THEME,
     statusMessages: [
       '📜 사주 원국을 해석하고 있습니다...',
       '⚖️ 오행 밸런스를 분석하고 있습니다...',
@@ -317,10 +282,7 @@ const PRODUCTS = {
     subtitle: '별자리로 보는 평생 재물운 분석',
     buttonText: '내 재물운 분석받기',
     isAstro: true,
-    theme: {
-      ...ASTRO_THEME,
-      score: 'from-amber-500 to-yellow-500',
-    },
+    theme: ASTRO_THEME,
     statusMessages: [
       '💰 네이탈 차트를 분석하고 있습니다...',
       '🏦 2하우스 재물궁을 확인하고 있습니다...',
@@ -356,11 +318,7 @@ const PRODUCTS = {
     subtitle: '별자리로 보는 평생 연애·결혼운 분석',
     buttonText: '내 연애운 분석받기',
     isAstro: true,
-    theme: {
-      ...ASTRO_THEME,
-      text: { ...ASTRO_THEME.text, accent: 'text-pink-600' },
-      score: 'from-pink-500 to-rose-500',
-    },
+    theme: ASTRO_THEME,
     statusMessages: [
       '💕 네이탈 차트를 분석하고 있습니다...',
       '💑 금성 배치를 확인하고 있습니다...',
@@ -397,11 +355,7 @@ const PRODUCTS = {
     subtitle: '별자리로 보는 평생 커리어·합격운 분석',
     buttonText: '내 합격운 분석받기',
     isAstro: true,
-    theme: {
-      ...ASTRO_THEME,
-      text: { ...ASTRO_THEME.text, accent: 'text-blue-700' },
-      score: 'from-blue-500 to-indigo-500',
-    },
+    theme: ASTRO_THEME,
     statusMessages: [
       '🎯 네이탈 차트를 분석하고 있습니다...',
       '📊 10하우스 커리어궁을 확인하고 있습니다...',

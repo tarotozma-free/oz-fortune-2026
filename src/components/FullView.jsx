@@ -147,15 +147,15 @@ const FullView = ({ config, theme, formData, result, onBack, displayName }) => {
             <div className={`${theme.text.muted} print:text-gray-500 text-sm`}>종합 점수</div>
           </div>
           {ai.peak_period && (
-            <div className="bg-emerald-500/20 print:bg-green-50 rounded-xl p-4 border border-emerald-400/40 print:border-green-300 text-center">
-              <div className="text-emerald-300 print:text-green-600 font-bold text-lg">{ai.peak_period?.age || ai.peak_period}</div>
-              <div className="text-emerald-200 print:text-green-500 text-sm">🌟 전성기</div>
+            <div className={`${theme.card} rounded-xl p-4 border text-center`}>
+              <div className={`${theme.text.primary} font-bold text-lg`}>{ai.peak_period?.age || ai.peak_period}</div>
+              <div className={`${theme.text.accent} text-sm`}>🌟 전성기</div>
             </div>
           )}
           {ai.danger_period && (
-            <div className="bg-rose-500/20 print:bg-red-50 rounded-xl p-4 border border-rose-400/40 print:border-red-300 text-center">
-              <div className="text-rose-300 print:text-red-600 font-bold text-lg">{ai.danger_period?.age || ai.danger_period}</div>
-              <div className="text-rose-200 print:text-red-500 text-sm">⚠️ 주의 시기</div>
+            <div className={`${theme.card} rounded-xl p-4 border text-center`}>
+              <div className={`${theme.text.primary} font-bold text-lg`}>{ai.danger_period?.age || ai.danger_period}</div>
+              <div className={`${theme.text.muted} text-sm`}>⚠️ 주의 시기</div>
             </div>
           )}
         </div>
@@ -205,7 +205,7 @@ const FullView = ({ config, theme, formData, result, onBack, displayName }) => {
             <div className="flex justify-between mt-1 px-2 overflow-x-auto">
               {tenYearFortune.map((item, i) => (
                 <div key={i} className="text-center flex-1 min-w-0">
-                  <span className={`text-xs truncate block ${(item.score || 50) >= 80 ? 'text-green-400 font-bold' : (item.score || 50) <= 40 ? 'text-red-400' : theme.text.muted} print:text-gray-600`}>
+                  <span className={`text-xs truncate block ${(item.score || 50) >= 80 ? `${theme.text.accent} font-bold` : (item.score || 50) <= 40 ? theme.text.muted : theme.text.secondary} print:text-gray-600`}>
                     {item.keyword}
                   </span>
                 </div>
@@ -220,14 +220,14 @@ const FullView = ({ config, theme, formData, result, onBack, displayName }) => {
             <h2 className={`text-lg font-bold ${theme.text.primary} print:text-gray-800 mb-4 text-center`}>🗺️ 나의 인생 로드맵</h2>
             <div className="relative">
               <div className="h-3 rounded-full bg-gray-700/30 print:bg-gray-200 relative overflow-hidden">
-                <div className="absolute h-full rounded-full bg-gradient-to-r from-red-400/60 via-amber-400/60 to-green-400/60" style={{ width: '100%' }}></div>
+                <div className={`absolute h-full rounded-full bg-gradient-to-r ${theme.score} opacity-40`} style={{ width: '100%' }}></div>
                 <div className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full border-2 border-blue-400 shadow-lg" style={{ left: '40%' }}></div>
               </div>
               <div className="flex justify-between mt-4 text-center">
                 {[
-                  ai.danger_period ? { label: '⚠️ 주의 구간', value: ai.danger_period?.age || ai.danger_period, color: 'text-red-400 print:text-red-600', bg: 'bg-red-500/10 print:bg-red-50 border-red-500/20 print:border-red-200' } : null,
-                  { label: '📍 현재', value: `${new Date().getFullYear()}년`, color: 'text-blue-400 print:text-gray-700', bg: 'bg-blue-500/10 print:bg-blue-50 border-blue-500/20 print:border-blue-200' },
-                  ai.peak_period ? { label: '🌟 전성기', value: ai.peak_period?.age || ai.peak_period, color: 'text-green-400 print:text-green-600', bg: 'bg-green-500/10 print:bg-green-50 border-green-500/20 print:border-green-200' } : null,
+                  ai.danger_period ? { label: '⚠️ 주의 구간', value: ai.danger_period?.age || ai.danger_period, color: `${theme.text.muted}`, bg: `${theme.card}` } : null,
+                  { label: '📍 현재', value: `${new Date().getFullYear()}년`, color: `${theme.text.primary} font-bold`, bg: `${theme.card}` },
+                  ai.peak_period ? { label: '🌟 전성기', value: ai.peak_period?.age || ai.peak_period, color: `${theme.text.accent}`, bg: `${theme.card}` } : null,
                 ].filter(Boolean).map((m, i) => (
                   <div key={i} className={`${m.bg} rounded-xl px-4 py-3 border flex-1 mx-1`}>
                     <div className={`${m.color} font-bold text-sm`}>{m.label}</div>

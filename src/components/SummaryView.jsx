@@ -147,17 +147,17 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
         {/* 전성기/주의기 */}
         {config.showPeakDanger && (
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 rounded-xl p-4 border border-green-500/30">
-              <div className="text-green-400 text-sm mb-1">
+            <div className={`${theme.card} rounded-xl p-4 border`}>
+              <div className={`${theme.text.accent} text-sm mb-1`}>
                 {isLove ? '💕 연애 전성기' : isCareer ? '🎯 커리어 전성기' : isFull ? '🌟 인생 전성기' : '🚀 전성기'}
               </div>
-              <div className="text-white font-bold text-lg">{ai.peak_period?.age || ai.peak_period || '45-55세'}</div>
-              <div className="text-green-300/80 text-xs mt-1">"{ai.peak_period?.hook || ai.peak_hook}"</div>
+              <div className={`${theme.text.primary} font-bold text-lg`}>{ai.peak_period?.age || ai.peak_period || '45-55세'}</div>
+              <div className={`${theme.text.muted} text-xs mt-1`}>"{ai.peak_period?.hook || ai.peak_hook}"</div>
             </div>
-            <div className="bg-gradient-to-br from-red-900/40 to-rose-900/40 rounded-xl p-4 border border-red-500/30">
-              <div className="text-red-400 text-sm mb-1">⚠️ 주의 시기</div>
-              <div className="text-white font-bold text-lg">{ai.danger_period?.age || ai.danger_period || '38-42세'}</div>
-              <div className="text-red-300/80 text-xs mt-1">"{ai.danger_period?.hook || ai.danger_hook}"</div>
+            <div className={`${theme.card} rounded-xl p-4 border`}>
+              <div className={`${theme.text.muted} text-sm mb-1`}>⚠️ 주의 시기</div>
+              <div className={`${theme.text.primary} font-bold text-lg`}>{ai.danger_period?.age || ai.danger_period || '38-42세'}</div>
+              <div className={`${theme.text.muted} text-xs mt-1`}>"{ai.danger_period?.hook || ai.danger_hook}"</div>
             </div>
           </div>
         )}
@@ -166,14 +166,14 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
         {(ai.peak_period || ai.danger_period) && (
           <div className={`${theme.card} rounded-xl p-4 mb-6 border`}>
             <div className="relative">
-              <div className="h-1.5 rounded-full bg-gray-700 relative overflow-hidden">
-                <div className="absolute left-0 h-full rounded-full bg-gradient-to-r from-amber-400 via-green-400 to-blue-400" style={{ width: '100%', opacity: 0.5 }}></div>
+              <div className={`h-1.5 rounded-full bg-black/10 relative overflow-hidden`}>
+                <div className={`absolute left-0 h-full rounded-full bg-gradient-to-r ${theme.score} opacity-40`} style={{ width: '100%' }}></div>
               </div>
               <div className="flex justify-between mt-2 text-center">
                 {[
-                  ai.danger_period ? { label: '⚠️', value: ai.danger_period?.age || ai.danger_period, color: 'text-red-400' } : null,
+                  ai.danger_period ? { label: '⚠️', value: ai.danger_period?.age || ai.danger_period, color: theme.text.muted } : null,
                   { label: '📍 현재', value: `${new Date().getFullYear()}년`, color: theme.text.accent },
-                  ai.peak_period ? { label: '🌟', value: ai.peak_period?.age || ai.peak_period, color: 'text-green-400' } : null,
+                  ai.peak_period ? { label: '🌟', value: ai.peak_period?.age || ai.peak_period, color: theme.text.accent } : null,
                 ].filter(Boolean).map((m, i) => (
                   <div key={i} className="flex-1">
                     <div className={`${m.color} font-bold text-xs`}>{m.label}</div>
@@ -187,10 +187,10 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
 
         {/* 결혼 타이밍 (연애운 전용) */}
         {isLove && ai.marriage_timing && (
-          <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 rounded-xl p-4 mb-6 border border-purple-500/30">
-            <div className="text-purple-400 text-sm mb-1">💍 결혼 적기</div>
-            <div className="text-white font-bold text-lg">{ai.marriage_timing}</div>
-            <div className="text-purple-300/80 text-xs mt-1">"{ai.marriage_hook}"</div>
+          <div className={`${theme.card} rounded-xl p-4 mb-6 border`}>
+            <div className={`${theme.text.accent} text-sm mb-1`}>💍 결혼 적기</div>
+            <div className={`${theme.text.primary} font-bold text-lg`}>{ai.marriage_timing}</div>
+            <div className={`${theme.text.muted} text-xs mt-1`}>"{ai.marriage_hook}"</div>
           </div>
         )}
 
@@ -221,14 +221,14 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
         {/* 연애운: 궁합 별자리 */}
         {config.showIdealPartner && ai.soulmate_signs && (
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-pink-900/40 to-rose-900/40 rounded-xl p-4 border border-pink-500/30">
-              <div className="text-pink-400 text-sm mb-2">💕 베스트 궁합</div>
-              <div className="text-white font-bold">{ai.soulmate_signs?.join(', ') || ai.soulmate_signs}</div>
+            <div className={`${theme.card} rounded-xl p-4 border`}>
+              <div className={`${theme.text.accent} text-sm mb-2`}>💕 베스트 궁합</div>
+              <div className={`${theme.text.primary} font-bold`}>{ai.soulmate_signs?.join(', ') || ai.soulmate_signs}</div>
             </div>
             {ai.avoid_signs && (
-              <div className="bg-gradient-to-br from-gray-900/40 to-slate-900/40 rounded-xl p-4 border border-gray-500/30">
-                <div className="text-gray-400 text-sm mb-2">⚠️ 피할 궁합</div>
-                <div className="text-white font-bold">{ai.avoid_signs?.join(', ') || ai.avoid_signs}</div>
+              <div className={`${theme.card} rounded-xl p-4 border`}>
+                <div className={`${theme.text.muted} text-sm mb-2`}>⚠️ 피할 궁합</div>
+                <div className={`${theme.text.primary} font-bold`}>{ai.avoid_signs?.join(', ') || ai.avoid_signs}</div>
               </div>
             )}
           </div>
@@ -236,10 +236,10 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
 
         {/* 시험 타이밍 (커리어 전용) */}
         {isCareer && ai.exam_timing && (
-          <div className="bg-gradient-to-br from-indigo-900/40 to-blue-900/40 rounded-xl p-4 mb-6 border border-indigo-500/30">
-            <div className="text-indigo-400 text-sm mb-1">📝 시험 합격 타이밍</div>
-            <div className="text-white font-bold text-lg">{ai.exam_timing}</div>
-            <div className="text-indigo-300/80 text-xs mt-1">"{ai.exam_hook}"</div>
+          <div className={`${theme.card} rounded-xl p-4 mb-6 border`}>
+            <div className={`${theme.text.accent} text-sm mb-1`}>📝 시험 합격 타이밍</div>
+            <div className={`${theme.text.primary} font-bold text-lg`}>{ai.exam_timing}</div>
+            <div className={`${theme.text.muted} text-xs mt-1`}>"{ai.exam_hook}"</div>
           </div>
         )}
 
@@ -368,7 +368,7 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
         {/* 풀버전 보기 버튼 */}
         {onShowFull && (
           <button onClick={onShowFull}
-            className={`block w-full py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-center transition-all mb-4 hover:from-emerald-600 hover:to-teal-700`}
+            className={`block w-full py-4 rounded-xl bg-gradient-to-r ${theme.button} font-bold text-center transition-all mb-4`}
           >
             📖 풀버전 보기
           </button>

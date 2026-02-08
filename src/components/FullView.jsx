@@ -147,15 +147,15 @@ const FullView = ({ config, theme, formData, result, onBack, displayName }) => {
             <div className={`${theme.text.muted} print:text-gray-500 text-sm`}>종합 점수</div>
           </div>
           {ai.peak_period && (
-            <div className="bg-green-900/30 print:bg-green-50 rounded-xl p-4 border border-green-500/30 print:border-green-300 text-center">
-              <div className="text-green-400 print:text-green-600 font-bold">{ai.peak_period?.age || ai.peak_period}</div>
-              <div className="text-green-300/80 print:text-green-500 text-sm">전성기</div>
+            <div className="bg-emerald-500/20 print:bg-green-50 rounded-xl p-4 border border-emerald-400/40 print:border-green-300 text-center">
+              <div className="text-emerald-300 print:text-green-600 font-bold text-lg">{ai.peak_period?.age || ai.peak_period}</div>
+              <div className="text-emerald-200 print:text-green-500 text-sm">🌟 전성기</div>
             </div>
           )}
           {ai.danger_period && (
-            <div className="bg-red-900/30 print:bg-red-50 rounded-xl p-4 border border-red-500/30 print:border-red-300 text-center">
-              <div className="text-red-400 print:text-red-600 font-bold">{ai.danger_period?.age || ai.danger_period}</div>
-              <div className="text-red-300/80 print:text-red-500 text-sm">주의 시기</div>
+            <div className="bg-rose-500/20 print:bg-red-50 rounded-xl p-4 border border-rose-400/40 print:border-red-300 text-center">
+              <div className="text-rose-300 print:text-red-600 font-bold text-lg">{ai.danger_period?.age || ai.danger_period}</div>
+              <div className="text-rose-200 print:text-red-500 text-sm">⚠️ 주의 시기</div>
             </div>
           )}
         </div>

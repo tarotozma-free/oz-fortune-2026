@@ -21,46 +21,6 @@ const AstroPlanetsChart = ({ visualData, theme }) => {
 
   return (
     <div className="space-y-6">
-      {big_three && (
-        <div className={`${theme.card} rounded-2xl p-6 border`}>
-          <h3 className={`${theme.text.accent} font-bold mb-4 text-center text-lg`}>🌟 당신의 빅 쓰리</h3>
-          <div className="grid grid-cols-3 gap-4">
-            {big_three.sun && (
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center mb-2 shadow-lg shadow-yellow-500/30">
-                  <span className="text-3xl">{big_three.sun.symbol || '☉'}</span>
-                </div>
-                <div className={`${theme.text.accent} font-bold`}>태양</div>
-                <div className={`${theme.text.primary} text-lg font-bold`}>{big_three.sun.sign}</div>
-                {big_three.sun.degree && <div className={`${theme.text.muted} text-xs`}>{big_three.sun.degree}</div>}
-                {big_three.sun.house && <div className={`${theme.text.muted} text-xs`}>{big_three.sun.house}하우스</div>}
-              </div>
-            )}
-            {big_three.moon && (
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-slate-300 to-slate-500 flex items-center justify-center mb-2 shadow-lg shadow-slate-500/30">
-                  <span className="text-3xl">{big_three.moon.symbol || '☽'}</span>
-                </div>
-                <div className={`${theme.text.accent} font-bold`}>달</div>
-                <div className={`${theme.text.primary} text-lg font-bold`}>{big_three.moon.sign}</div>
-                {big_three.moon.degree && <div className={`${theme.text.muted} text-xs`}>{big_three.moon.degree}</div>}
-                {big_three.moon.house && <div className={`${theme.text.muted} text-xs`}>{big_three.moon.house}하우스</div>}
-              </div>
-            )}
-            {big_three.rising && (
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-purple-400 to-indigo-600 flex items-center justify-center mb-2 shadow-lg shadow-purple-500/30">
-                  <span className="text-3xl">{big_three.rising.symbol || '⬆'}</span>
-                </div>
-                <div className={`${theme.text.accent} font-bold`}>상승궁</div>
-                <div className={`${theme.text.primary} text-lg font-bold`}>{big_three.rising.sign}</div>
-                {big_three.rising.degree && <div className={`${theme.text.muted} text-xs`}>{big_three.rising.degree}</div>}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-      
       {planets && Object.keys(planets).length > 0 && (
         <div className={`${theme.card} rounded-2xl p-6 border`}>
           <h3 className={`${theme.text.accent} font-bold mb-4 text-center`}>💫 행성 배치</h3>

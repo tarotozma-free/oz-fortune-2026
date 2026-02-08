@@ -83,7 +83,7 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
           </div>
         )}
 
-        {/* ✦ 빅쓰리 (점성학 전 상품 공통) */}
+        {/* ✦ 빅쓰리 (점성학) */}
         {config.isAstro && (ai.sun_sign || ai.visual_data?.sun_sign) && (
           <div className={`${theme.card} rounded-2xl p-5 mb-6 border`}>
             <div className="grid grid-cols-3 gap-3 text-center">
@@ -195,30 +195,6 @@ const SummaryView = ({ config, theme, formData, result, onBack, onShowFull, disp
         )}
 
         {/* 점성학 전용: 태양/달/상승궁 표시 */}
-        {config.showSunSign && ai.sun_sign && (
-          <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className={`${theme.card} rounded-xl p-4 border text-center`}>
-              <div className="text-3xl mb-1">{ai.sun_sign_symbol || '☀️'}</div>
-              <div className={`${theme.text.accent} font-bold text-sm`}>태양</div>
-              <div className={`${theme.text.primary} text-sm`}>{ai.sun_sign}</div>
-            </div>
-            {ai.moon_sign && (
-              <div className={`${theme.card} rounded-xl p-4 border text-center`}>
-                <div className="text-3xl mb-1">🌙</div>
-                <div className={`${theme.text.accent} font-bold text-sm`}>달</div>
-                <div className={`${theme.text.primary} text-sm`}>{ai.moon_sign}</div>
-              </div>
-            )}
-            {ai.rising_sign && (
-              <div className={`${theme.card} rounded-xl p-4 border text-center`}>
-                <div className="text-3xl mb-1">⬆️</div>
-                <div className={`${theme.text.accent} font-bold text-sm`}>상승궁</div>
-                <div className={`${theme.text.primary} text-sm`}>{ai.rising_sign}</div>
-              </div>
-            )}
-          </div>
-        )}
-
         {/* 연애운 전용: 이상형 정보 */}
         {config.showIdealPartner && ai.ideal_partner_look && (
           <div className={`${theme.card} rounded-xl p-4 mb-6 border`}>

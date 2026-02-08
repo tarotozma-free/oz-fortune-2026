@@ -106,8 +106,8 @@ const PRODUCTS = {
       { key: 'social', label: '사회', emoji: '🤝' },
     ],
     prescriptionTitle: '🍀 개운 처방전',
-    prescriptionFields: ['color', 'number', 'direction', 'item'],
-    prescriptionLabels: { color: '색상', number: '숫자', direction: '방향', item: '물건' },
+    prescriptionFields: ['color', 'item', 'action', 'routine', 'season_tip', 'avoid'],
+    prescriptionLabels: { color: '행운 색상·소재', item: '개운 아이템', action: '운 높이는 행동', routine: '매일 실천 루틴', season_tip: '올해 특별 처방', avoid: '주의할 것' },
   },
   
   wealth: {
@@ -135,10 +135,10 @@ const PRODUCTS = {
       { key: 'windfall', label: '횡재', emoji: '🎰' },
     ],
     prescriptionTitle: '💎 재물 처방전',
-    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionFields: ['wallet_color', 'invest_timing', 'money_item', 'saving_method', 'side_income', 'money_avoid'],
     prescriptionLabels: { 
-      color: '지갑 색상', number: '행운의 숫자', direction: '돈이 오는 방향', 
-      item: '재물 아이템', action: '투자 타이밍', avoid: '피해야 할 것'
+      wallet_color: '지갑·통장 색상', invest_timing: '투자 적기·방법', money_item: '재물 부적·아이템', 
+      saving_method: '맞춤 저축 전략', side_income: '부업·부수입 적성', money_avoid: '돈 잃기 쉬운 상황'
     },
     showWealthGrade: true,
     showMoneyType: true,
@@ -173,10 +173,10 @@ const PRODUCTS = {
       { key: 'destiny', label: '인연', emoji: '🔗' },
     ],
     prescriptionTitle: '💕 연애 처방전',
-    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionFields: ['charm_color', 'ideal_type', 'date_spot', 'love_action', 'confession_timing', 'love_avoid'],
     prescriptionLabels: { 
-      color: '연애운 색상', number: '인연의 숫자', direction: '인연이 오는 방향', 
-      item: '연애 아이템', action: '연애운 높이는 행동', avoid: '연애할 때 피할 것'
+      charm_color: '매력 UP 색상·패션', ideal_type: '운명의 상대 특징', date_spot: '인연 만나는 장소', 
+      love_action: '연애운 높이는 행동', confession_timing: '고백·프로포즈 적기', love_avoid: '연애 시 주의 패턴'
     },
     showLoveGrade: true,
     showLoveStyle: true,
@@ -211,10 +211,10 @@ const PRODUCTS = {
       { key: 'business_luck', label: '사업', emoji: '🏢' },
     ],
     prescriptionTitle: '🎯 합격 처방전',
-    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionFields: ['interview_color', 'study_time', 'focus_item', 'exam_routine', 'career_fit', 'career_avoid'],
     prescriptionLabels: { 
-      color: '면접운 색상', number: '합격의 숫자', direction: '좋은 직장 방향', 
-      item: '합격 아이템', action: '면접 전 행동', avoid: '취업할 때 피할 것'
+      interview_color: '면접·시험 필승 색상', study_time: '집중력 최고 시간대', focus_item: '합격 부적·집중 아이템', 
+      exam_routine: '시험 전 루틴', career_fit: '적성에 맞는 직종', career_avoid: '합격 방해 패턴'
     },
     showCareerGrade: true,
     showCareerType: true,
@@ -253,10 +253,10 @@ const PRODUCTS = {
       { key: 'family', label: '가족', emoji: '👨‍👩‍👧' },
     ],
     prescriptionTitle: '✨ 평생 개운 처방전',
-    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionFields: ['life_color', 'power_stone', 'daily_habit', 'yearly_ritual', 'relationship_tip', 'life_avoid'],
     prescriptionLabels: { 
-      color: '행운 색상', number: '행운의 숫자', direction: '좋은 방향', 
-      item: '행운 아이템', action: '운 높이는 행동', avoid: '피해야 할 것'
+      life_color: '평생 행운 색상·소재', power_stone: '수호 원석·부적', daily_habit: '매일 실천할 습관', 
+      yearly_ritual: '매년 반복할 의식', relationship_tip: '대인관계 처방', life_avoid: '평생 주의할 패턴'
     },
     showFullGrade: true,
     showSajuSummary: true,
@@ -294,10 +294,10 @@ const PRODUCTS = {
       { key: 'luck', label: '행운', emoji: '🍀' },
     ],
     prescriptionTitle: '⭐ 2026 행운 처방전',
-    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionFields: ['lucky_color', 'power_stone', 'lucky_day', 'ritual', 'element_boost', 'planet_avoid'],
     prescriptionLabels: { 
-      color: '행운의 색상', number: '행운의 숫자', direction: '좋은 방향', 
-      item: '행운 아이템', action: '운 높이는 행동', avoid: '피해야 할 것'
+      lucky_color: '행운 색상·패션', power_stone: '파워스톤·원석', lucky_day: '행운의 요일·시간', 
+      ritual: '매일 실천 의식', element_boost: '부족 원소 보충법', planet_avoid: '행성 주의사항'
     },
     showYearGrade: true,
     showMonthlyFortune: true,
@@ -330,10 +330,10 @@ const PRODUCTS = {
       { key: 'windfall', label: '횡재', emoji: '🎰' },
     ],
     prescriptionTitle: '💎 재물 처방전',
-    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionFields: ['wallet_color', 'wealth_stone', 'invest_day', 'money_ritual', 'abundance_action', 'wealth_block'],
     prescriptionLabels: { 
-      color: '지갑 색상', number: '재물 행운 숫자', direction: '돈이 오는 방향', 
-      item: '재물 아이템', action: '돈 운 높이는 행동', avoid: '재물운 막는 것'
+      wallet_color: '지갑·금고 색상', wealth_stone: '재물 원석', invest_day: '투자 최적 요일', 
+      money_ritual: '재물 끌어당기는 루틴', abundance_action: '풍요 에너지 활동', wealth_block: '재물운 차단 요소'
     },
     showWealthGrade: true,
     showMoneyType: true,
@@ -369,10 +369,10 @@ const PRODUCTS = {
       { key: 'destiny', label: '인연', emoji: '🔗' },
     ],
     prescriptionTitle: '💕 연애 처방전',
-    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionFields: ['charm_style', 'love_stone', 'date_day', 'venus_ritual', 'attract_action', 'love_block'],
     prescriptionLabels: { 
-      color: '연애운 색상', number: '사랑의 숫자', direction: '인연 오는 방향', 
-      item: '사랑의 보석', action: '사랑 부르는 행동', avoid: '연애운 막는 것'
+      charm_style: '매력 UP 색상·스타일', love_stone: '사랑의 원석', date_day: '데이트 최적 요일', 
+      venus_ritual: '금성 에너지 루틴', attract_action: '인연 끌어당기는 행동', love_block: '연애운 차단 요소'
     },
     showLoveGrade: true,
     showLoveStyle: true,
@@ -409,10 +409,10 @@ const PRODUCTS = {
       { key: 'wealth_from_career', label: '연봉', emoji: '💰' },
     ],
     prescriptionTitle: '🎯 합격 처방전',
-    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionFields: ['power_color', 'focus_stone', 'study_day', 'saturn_ritual', 'career_action', 'career_block'],
     prescriptionLabels: { 
-      color: '면접 합격 색상', number: '합격의 숫자', direction: '좋은 직장 방향', 
-      item: '성공 아이템', action: '합격 부르는 행동', avoid: '커리어운 막는 것'
+      power_color: '면접 필승 색상', focus_stone: '집중력 원석', study_day: '공부 최적 요일', 
+      saturn_ritual: '토성 에너지 루틴', career_action: '합격 끌어당기는 행동', career_block: '합격운 차단 요소'
     },
     showCareerGrade: true,
     showCareerType: true,
@@ -450,10 +450,10 @@ const PRODUCTS = {
       { key: 'health', label: '건강', emoji: '🏃' },
     ],
     prescriptionTitle: '✨ 평생 개운 처방전',
-    prescriptionFields: ['color', 'number', 'direction', 'item', 'action', 'avoid'],
+    prescriptionFields: ['life_color', 'guardian_stone', 'power_day', 'star_ritual', 'soul_mission', 'karma_avoid'],
     prescriptionLabels: { 
-      color: '평생 행운 색상', number: '인생 행운 숫자', direction: '행운의 방향', 
-      item: '수호 원석', action: '운 높이는 행동', avoid: '피해야 할 것'
+      life_color: '평생 행운 색상', guardian_stone: '수호 원석', power_day: '파워 요일·시간', 
+      star_ritual: '별의 에너지 루틴', soul_mission: '영혼의 미션', karma_avoid: '카르마 주의 패턴'
     },
     showFullGrade: true,
     showSajuSummary: true,

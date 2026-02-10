@@ -140,7 +140,7 @@ const CalendarResultPage = () => {
   // month_element에서 주요 오행 추출
   const extractElement = (elemStr) => {
     if (!elemStr) return null;
-    for (const key of Object.keys(ELEMENT_MISSIONS)) {
+    for (const key of Object.keys(ELEMENT_MISSIONS_POOL)) {
       if (elemStr.includes(key)) return key;
     }
     return null;
